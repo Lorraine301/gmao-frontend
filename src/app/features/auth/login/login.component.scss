@@ -1,267 +1,437 @@
-// ── Variables ──────────────────────────────────────────────
-$primary:       #1E3A5F;
-$secondary:     #2E75B6;
-$accent:        #4A90D9;
-$error:         #e53e3e;
-$error-bg:      #fff5f5;
-$error-border:  #feb2b2;
-$text-dark:     #1a1a2e;
-$text-gray:     #666;
-$border:        #e2e8f0;
-$white:         #ffffff;
+// ── Variables ───────────────────────────────────────────────────────────────
+$primary:      #1E3A5F;
+$secondary:    #2E75B6;
+$accent:       #4A90D9;
+$error:        #c0392b;
+$error-light:  #fdf3f2;
+$error-border: #e8b4b0;
+$text-dark:    #1a202c;
+$text-mid:     #4a5568;
+$text-light:   #718096;
+$border:       #e2e8f0;
+$border-focus: #2E75B6;
+$bg-input:     #f8fafc;
+$white:        #ffffff;
 
-// ── Wrapper ────────────────────────────────────────────────
+// ── Reset global ────────────────────────────────────────────────────────────
+*, *::before, *::after { box-sizing: border-box; }
+
+// ── Wrapper ─────────────────────────────────────────────────────────────────
 .login-wrapper {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, $primary 0%, $secondary 50%, $accent 100%);
-  padding: 20px;
+  background: linear-gradient(145deg, $primary 0%, #24527a 40%, $secondary 75%, $accent 100%);
+  padding: 24px;
   position: relative;
   overflow: hidden;
+}
 
-  // Cercles décoratifs en arrière-plan
-  &::before, &::after {
-    content: '';
-    position: absolute;
-    border-radius: 50%;
-    opacity: 0.08;
-    background: $white;
+// ── Formes décoratives animées ───────────────────────────────────────────────
+.bg-shapes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.shape {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba($white, 0.04);
+  border: 1px solid rgba($white, 0.06);
+
+  &-1 {
+    width: 600px; height: 600px;
+    top: -200px; right: -200px;
+    animation: float 8s ease-in-out infinite;
   }
-  &::before {
-    width: 500px; height: 500px;
-    top: -150px; right: -150px;
+  &-2 {
+    width: 350px; height: 350px;
+    bottom: -120px; left: -120px;
+    animation: float 10s ease-in-out infinite reverse;
   }
-  &::after {
-    width: 300px; height: 300px;
-    bottom: -100px; left: -100px;
+  &-3 {
+    width: 180px; height: 180px;
+    top: 20%; left: 8%;
+    animation: float 6s ease-in-out infinite 2s;
+  }
+  &-4 {
+    width: 100px; height: 100px;
+    bottom: 25%; right: 10%;
+    animation: float 7s ease-in-out infinite 1s;
   }
 }
 
-// ── Card ───────────────────────────────────────────────────
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%       { transform: translateY(-20px) rotate(5deg); }
+}
+
+// ── Card ─────────────────────────────────────────────────────────────────────
 .login-card {
   background: $white;
-  border-radius: 20px;
-  padding: 48px 44px 36px;
+  border-radius: 24px;
+  padding: 52px 48px 40px;
   width: 100%;
-  max-width: 440px;
-  box-shadow:
-    0 25px 50px rgba(0, 0, 0, 0.25),
-    0 0 0 1px rgba(255,255,255,0.1);
+  max-width: 448px;
   position: relative;
   z-index: 1;
-  animation: slideUp 0.4s ease-out;
+  box-shadow:
+    0 32px 64px rgba(0, 0, 0, 0.28),
+    0 0 0 1px rgba($white, 0.12),
+    inset 0 1px 0 rgba($white, 0.8);
+  animation: cardEntrance 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(32px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
-// ── Logo ───────────────────────────────────────────────────
+// ── Logo ─────────────────────────────────────────────────────────────────────
 .login-logo {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 
   img {
-    width: 90px;
-    height: 90px;
+    width: 88px;
+    height: 88px;
     object-fit: contain;
-    filter: drop-shadow(0 4px 12px rgba(220, 50, 50, 0.3));
-    animation: fadeIn 0.5s ease-out;
+    filter: drop-shadow(0 6px 16px rgba(200, 40, 40, 0.25));
+    animation: logoEntrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
   }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.85); }
-  to   { opacity: 1; transform: scale(1); }
+@keyframes logoEntrance {
+  from { opacity: 0; transform: scale(0.7) rotate(-8deg); }
+  to   { opacity: 1; transform: scale(1) rotate(0deg); }
 }
 
-// ── Header ─────────────────────────────────────────────────
+// ── Header ───────────────────────────────────────────────────────────────────
 .login-header {
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 36px;
+  animation: fadeSlideUp 0.5s ease-out 0.2s both;
 
   h1 {
-    font-size: 1.65rem;
+    font-size: 1.7rem;
     font-weight: 700;
     color: $primary;
-    margin-bottom: 6px;
-    letter-spacing: -0.3px;
+    letter-spacing: -0.4px;
+    margin-bottom: 8px;
+    line-height: 1.2;
   }
 
   p {
-    color: $text-gray;
-    font-size: 0.88rem;
+    color: $text-light;
+    font-size: 0.875rem;
+    line-height: 1.5;
   }
 }
 
-// ── Form ───────────────────────────────────────────────────
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// ── Form groups ──────────────────────────────────────────────────────────────
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 6px;
   margin-bottom: 20px;
+  animation: fadeSlideUp 0.5s ease-out 0.3s both;
+
+  &:nth-child(2) { animation-delay: 0.35s; }
 
   label {
-    font-size: 0.83rem;
+    font-size: 0.82rem;
     font-weight: 600;
     color: $text-dark;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-
-    .label-icon { font-size: 0.85rem; }
+    letter-spacing: 0.2px;
+    transition: color 0.2s;
   }
+
+  &.has-error label { color: $error; }
 }
 
+// ── Input wrapper ────────────────────────────────────────────────────────────
 .input-wrapper {
   position: relative;
+  display: flex;
+  align-items: center;
+
+  .input-icon {
+    position: absolute;
+    left: 14px;
+    width: 17px;
+    height: 17px;
+    color: #a0aec0;
+    pointer-events: none;
+    transition: color 0.2s;
+    flex-shrink: 0;
+  }
 
   input {
     width: 100%;
-    padding: 13px 16px;
+    padding: 13px 16px 13px 42px;
     border: 1.5px solid $border;
-    border-radius: 10px;
-    font-size: 0.95rem;
+    border-radius: 11px;
+    font-size: 0.94rem;
     color: $text-dark;
-    background: #fafbfc;
-    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    background: $bg-input;
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease,
+      background 0.2s ease;
     outline: none;
-    box-sizing: border-box;
+    font-family: inherit;
 
-    &::placeholder { color: #b0b8c4; }
+    &::placeholder {
+      color: #c5cdd8;
+      font-size: 0.88rem;
+    }
 
     &:focus {
-      border-color: $secondary;
+      border-color: $border-focus;
       background: $white;
-      box-shadow: 0 0 0 3px rgba($secondary, 0.12);
-    }
+      box-shadow: 0 0 0 3.5px rgba($secondary, 0.1);
 
-    &.input-error {
-      border-color: $error;
-      background: $error-bg;
-      &:focus { box-shadow: 0 0 0 3px rgba($error, 0.12); }
+      // L'icône prend la couleur primaire au focus
+      & + .input-icon,
+      ~ .input-icon { color: $secondary; }
     }
+  }
+
+  // Focus sur l'icône quand l'input est focus
+  &:focus-within .input-icon {
+    color: $secondary;
   }
 }
 
-// ── Œil mot de passe ───────────────────────────────────────
+// ── Champ has-error ───────────────────────────────────────────────────────────
+.form-group.has-error {
+  .input-wrapper input {
+    border-color: $error;
+    background: $error-light;
+
+    &:focus {
+      border-color: $error;
+      box-shadow: 0 0 0 3.5px rgba($error, 0.1);
+    }
+  }
+
+  .input-wrapper .input-icon { color: $error; }
+}
+
+// ── Mot de passe ─────────────────────────────────────────────────────────────
 .password-wrapper input {
-  padding-right: 48px;
+  padding-right: 46px;
 }
 
 .eye-btn {
   position: absolute;
   right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
   background: none;
   border: none;
   cursor: pointer;
-  padding: 4px;
-  font-size: 1.1rem;
-  line-height: 1;
-  opacity: 0.6;
-  transition: opacity 0.2s;
-  &:hover { opacity: 1; }
-}
-
-// ── Messages d'erreur ──────────────────────────────────────
-.error-msg {
-  font-size: 0.78rem;
-  color: $error;
+  padding: 6px;
   display: flex;
   align-items: center;
-  gap: 4px;
-  &::before { content: '•'; }
+  justify-content: center;
+  color: #a0aec0;
+  border-radius: 6px;
+  transition: color 0.2s, background 0.2s;
+
+  svg {
+    width: 17px;
+    height: 17px;
+    display: block;
+  }
+
+  &:hover {
+    color: $secondary;
+    background: rgba($secondary, 0.07);
+  }
 }
 
+// ── Messages d'erreur champ ───────────────────────────────────────────────────
+.field-errors {
+  min-height: 18px;
+
+  span {
+    font-size: 0.775rem;
+    color: $error;
+    display: block;
+    animation: errorAppear 0.2s ease-out;
+  }
+}
+
+@keyframes errorAppear {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// ── Bannière d'erreur globale ─────────────────────────────────────────────────
 .error-banner {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: $error-bg;
+  gap: 10px;
+  background: $error-light;
   border: 1px solid $error-border;
   border-left: 4px solid $error;
-  border-radius: 8px;
-  padding: 11px 14px;
-  color: darken($error, 5%);
-  font-size: 0.88rem;
+  border-radius: 10px;
+  padding: 12px 14px;
   margin-bottom: 16px;
-  animation: shake 0.3s ease-out;
+  animation: bannerAppear 0.25s ease-out;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    color: $error;
+    flex-shrink: 0;
+  }
+
+  span {
+    font-size: 0.87rem;
+    color: darken($error, 8%);
+    line-height: 1.4;
+    font-weight: 500;
+  }
 }
 
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25%       { transform: translateX(-6px); }
-  75%       { transform: translateX(6px); }
+@keyframes bannerAppear {
+  0%   { opacity: 0; transform: translateX(-8px); }
+  60%  { transform: translateX(4px); }
+  100% { opacity: 1; transform: translateX(0); }
 }
 
-// ── Bouton ─────────────────────────────────────────────────
+// ── Bouton principal ──────────────────────────────────────────────────────────
 .btn-login {
   width: 100%;
-  padding: 14px;
-  background: linear-gradient(135deg, $primary, $secondary);
+  padding: 14px 20px;
+  background: linear-gradient(135deg, $primary 0%, $secondary 100%);
   color: $white;
   border: none;
-  border-radius: 10px;
-  font-size: 1rem;
+  border-radius: 11px;
+  font-size: 0.97rem;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
-  box-shadow: 0 4px 15px rgba($secondary, 0.35);
-  margin-top: 4px;
+  letter-spacing: 0.2px;
+  margin-top: 6px;
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    opacity 0.15s ease;
+  box-shadow:
+    0 4px 16px rgba($secondary, 0.38),
+    0 1px 3px rgba(0,0,0,0.12);
+  animation: fadeSlideUp 0.5s ease-out 0.4s both;
+
+  // Effet shimmer au hover
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba($white, 0.12) 50%,
+      transparent 100%
+    );
+    transition: left 0.4s ease;
+  }
 
   &:hover:not(:disabled) {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba($secondary, 0.45);
+    transform: translateY(-2px);
+    box-shadow:
+      0 8px 24px rgba($secondary, 0.45),
+      0 2px 6px rgba(0,0,0,0.15);
+
+    &::after { left: 100%; }
   }
 
   &:active:not(:disabled) {
     transform: translateY(0);
+    box-shadow: 0 2px 8px rgba($secondary, 0.3);
   }
 
   &:disabled {
-    opacity: 0.75;
+    opacity: 0.72;
     cursor: not-allowed;
     transform: none;
   }
 }
 
-// ── Spinner ────────────────────────────────────────────────
-.loader-wrapper {
+.btn-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+}
+
+.btn-loading {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
+  font-size: 0.92rem;
 }
 
+// ── Spinner ───────────────────────────────────────────────────────────────────
 .spinner {
   width: 18px;
   height: 18px;
-  border: 2.5px solid rgba($white, 0.35);
+  border: 2px solid rgba($white, 0.3);
   border-top-color: $white;
   border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-  display: inline-block;
+  animation: spin 0.65s linear infinite;
+  flex-shrink: 0;
 }
 
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
 
-// ── Footer ─────────────────────────────────────────────────
+// ── Footer ────────────────────────────────────────────────────────────────────
 .login-footer {
-  text-align: center;
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid $border;
+  margin-top: 28px;
+  animation: fadeSlideUp 0.5s ease-out 0.45s both;
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      $border 30%,
+      $border 70%,
+      transparent 100%
+    );
+    margin-bottom: 16px;
+  }
 
   p {
-    font-size: 0.78rem;
-    color: #aaa;
+    text-align: center;
+    font-size: 0.775rem;
+    color: #b0bac8;
+    letter-spacing: 0.3px;
   }
 }

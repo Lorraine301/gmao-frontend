@@ -1,84 +1,133 @@
 <div class="login-wrapper">
+
+  <!-- Particules décoratives -->
+  <div class="bg-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+    <div class="shape shape-4"></div>
+  </div>
+
   <div class="login-card">
 
-    <!-- Logo image Suprajit -->
+    <!-- Logo -->
     <div class="login-logo">
-      <img src="/images/logo_suprajit.png" alt="Logo Suprajit">
-   </div>
+      <img src="./images/logo_suprajit.png" alt="Logo Suprajit" />
+    </div>
 
+    <!-- Header -->
     <div class="login-header">
       <h1>GMAO Intelligente</h1>
       <p>Connectez-vous à votre espace de maintenance</p>
     </div>
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
 
       <!-- Email -->
-      <div class="form-group">
-        <label for="email">
-          <span class="label-icon">✉</span> Adresse email
-        </label>
+      <div class="form-group"
+           [class.has-error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+        <label for="email">Adresse email</label>
         <div class="input-wrapper">
+          <!-- Icône email SVG -->
+          <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2"/>
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+          </svg>
           <input
             id="email"
             type="email"
             formControlName="email"
             placeholder="vous@suprajit.ma"
             autocomplete="email"
-            [class.input-error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
           />
         </div>
-        <span class="error-msg"
-          *ngIf="loginForm.get('email')?.errors?.['required'] && loginForm.get('email')?.touched">
-          L'email est requis
-        </span>
-        <span class="error-msg"
-          *ngIf="loginForm.get('email')?.errors?.['email'] && loginForm.get('email')?.touched">
-          Format d'email invalide
-        </span>
+        <div class="field-errors">
+          <span *ngIf="loginForm.get('email')?.errors?.['required'] && loginForm.get('email')?.touched">
+            L'adresse email est requise
+          </span>
+          <span *ngIf="loginForm.get('email')?.errors?.['email'] && loginForm.get('email')?.touched">
+            Format d'email invalide
+          </span>
+        </div>
       </div>
 
       <!-- Mot de passe -->
-      <div class="form-group">
-        <label for="password">
-          <span class="label-icon">🔒</span> Mot de passe
-        </label>
+      <div class="form-group"
+           [class.has-error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+        <label for="password">Mot de passe</label>
         <div class="input-wrapper password-wrapper">
+          <!-- Icône cadenas SVG -->
+          <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
           <input
             id="password"
             [type]="showPassword ? 'text' : 'password'"
             formControlName="password"
             placeholder="••••••••"
             autocomplete="current-password"
-            [class.input-error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
           />
-          <button type="button" class="eye-btn" (click)="togglePassword()" tabindex="-1">
-            <span *ngIf="!showPassword">👁</span>
-            <span *ngIf="showPassword">-</span>
+          <!-- Bouton œil SVG -->
+          <button type="button" class="eye-btn" (click)="togglePassword()" tabindex="-1"
+                  [attr.aria-label]="showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'">
+            <!-- Œil ouvert -->
+            <svg *ngIf="!showPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            <!-- Œil barré -->
+            <svg *ngIf="showPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+              <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+              <line x1="1" y1="1" x2="23" y2="23"/>
+            </svg>
           </button>
         </div>
-        <span class="error-msg"
-          *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-          Le mot de passe est requis
-        </span>
+        <div class="field-errors">
+          <span *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+            Le mot de passe est requis
+          </span>
+        </div>
       </div>
 
       <!-- Erreur globale -->
-      <div class="error-banner" *ngIf="errorMessage">
-        <span>⚠</span> {{ errorMessage }}
+      <div class="error-banner" *ngIf="errorMessage" role="alert">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <span>{{ errorMessage }}</span>
       </div>
 
-      <!-- Bouton -->
+      <!-- Bouton submit -->
       <button type="submit" [disabled]="isLoading" class="btn-login">
-        <span *ngIf="!isLoading">Se connecter</span>
-        <span *ngIf="isLoading" class="loader-wrapper">
-          <span class="spinner"></span> Connexion en cours...
+        <span *ngIf="!isLoading" class="btn-text">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+            <polyline points="10 17 15 12 10 7"/>
+            <line x1="15" y1="12" x2="3" y2="12"/>
+          </svg>
+          Se connecter
+        </span>
+        <span *ngIf="isLoading" class="btn-loading">
+          <span class="spinner"></span>
+          Connexion en cours...
         </span>
       </button>
 
     </form>
 
+    <!-- Footer -->
     <div class="login-footer">
+      <div class="divider"></div>
       <p>Suprajit Maroc &copy; {{ currentYear }}</p>
     </div>
 
