@@ -1,0 +1,267 @@
+// ── Variables ──────────────────────────────────────────────
+$primary:       #1E3A5F;
+$secondary:     #2E75B6;
+$accent:        #4A90D9;
+$error:         #e53e3e;
+$error-bg:      #fff5f5;
+$error-border:  #feb2b2;
+$text-dark:     #1a1a2e;
+$text-gray:     #666;
+$border:        #e2e8f0;
+$white:         #ffffff;
+
+// ── Wrapper ────────────────────────────────────────────────
+.login-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, $primary 0%, $secondary 50%, $accent 100%);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+
+  // Cercles décoratifs en arrière-plan
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.08;
+    background: $white;
+  }
+  &::before {
+    width: 500px; height: 500px;
+    top: -150px; right: -150px;
+  }
+  &::after {
+    width: 300px; height: 300px;
+    bottom: -100px; left: -100px;
+  }
+}
+
+// ── Card ───────────────────────────────────────────────────
+.login-card {
+  background: $white;
+  border-radius: 20px;
+  padding: 48px 44px 36px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255,255,255,0.1);
+  position: relative;
+  z-index: 1;
+  animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// ── Logo ───────────────────────────────────────────────────
+.login-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+
+  img {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 12px rgba(220, 50, 50, 0.3));
+    animation: fadeIn 0.5s ease-out;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+// ── Header ─────────────────────────────────────────────────
+.login-header {
+  text-align: center;
+  margin-bottom: 32px;
+
+  h1 {
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: $primary;
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
+  }
+
+  p {
+    color: $text-gray;
+    font-size: 0.88rem;
+  }
+}
+
+// ── Form ───────────────────────────────────────────────────
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 20px;
+
+  label {
+    font-size: 0.83rem;
+    font-weight: 600;
+    color: $text-dark;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    .label-icon { font-size: 0.85rem; }
+  }
+}
+
+.input-wrapper {
+  position: relative;
+
+  input {
+    width: 100%;
+    padding: 13px 16px;
+    border: 1.5px solid $border;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    color: $text-dark;
+    background: #fafbfc;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    outline: none;
+    box-sizing: border-box;
+
+    &::placeholder { color: #b0b8c4; }
+
+    &:focus {
+      border-color: $secondary;
+      background: $white;
+      box-shadow: 0 0 0 3px rgba($secondary, 0.12);
+    }
+
+    &.input-error {
+      border-color: $error;
+      background: $error-bg;
+      &:focus { box-shadow: 0 0 0 3px rgba($error, 0.12); }
+    }
+  }
+}
+
+// ── Œil mot de passe ───────────────────────────────────────
+.password-wrapper input {
+  padding-right: 48px;
+}
+
+.eye-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 1.1rem;
+  line-height: 1;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+  &:hover { opacity: 1; }
+}
+
+// ── Messages d'erreur ──────────────────────────────────────
+.error-msg {
+  font-size: 0.78rem;
+  color: $error;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  &::before { content: '•'; }
+}
+
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: $error-bg;
+  border: 1px solid $error-border;
+  border-left: 4px solid $error;
+  border-radius: 8px;
+  padding: 11px 14px;
+  color: darken($error, 5%);
+  font-size: 0.88rem;
+  margin-bottom: 16px;
+  animation: shake 0.3s ease-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25%       { transform: translateX(-6px); }
+  75%       { transform: translateX(6px); }
+}
+
+// ── Bouton ─────────────────────────────────────────────────
+.btn-login {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, $primary, $secondary);
+  color: $white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+  box-shadow: 0 4px 15px rgba($secondary, 0.35);
+  margin-top: 4px;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba($secondary, 0.45);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+// ── Spinner ────────────────────────────────────────────────
+.loader-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba($white, 0.35);
+  border-top-color: $white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+// ── Footer ─────────────────────────────────────────────────
+.login-footer {
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid $border;
+
+  p {
+    font-size: 0.78rem;
+    color: #aaa;
+  }
+}
