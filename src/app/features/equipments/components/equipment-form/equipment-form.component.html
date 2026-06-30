@@ -1,0 +1,186 @@
+<div class="page-wrapper">
+
+  <div class="page-header">
+    <button class="btn-back" routerLink="/equipments">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"/>
+        <polyline points="12 19 5 12 12 5"/>
+      </svg>
+      Retour
+    </button>
+    <h1>{{ isEditMode ? 'Modifier l\'équipement' : 'Nouvel équipement' }}</h1>
+  </div>
+
+  <div class="loading-state" *ngIf="isLoading">
+    <div class="spinner-lg"></div>
+    <p>Chargement...</p>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="!isLoading" novalidate>
+
+    <!-- Erreur globale -->
+    <div class="alert alert-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <!-- Section Identification -->
+    <div class="form-section">
+      <h2 class="section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2"/>
+          <line x1="8" y1="21" x2="16" y2="21"/>
+          <line x1="12" y1="17" x2="12" y2="21"/>
+        </svg>
+        Identification
+      </h2>
+      <div class="form-grid">
+        <div class="form-group" [class.error]="isInvalid('code')">
+          <label>Code machine <span class="required">*</span></label>
+          <input formControlName="code" placeholder="ex: EXT-0006" />
+          <span class="error-msg" *ngIf="isInvalid('code')">Le code est obligatoire (max 30 car.)</span>
+        </div>
+        <div class="form-group" [class.error]="isInvalid('name')">
+          <label>Nom <span class="required">*</span></label>
+          <input formControlName="name" placeholder="ex: Extrusion Machine" />
+          <span class="error-msg" *ngIf="isInvalid('name')">Le nom est obligatoire</span>
+        </div>
+        <div class="form-group">
+          <label>Numéro de série</label>
+          <input formControlName="serialNumber" placeholder="ex: EXT-0006-SN" />
+        </div>
+        <div class="form-group full-width">
+          <label>Description</label>
+          <textarea formControlName="description" rows="3"
+                    placeholder="Description détaillée de l'équipement..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section Fabricant -->
+    <div class="form-section">
+      <h2 class="section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+        </svg>
+        Fabricant & Classification
+      </h2>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Fabricant</label>
+          <input formControlName="manufacturer" placeholder="ex: Maillefer, ARBURG" />
+        </div>
+        <div class="form-group">
+          <label>Modèle</label>
+          <input formControlName="model" placeholder="ex: MX120, 470S" />
+        </div>
+        <div class="form-group">
+          <label>Type</label>
+          <select formControlName="type">
+            <option value="">Sélectionner...</option>
+            <option *ngFor="let t of typeOptions" [value]="t">{{ t }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Catégorie</label>
+          <select formControlName="category">
+            <option value="">Sélectionner...</option>
+            <option *ngFor="let c of categoryOptions" [value]="c">{{ c }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section Localisation -->
+    <div class="form-section">
+      <h2 class="section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        Localisation
+      </h2>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Usine</label>
+          <input formControlName="plant" placeholder="ex: Suprajit Morocco" />
+        </div>
+        <div class="form-group">
+          <label>Ligne de production</label>
+          <input formControlName="productionLine" placeholder="ex: Line A" />
+        </div>
+        <div class="form-group">
+          <label>Localisation</label>
+          <input formControlName="location" placeholder="ex: Workshop A" />
+        </div>
+        <div class="form-group">
+          <label>Équipe de maintenance</label>
+          <input formControlName="maintenanceTeam" placeholder="ex: Mechanical Team" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Section Dates & Statut -->
+    <div class="form-section">
+      <h2 class="section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        Dates & État
+      </h2>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Date d'installation</label>
+          <input type="date" formControlName="installationDate" />
+        </div>
+        <div class="form-group">
+          <label>Date de mise en service</label>
+          <input type="date" formControlName="commissioningDate" />
+        </div>
+        <div class="form-group" [class.error]="isInvalid('status')">
+          <label>Statut <span class="required">*</span></label>
+          <select formControlName="status">
+            <option value="Active">Actif</option>
+            <option value="Inactive">Inactif</option>
+            <option value="Under_Maintenance">En maintenance</option>
+          </select>
+        </div>
+        <div class="form-group" [class.error]="isInvalid('criticalityLevel')">
+          <label>Niveau de criticité <span class="required">*</span></label>
+          <select formControlName="criticalityLevel">
+            <option value="Low">Faible</option>
+            <option value="Medium">Moyen</option>
+            <option value="High">Élevé</option>
+          </select>
+        </div>
+        <div class="form-group full-width">
+          <label>Notes</label>
+          <textarea formControlName="notes" rows="2"
+                    placeholder="Notes complémentaires..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="form-actions">
+      <button type="button" class="btn btn-ghost" routerLink="/equipments">
+        Annuler
+      </button>
+      <button type="submit" class="btn btn-primary" [disabled]="isSaving">
+        <span *ngIf="!isSaving">
+          {{ isEditMode ? 'Enregistrer les modifications' : 'Créer l\'équipement' }}
+        </span>
+        <span *ngIf="isSaving" class="btn-loading">
+          <span class="spinner"></span> Enregistrement...
+        </span>
+      </button>
+    </div>
+
+  </form>
+</div>

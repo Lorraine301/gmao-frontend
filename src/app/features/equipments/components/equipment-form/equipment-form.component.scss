@@ -1,0 +1,189 @@
+$primary:   #1E3A5F;
+$secondary: #2E75B6;
+$error:     #c0392b;
+$border:    #e2e8f0;
+$bg:        #f8fafc;
+$white:     #ffffff;
+$text-dark: #1a202c;
+$text-light:#718096;
+
+.page-wrapper { padding: 32px; max-width: 900px; margin: 0 auto; }
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+
+  h1 { font-size: 1.5rem; font-weight: 700; color: $primary; margin: 0; }
+}
+
+.btn-back {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: $text-light;
+  cursor: pointer;
+  font-size: 0.88rem;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: all 0.15s;
+  svg { width: 16px; height: 16px; }
+  &:hover { background: $bg; color: $text-dark; }
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px;
+  gap: 16px;
+  color: $text-light;
+}
+
+.spinner-lg {
+  width: 36px; height: 36px;
+  border: 3px solid rgba($secondary, 0.2);
+  border-top-color: $secondary;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.alert-error {
+  padding: 12px 16px;
+  background: #fdf3f2;
+  border: 1px solid #e8b4b0;
+  border-left: 4px solid $error;
+  border-radius: 8px;
+  color: $error;
+  font-size: 0.88rem;
+  margin-bottom: 20px;
+}
+
+.form-section {
+  background: $white;
+  border: 1px solid $border;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: $primary;
+  margin: 0 0 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid $border;
+  svg { width: 18px; height: 18px; }
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+
+  .full-width { grid-column: 1 / -1; }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: $text-dark;
+  }
+
+  input, select, textarea {
+    padding: 11px 14px;
+    border: 1.5px solid $border;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: $text-dark;
+    background: $bg;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &:focus {
+      border-color: $secondary;
+      background: $white;
+      box-shadow: 0 0 0 3px rgba($secondary, 0.1);
+    }
+    &::placeholder { color: #c5cdd8; }
+  }
+
+  textarea { resize: vertical; }
+
+  &.error {
+    input, select, textarea {
+      border-color: $error;
+      background: #fdf3f2;
+    }
+  }
+}
+
+.required { color: $error; }
+
+.error-msg {
+  font-size: 0.775rem;
+  color: $error;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 24px;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s;
+
+  &-primary {
+    background: linear-gradient(135deg, $primary, $secondary);
+    color: $white;
+    box-shadow: 0 2px 8px rgba($secondary, 0.3);
+    &:hover:not(:disabled) { transform: translateY(-1px); }
+    &:disabled { opacity: 0.7; cursor: not-allowed; }
+  }
+  &-ghost {
+    background: transparent;
+    color: $text-light;
+    border: 1.5px solid $border;
+    &:hover { background: $bg; color: $text-dark; }
+  }
+}
+
+.btn-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.spinner {
+  width: 16px; height: 16px;
+  border: 2px solid rgba(white, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}

@@ -3,53 +3,67 @@ import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
-  // Redirection par défaut
   { path: '', redirectTo: '/login', pathMatch: 'full' },
 
-  // Page de login (publique)
   {
     path: 'login',
     loadComponent: () =>
       import('./features/auth/login/login.component').then(m => m.LoginComponent)
   },
-
-  // Page non autorisée (publique)
   {
     path: 'unauthorized',
     loadComponent: () =>
       import('./shared/pages/unauthorized/unauthorized.component').then(m => m.UnauthorizedComponent)
   },
 
-  // Zone Admin
+ // ── Équipements ──────────────────────────────────────────
+ // Liste → Admin + Supervisor seulement
   {
-    path: 'admin',
+    path: 'equipments',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['Admin', 'Supervisor'] },
+    loadComponent: () =>
+      import('./features/equipments/components/equipment-list/equipment-list.component')
+        .then(m => m.EquipmentListComponent)
+  },
+  {
+    path: 'equipments/new',
     canActivate: [authGuard, roleGuard],
     data: { roles: ['Admin'] },
     loadComponent: () =>
-      import('./features/auth/login/login.component').then(m => m.LoginComponent)
-      // ← sera remplacé par AdminDashboardComponent en Sprint 4
+      import('./features/equipments/components/equipment-form/equipment-form.component')
+        .then(m => m.EquipmentFormComponent)
   },
-
-  // Zone Supervisor
   {
-    path: 'supervisor',
+    path: 'equipments/:id/edit',
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['Supervisor', 'Admin'] },
+    data: { roles: ['Admin'] },
     loadComponent: () =>
-      import('./features/auth/login/login.component').then(m => m.LoginComponent)
-      // ← sera remplacé par SupervisorDashboardComponent
+      import('./features/equipments/components/equipment-form/equipment-form.component')
+        .then(m => m.EquipmentFormComponent)
   },
-
-  // Zone Technician
   {
-    path: 'technician',
+    // Détail → Admin + Supervisor + Technician
+    path: 'equipments/:id',
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['Technician', 'Admin'] },
+    data: { roles: ['Admin', 'Supervisor', 'Technician'] },
     loadComponent: () =>
-      import('./features/auth/login/login.component').then(m => m.LoginComponent)
-      // ← sera remplacé par TechnicianDashboardComponent
+      import('./features/equipments/components/equipment-detail/equipment-detail.component')
+        .then(m => m.EquipmentDetailComponent)
+  },
+  // ── Dashboard ───────────────────────────────────────────
+  {
+  path: 'dashboard',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./shared/pages/coming-soon/coming-soon.component')
+      .then(m => m.ComingSoonComponent)
   },
 
-  // Wildcard
+  // Redirections par rôle (placeholders à remplacer sprint par sprint)
+  { path: 'admin',      redirectTo: '/equipments', pathMatch: 'full' },
+  { path: 'supervisor', redirectTo: '/equipments', pathMatch: 'full' },
+  { path: 'technician', redirectTo: '/dashboard', pathMatch: 'full' },
+
   { path: '**', redirectTo: '/login' }
 ];
