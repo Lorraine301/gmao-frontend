@@ -208,15 +208,39 @@ $text-light: #718096;
   background: $white;
   border: 1px solid $border;
   border-radius: 12px;
-  overflow: hidden;
   box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+
+  // Conteneur scrollable avec hauteur max pour que la barre reste visible
+  overflow-x: auto;
+  overflow-y: visible;
+  max-height: calc(100vh - 280px); // ← adapte la hauteur selon ta navbar
+  overflow-y: auto;
+
+  // Scrollbar horizontale toujours visible en bas de la fenêtre
+  &::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: $bg;
+    border-radius: 3px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 3px;
+    &:hover { background: $secondary; }
+  }
 }
 
 .data-table {
   width: 100%;
+  min-width: 900px;
   border-collapse: collapse;
 
   thead tr {
+    position: sticky;
+    top: 0;
+    z-index: 2;
     background: $bg;
     border-bottom: 2px solid $border;
   }

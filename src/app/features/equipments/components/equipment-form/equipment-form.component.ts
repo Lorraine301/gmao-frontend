@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule,AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { EquipmentService } from '../../services/equipment.service';
 import { EquipmentStatus, CriticalityLevel } from '../../models/equipment.model';
@@ -69,7 +69,7 @@ export class EquipmentFormComponent implements OnInit {
       commissioningDate:[''],
       maintenanceTeam:  [''],
       notes:            ['']
-    });
+    },{ validators: dateOrderValidator});
   }
 
   private loadEquipment(): void {
@@ -97,7 +97,7 @@ export class EquipmentFormComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.form.invalid) {
+    if (this.form.invalid || this.form.errors?.['dateOrder']) {
       this.form.markAllAsTouched();
       this.cdr.detectChanges();
       return;
@@ -136,3 +136,13 @@ export class EquipmentFormComponent implements OnInit {
     return !!(ctrl?.invalid && ctrl?.touched);
   }
 }
+// Validateur personnalisé à ajouter en dehors de la classe
+export const dateOrderValidator: ValidatorFn = (form: AbstractControl): ValidationErrors | null => {
+  const installation = form.get('installationDate')?.value;
+  const commissioning = form.get('commissioningDate')?.value;
+
+  if (installation && commissioning && commissioning < installation) {
+    return { dateOrder: true };
+  }
+  return null;
+};
