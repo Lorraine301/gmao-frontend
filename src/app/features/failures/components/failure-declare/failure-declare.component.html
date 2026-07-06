@@ -1,0 +1,84 @@
+<div class="page-wrapper">
+  <div class="page-header">
+    <button class="btn-back" routerLink="/failures">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+      </svg>
+      Retour
+    </button>
+    <h1>Déclarer une panne</h1>
+  </div>
+
+  <div class="loading-state" *ngIf="isLoading">
+    <div class="spinner-lg"></div>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="!isLoading" novalidate>
+    <div class="alert-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <div class="form-section">
+      <h2 class="section-title">Informations de la panne</h2>
+      <div class="form-grid">
+
+        <div class="form-group full-width" [class.error]="isInvalid('equipmentId')">
+          <label>Équipement concerné <span class="required">*</span></label>
+          <select formControlName="equipmentId">
+            <option [ngValue]="null" disabled>— Sélectionner un équipement —</option>
+            <option *ngFor="let eq of equipments" [ngValue]="eq.id">
+              {{ eq.code }} – {{ eq.name }} ({{ eq.type }})
+            </option>
+          </select>
+          <span class="error-msg" *ngIf="isInvalid('equipmentId')">L'équipement est obligatoire</span>
+        </div>
+
+        <div class="form-group full-width" [class.error]="isInvalid('title')">
+          <label>Titre de la panne <span class="required">*</span></label>
+          <input formControlName="title" placeholder="ex: Surchauffe du moteur d'extrusion" />
+          <span class="error-msg" *ngIf="isInvalid('title')">Le titre est obligatoire</span>
+        </div>
+
+        <div class="form-group full-width" [class.error]="isInvalid('description')">
+          <label>Description détaillée <span class="required">*</span></label>
+          <textarea formControlName="description" rows="4"
+                    placeholder="Décrivez précisément le problème observé, les symptômes, les conditions d'apparition..."></textarea>
+          <span class="error-msg" *ngIf="isInvalid('description')">La description est obligatoire</span>
+        </div>
+
+        <div class="form-group">
+          <label>Type de panne</label>
+          <select formControlName="failureType">
+            <option value="Mechanical">Mécanique</option>
+            <option value="Electrical">Électrique</option>
+            <option value="Other">Autre</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Canal de signalement</label>
+          <select formControlName="reportedChannel">
+            <option value="Web">Web</option>
+            <option value="Mobile">Mobile</option>
+            <option value="Terminal">Terminal</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="rule-engine-info">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      La priorité sera automatiquement calculée par le moteur de règles après la déclaration.
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-ghost" routerLink="/failures">Annuler</button>
+      <button type="submit" class="btn btn-primary" [disabled]="isSaving">
+        <span *ngIf="!isSaving">Déclarer la panne</span>
+        <span *ngIf="isSaving" class="btn-loading"><span class="spinner"></span> Envoi...</span>
+      </button>
+    </div>
+  </form>
+</div>

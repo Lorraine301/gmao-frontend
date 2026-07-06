@@ -1,0 +1,122 @@
+<div class="page-wrapper">
+
+  <div class="page-header">
+    <button class="btn-back" routerLink="/interventions">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+      </svg>
+      Retour aux interventions
+    </button>
+  </div>
+
+  <div class="loading-state" *ngIf="isLoading"><div class="spinner-lg"></div></div>
+  <div class="alert alert-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <div *ngIf="intervention && !isLoading">
+
+    <div class="int-header">
+      <div>
+        <span class="int-id">#{{ intervention.id }}</span>
+        <h1 class="int-title">{{ intervention.failureTitle }}</h1>
+        <div class="badges">
+          <span class="badge badge--priority-{{ intervention.priority.toLowerCase() }}">
+            {{ getPriorityLabel(intervention.priority) }}
+          </span>
+          <span class="badge badge--status-{{ intervention.status.toLowerCase().replace('_','-') }}">
+            {{ getStatusLabel(intervention.status) }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-grid">
+
+      <!-- Équipement -->
+      <div class="detail-card highlight-card">
+        <h2 class="card-title">Équipement</h2>
+        <div class="info-list">
+          <div class="info-item">
+            <span class="info-label">Code</span>
+            <a [routerLink]="['/equipments', equipment?.id]" class="link-code">
+              {{ intervention.equipmentCode }}
+            </a>
+          </div>
+          <div class="info-item"><span class="info-label">Nom</span><span>{{ intervention.equipmentName }}</span></div>
+          <div class="info-item" *ngIf="equipment">
+            <span class="info-label">Type</span><span>{{ equipment.type || '—' }}</span>
+          </div>
+          <div class="info-item" *ngIf="equipment">
+            <span class="info-label">Localisation</span><span class="location-value">{{ equipment.location || '—' }}</span>
+          </div>
+          <div class="info-item" *ngIf="equipment">
+            <span class="info-label">Ligne</span><span>{{ equipment.productionLine || '—' }}</span>
+          </div>
+          <div class="info-item" *ngIf="equipment">
+            <span class="info-label">Fabricant</span><span>{{ equipment.manufacturer || '—' }}</span>
+          </div>
+          <div class="info-item" *ngIf="equipment">
+            <span class="info-label">Modèle</span><span>{{ equipment.model || '—' }}</span>
+          </div>
+          <div class="info-item" *ngIf="equipment">
+            <span class="info-label">Criticité</span>
+            <span class="badge badge--criticality-{{ equipment.criticalityLevel?.toLowerCase() }}">
+              {{ getCriticalityLabel(equipment.criticalityLevel) }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panne -->
+      <div class="detail-card">
+        <h2 class="card-title">Panne</h2>
+        <div class="info-list">
+          <div class="info-item">
+            <span class="info-label">Code</span>
+            <a [routerLink]="['/failures', intervention.failureId]" class="link-code">
+              {{ intervention.failureCode }}
+            </a>
+          </div>
+          <div class="info-item"><span class="info-label">Titre</span><span>{{ intervention.failureTitle }}</span></div>
+          <div class="info-item"><span class="info-label">Priorité</span>
+            <span class="badge badge--priority-{{ intervention.priority.toLowerCase() }}">
+              {{ getPriorityLabel(intervention.priority) }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Technicien & Temps -->
+      <div class="detail-card">
+        <h2 class="card-title">Technicien & Temps</h2>
+        <div class="info-list">
+          <div class="info-item">
+            <span class="info-label">Technicien</span>
+            <span>{{ intervention.technicianName }} ({{ intervention.technicianEmployeeCode }})</span>
+          </div>
+          <div class="info-item"><span class="info-label">Assigné par</span><span>{{ intervention.assignedByName || '—' }}</span></div>
+          <div class="info-item"><span class="info-label">Début</span>
+            <span>{{ intervention.startTime ? (intervention.startTime | date:'dd/MM/yyyy HH:mm') : '—' }}</span>
+          </div>
+          <div class="info-item"><span class="info-label">Fin</span>
+            <span>{{ intervention.endTime ? (intervention.endTime | date:'dd/MM/yyyy HH:mm') : '—' }}</span>
+          </div>
+          <div class="info-item" *ngIf="intervention.duration">
+            <span class="info-label">Durée</span>
+            <span class="duration-value">{{ intervention.duration }}h</span>
+          </div>
+          <div class="info-item" *ngIf="intervention.closedByName">
+            <span class="info-label">Clôturée par</span><span>{{ intervention.closedByName }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Solution -->
+      <div class="detail-card full-width" *ngIf="intervention.solution">
+        <h2 class="card-title">Solution apportée</h2>
+        <p class="solution-text">{{ intervention.solution }}</p>
+      </div>
+
+    </div>
+  </div>
+</div>

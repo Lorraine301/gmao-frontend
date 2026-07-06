@@ -1,0 +1,166 @@
+<div class="page-wrapper">
+
+  <div class="page-header">
+    <div class="page-header__left">
+      <h1 class="page-title">Gestion des pannes</h1>
+      <span class="page-subtitle">{{ failures.length }} panne(s) trouvée(s)</span>
+    </div>
+    <button class="btn btn-primary" routerLink="/failures/declare">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Déclarer une panne
+    </button>
+  </div>
+
+  <!-- Filtres -->
+  <div class="filters-card">
+    <div class="filters-grid">
+      <div class="filter-group">
+        <label>Statut</label>
+        <select [(ngModel)]="filters.status" (ngModelChange)="onFilterChange()">
+          <option [ngValue]="undefined">Tous les statuts</option>
+          <option *ngFor="let s of statusOptions" [ngValue]="s">{{ getStatusLabel(s) }}</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Priorité</label>
+        <select [(ngModel)]="filters.priority" (ngModelChange)="onFilterChange()">
+          <option [ngValue]="undefined">Toutes les priorités</option>
+          <option *ngFor="let p of priorityOptions" [ngValue]="p">{{ getPriorityLabel(p) }}</option>
+        </select>
+      </div>
+      <button class="btn btn-ghost" (click)="resetFilters()">Réinitialiser</button>
+    </div>
+  </div>
+
+  <!-- Erreur -->
+  <div class="alert alert-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <!-- Loading -->
+  <div class="loading-state" *ngIf="isLoading">
+    <div class="spinner-lg"></div><p>Chargement...</p>
+  </div>
+
+  <!-- Table -->
+  <div class="table-card" *ngIf="!isLoading">
+    <table class="data-table" *ngIf="failures.length > 0; else emptyState">
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Équipement</th>
+          <th>Titre</th>
+          <th>Type</th>
+          <th>Priorité</th>
+          <th>Statut</th>
+          <th>Déclaré par</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let f of failures">
+          <td class="code-cell">{{ f.failureCode }}</td>
+          <td>
+            <span class="eq-code">{{ f.equipmentCode }}</span>
+            <span class="eq-name">{{ f.equipmentName }}</span>
+          </td>
+          <td class="title-cell">{{ f.title }}</td>
+          <td>{{ f.failureType ? getFailureTypeLabel(f.failureType) : '—' }}</td>
+          <td>
+            <div class="priority-cell">
+              <span class="badge badge--priority-{{ f.priority.toLowerCase() }}">
+                {{ getPriorityLabel(f.priority) }}
+              </span>
+              <span class="rule-tag" *ngIf="f.ruleEngineTriggered">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                  <line x1="12" y1="9" x2="12" y2="13"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+                Règle déclenchée
+              </span>
+              <span class="recommend-tag" *ngIf="f.recommendedTechnicianName">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+                {{ f.recommendedTechnicianName }}
+              </span>
+            </div>
+          </td>
+          <td>
+            <span class="badge badge--status-{{ f.status.toLowerCase().replace('_', '-') }}">
+              {{ getStatusLabel(f.status) }}
+            </span>
+          </td>
+          <td>{{ f.reportedByName }}</td>
+          <td class="date-cell">{{ f.reportedAt | date:'dd/MM/yy HH:mm' }}</td>
+          <td class="actions-cell">
+            <button class="btn-icon btn-icon--view" [routerLink]="['/failures', f.id]" title="Voir">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+            <button *ngIf="isSupervisorOrAdmin && f.status === 'Open'"
+                    class="btn-icon btn-icon--assign"
+                    (click)="openAssignPanel(f.id)" title="Affecter un technicien">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                   stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="8.5" cy="7" r="4"/>
+                <line x1="20" y1="8" x2="20" y2="14"/>
+                <line x1="23" y1="11" x2="17" y2="11"/>
+              </svg>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #emptyState>
+      <div class="empty-state">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <h3>Aucune panne trouvée</h3>
+        <p>Modifiez les filtres ou déclarez une nouvelle panne.</p>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Panel d'affectation -->
+  <div class="modal-overlay" *ngIf="assignFailureId !== null" (click)="cancelAssign()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h3>Affecter un technicien</h3>
+      <p>Sélectionnez le technicien à assigner à cette panne.</p>
+
+      <div class="form-group">
+        <label>Technicien</label>
+        <select [(ngModel)]="selectedTechnicianId">
+          <option [ngValue]="null" disabled>— Choisir un technicien —</option>
+          <option *ngFor="let t of technicians" [ngValue]="t.id">
+            {{ t.fullName }} ({{ t.employeeCode }}) — {{ t.speciality || 'Général' }}
+          </option>
+        </select>
+      </div>
+
+      <div class="modal__actions">
+        <button class="btn btn-ghost" (click)="cancelAssign()">Annuler</button>
+        <button class="btn btn-primary"
+                (click)="confirmAssign()"
+                [disabled]="!selectedTechnicianId || isAssigning">
+          <span *ngIf="!isAssigning">Affecter</span>
+          <span *ngIf="isAssigning" class="btn-loading">
+            <span class="spinner"></span> En cours...
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

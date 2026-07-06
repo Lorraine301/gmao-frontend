@@ -1,0 +1,85 @@
+<div class="page-wrapper">
+
+  <div class="page-header">
+    <div class="page-header__left">
+      <h1 class="page-title">Suivi des interventions</h1>
+      <span class="page-subtitle">{{ interventions.length }} intervention(s)</span>
+    </div>
+  </div>
+
+  <div class="loading-state" *ngIf="isLoading">
+    <div class="spinner-lg"></div>
+    <p>Chargement...</p>
+  </div>
+
+  <div class="alert-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <div class="table-card" *ngIf="!isLoading">
+    <table class="data-table" *ngIf="interventions.length > 0; else emptyState">
+      <thead>
+        <tr>
+          <th>Panne</th>
+          <th>Équipement</th>
+          <th>Technicien</th>
+          <th>Assigné par</th>
+          <th>Priorité</th>
+          <th>Statut</th>
+          <th>Début</th>
+          <th>Durée</th>
+          <th>Solution</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let i of interventions"   
+        [routerLink]="['/interventions', i.id]"
+         style="cursor: pointer;">
+          <td>
+            <span class="failure-code">{{ i.failureCode }}</span>
+            <span class="failure-title">{{ i.failureTitle }}</span>
+          </td>
+          <td>
+            <span class="eq-code">{{ i.equipmentCode }}</span>
+            <span class="eq-name">{{ i.equipmentName }}</span>
+          </td>
+          <td>
+            <span class="tech-name">{{ i.technicianName }}</span>
+            <span class="tech-code">{{ i.technicianEmployeeCode }}</span>
+          </td>
+          <td>{{ i.assignedByName || '—' }}</td>
+          <td>
+            <span class="badge badge--priority-{{ i.priority.toLowerCase() }}">
+              {{ getPriorityLabel(i.priority) }}
+            </span>
+          </td>
+          <td>
+            <span class="badge badge--status-{{ i.status.toLowerCase().replace('_', '-') }}">
+              {{ getStatusLabel(i.status) }}
+            </span>
+          </td>
+          <td class="date-cell">
+            {{ i.startTime ? (i.startTime | date:'dd/MM HH:mm') : '—' }}
+          </td>
+          <td class="duration-cell">{{ getDurationLabel(i.duration) }}</td>
+          <td class="solution-cell">
+            <span *ngIf="i.solution" class="solution-text" [title]="i.solution">
+              {{ i.solution.length > 40 ? i.solution.substring(0, 40) + '...' : i.solution }}
+            </span>
+            <span *ngIf="!i.solution" class="no-solution">—</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #emptyState>
+      <div class="empty-state">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+        </svg>
+        <h3>Aucune intervention</h3>
+        <p>Aucune intervention n'a encore été créée.</p>
+      </div>
+    </ng-template>
+  </div>
+
+</div>

@@ -1,0 +1,157 @@
+<div class="page-wrapper">
+
+  <div class="page-header">
+    <button class="btn-back" routerLink="/failures">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+      </svg>
+      Retour aux pannes
+    </button>
+  </div>
+
+  <div class="loading-state" *ngIf="isLoading">
+    <div class="spinner-lg"></div>
+  </div>
+
+  <div class="alert-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <div *ngIf="failure && !isLoading">
+
+    <!-- En-tête -->
+    <div class="failure-header">
+      <div class="failure-header__left">
+        <span class="failure-code">{{ failure.failureCode }}</span>
+        <h1 class="failure-title">{{ failure.title }}</h1>
+        <div class="failure-badges">
+          <span class="badge badge--priority-{{ failure.priority.toLowerCase() }}">
+            {{ getPriorityLabel(failure.priority) }}
+          </span>
+          <span class="badge badge--status-{{ failure.status.toLowerCase().replace('_', '-') }}">
+            {{ getStatusLabel(failure.status) }}
+          </span>
+          <span class="badge badge--type" *ngIf="failure.failureType">
+            {{ getFailureTypeLabel(failure.failureType) }}
+          </span>
+          <span class="badge badge--llm-pending" *ngIf="!failure.llmProcessed">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            Analyse IA en attente
+          </span>
+        </div>
+      </div>
+
+      <div class="failure-header__actions" *ngIf="isSupervisorOrAdmin">
+        <a class="btn btn-secondary"
+           [routerLink]="['/interventions']">
+          Voir les interventions
+        </a>
+      </div>
+    </div>
+
+    <!-- Grille de détails -->
+    <div class="detail-grid">
+    <div class="detail-card" *ngIf="failure.ruleEngineTriggered">
+    <h2 class="card-title">Moteur de règles</h2>
+    <div class="info-list">
+      <div class="info-item">
+        <span class="info-label">Règle déclenchée</span>
+        <span class="badge badge--rule">⚠ Oui – priorité recalculée</span>
+      </div>
+      <div class="info-item" *ngIf="failure.recommendedTechnicianName">
+        <span class="info-label">Technicien recommandé</span>
+        <span>{{ failure.recommendedTechnicianName }}</span>
+      </div>
+    </div>
+  </div>
+
+      <!-- Description -->
+      <div class="detail-card full-width">
+        <h2 class="card-title">Description</h2>
+        <p class="description-text">{{ failure.description }}</p>
+      </div>
+
+      <!-- Équipement -->
+      <div class="detail-card">
+        <h2 class="card-title">Équipement concerné</h2>
+        <div class="info-list">
+          <div class="info-item">
+            <span class="info-label">Code</span>
+            <a [routerLink]="['/equipments', failure.equipmentId]" class="link-code">
+              {{ failure.equipmentCode }}
+            </a>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Nom</span>
+            <span>{{ failure.equipmentName }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Type</span>
+            <span>{{ failure.equipmentType || '—' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Déclaration -->
+      <div class="detail-card">
+        <h2 class="card-title">Déclaration</h2>
+        <div class="info-list">
+          <div class="info-item">
+            <span class="info-label">Déclaré par</span>
+            <span>{{ failure.reportedByName }} ({{ failure.reportedByEmployeeCode }})</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Canal</span>
+            <span>{{ failure.reportedChannel }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Date de signalement</span>
+            <span>{{ failure.reportedAt | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          <div class="info-item" *ngIf="failure.resolvedAt">
+            <span class="info-label">Date de résolution</span>
+            <span>{{ failure.resolvedAt | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Priorité IA -->
+      <div class="detail-card" *ngIf="failure.llmPriority">
+        <h2 class="card-title">Analyse IA</h2>
+        <div class="info-list">
+          <div class="info-item">
+            <span class="info-label">Priorité LLM</span>
+            <span class="badge badge--priority-{{ failure.llmPriority.toLowerCase() }}">
+              {{ getPriorityLabel(failure.llmPriority) }}
+            </span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Statut analyse</span>
+            <span class="badge" [ngClass]="failure.llmProcessed ? 'badge--analysed' : 'badge--llm-pending'">
+              {{ failure.llmProcessed ? 'Analysée' : 'En attente' }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Audit -->
+      <div class="detail-card">
+        <h2 class="card-title">Historique</h2>
+        <div class="info-list">
+          <div class="info-item">
+            <span class="info-label">Créée le</span>
+            <span>{{ failure.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Mise à jour</span>
+            <span>{{ failure.updatedAt | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

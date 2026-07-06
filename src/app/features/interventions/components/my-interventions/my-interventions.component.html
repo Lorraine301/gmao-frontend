@@ -1,0 +1,114 @@
+<div class="page-wrapper">
+  <div class="page-header">
+    <h1 class="page-title">Mes interventions</h1>
+    <span class="page-subtitle">{{ interventions.length }} intervention(s)</span>
+  </div>
+
+  <div class="loading-state" *ngIf="isLoading">
+    <div class="spinner-lg"></div><p>Chargement...</p>
+  </div>
+
+  <div class="alert-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <div class="interventions-grid" *ngIf="!isLoading">
+    <div class="intervention-card" *ngFor="let i of interventions"
+         [routerLink]="['/my-interventions', i.id]"
+         style="cursor: pointer;"
+         [class.card--pending]="i.status === 'Pending'"
+         [class.card--in-progress]="i.status === 'In_Progress'"
+         [class.card--completed]="i.status === 'Completed'">
+
+      <div class="card-header">
+        <div class="card-codes">
+          <span class="failure-code">{{ i.failureCode }}</span>
+          <span class="eq-code">{{ i.equipmentCode }}</span>
+        </div>
+        <span class="badge badge--status-{{ i.status.toLowerCase().replace('_', '-') }}">
+          {{ getStatusLabel(i.status) }}
+        </span>
+      </div>
+
+      <div class="card-body">
+        <h3 class="failure-title">{{ i.failureTitle }}</h3>
+        <p class="equipment-name">{{ i.equipmentName }}</p>
+
+        <div class="card-meta">
+          <div class="meta-item">
+            <span class="meta-label">Priorité</span>
+            <span class="badge badge--priority-{{ i.priority.toLowerCase() }}">
+              {{ getPriorityLabel(i.priority) }}
+            </span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Assigné par</span>
+            <span class="meta-value">{{ i.assignedByName || '—' }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Début</span>
+            <span class="meta-value">{{ i.startTime ? (i.startTime | date:'dd/MM HH:mm') : '—' }}</span>
+          </div>
+          <div class="meta-item" *ngIf="i.duration">
+            <span class="meta-label">Durée</span>
+            <span class="meta-value">{{ i.duration }}h</span>
+          </div>
+        </div>
+
+        <div class="solution-text" *ngIf="i.solution">
+          <strong>Solution :</strong> {{ i.solution }}
+        </div>
+      </div>
+
+      <div class="card-actions" *ngIf="i.status !== 'Completed'">
+        <button *ngIf="i.status === 'Pending'"
+                class="btn btn-start" (click)="startIntervention(i.id)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+          Démarrer
+        </button>
+        <button *ngIf="i.status === 'In_Progress'"
+                class="btn btn-complete" (click)="openCompletePanel(i.id)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          Terminer
+        </button>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="interventions.length === 0">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+      </svg>
+      <h3>Aucune intervention assignée</h3>
+      <p>Vous n'avez pas d'intervention en cours.</p>
+    </div>
+  </div>
+
+  <!-- Modal clôture -->
+  <div class="modal-overlay" *ngIf="completeInterventionId !== null" (click)="cancelComplete()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h3>Clôturer l'intervention</h3>
+      <p>Décrivez la solution apportée pour résoudre la panne.</p>
+      <form [formGroup]="solutionForm" novalidate>
+        <div class="form-group" [class.error]="solutionForm.get('solution')?.invalid && solutionForm.get('solution')?.touched">
+          <label>Solution apportée <span class="required">*</span></label>
+          <textarea formControlName="solution" rows="4"
+                    placeholder="Décrivez les actions effectuées, les pièces remplacées, les réglages effectués..."></textarea>
+          <span class="error-msg" *ngIf="solutionForm.get('solution')?.invalid && solutionForm.get('solution')?.touched">
+            Minimum 10 caractères requis
+          </span>
+        </div>
+      </form>
+      <div class="modal__actions">
+        <button class="btn btn-ghost" (click)="cancelComplete()">Annuler</button>
+        <button class="btn btn-complete-confirm"
+                (click)="confirmComplete()" [disabled]="isCompleting">
+          <span *ngIf="!isCompleting">Confirmer la clôture</span>
+          <span *ngIf="isCompleting" class="btn-loading"><span class="spinner"></span> Clôture...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
