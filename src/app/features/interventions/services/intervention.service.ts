@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { AtRiskEquipment, Intervention } from '../models/intervention.model';
+import { ConsumeStockRequest } from '../../stock/models/spare-part.model';
 
 @Injectable({ providedIn: 'root' })
 export class InterventionService {
@@ -26,8 +27,12 @@ export class InterventionService {
     return this.http.put<Intervention>(`${this.url}/${id}/status`, { status });
   }
 
-  complete(id: number, solution: string): Observable<Intervention> {
-    return this.http.put<Intervention>(`${this.url}/${id}/complete`, { solution });
+    // ── AJOUT du paramètre optionnel `parts` ──────────────────
+  complete(id: number, solution: string, parts?: ConsumeStockRequest[]): Observable<Intervention> {
+    return this.http.put<Intervention>(`${this.url}/${id}/complete`, {
+      solution,
+      parts: parts ?? []
+    });
   }
 
   getAtRiskEquipments(): Observable<AtRiskEquipment[]> {

@@ -1,11 +1,13 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InterventionService } from '../../services/intervention.service';
 import { EquipmentService } from '../../../equipments/services/equipment.service';
+import { SparePartService } from '../../../stock/services/spare-part.service';
 import { Intervention } from '../../models/intervention.model';
 import { Equipment } from '../../../equipments/models/equipment.model';
+import { SparePart } from '../../../stock/models/spare-part.model';
 
 @Component({
   selector: 'app-my-intervention-detail',
@@ -18,6 +20,7 @@ export class MyInterventionDetailComponent implements OnInit {
 
   intervention?: Intervention;
   equipment?: Equipment;
+  spareParts: SparePart[] = [];
   isLoading = true;
   errorMessage = '';
   successMessage = '';
@@ -29,16 +32,29 @@ export class MyInterventionDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private interventionService: InterventionService,
     private equipmentService: EquipmentService,
+    private sparePartService: SparePartService,
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.completeForm = this.fb.group({
-      solution: ['', [Validators.required, Validators.minLength(10)]]
+      solution: ['', [Validators.required, Validators.minLength(10)]],
+      parts: this.fb.array([])
     });
+    this.loadSpareParts();
     const id = this.route.snapshot.paramMap.get('id');
     if (id) this.loadIntervention(+id);
+  }
+
+  get partsArray(): FormArray {
+    return this.completeForm.get('parts') as FormArray;
+  }
+
+  loadSpareParts(): void {
+    this.sparePartService.findAll().subscribe({
+      next: (data) => { this.spareParts = data; this.cdr.detectChanges(); }
+    });
   }
 
   loadIntervention(id: number): void {
@@ -52,7 +68,6 @@ export class MyInterventionDetailComponent implements OnInit {
           this.cdr.detectChanges();
           return;
         }
-        // Charger les détails complets de l'équipement
         this.loadEquipment(this.intervention.failureId);
       },
       error: () => {
@@ -64,8 +79,6 @@ export class MyInterventionDetailComponent implements OnInit {
   }
 
   loadEquipment(failureId: number): void {
-    // On utilise le failureId pour retrouver l'équipement via son code
-    // On cherche l'équipement depuis la liste en filtrant par code
     this.equipmentService.findAll().subscribe({
       next: (equipments) => {
         this.equipment = equipments.find(
@@ -94,16 +107,37 @@ export class MyInterventionDetailComponent implements OnInit {
 
   openCompleteForm(): void { this.showCompleteForm = true; this.cdr.detectChanges(); }
 
+  // ── Gestion des lignes de pièces ──────────────────────────
+  addPartRow(): void {
+    this.partsArray.push(this.fb.group({
+      sparePartId: [null, Validators.required],
+      quantityUsed: [1, [Validators.required, Validators.min(1)]]
+    }));
+    this.cdr.detectChanges();
+  }
+
+  removePartRow(index: number): void {
+    this.partsArray.removeAt(index);
+    this.cdr.detectChanges();
+  }
+
   submitComplete(): void {
-    if (this.completeForm.invalid || !this.intervention) {
+    if (this.completeForm.get('solution')?.invalid || !this.intervention) {
       this.completeForm.markAllAsTouched();
       return;
     }
     this.isCompleting = true;
-    this.interventionService.complete(
-      this.intervention.id,
-      this.completeForm.get('solution')!.value
-    ).subscribe({
+
+    const solution = this.completeForm.get('solution')!.value;
+
+    const parts = this.partsArray.controls
+      .filter(c => c.get('sparePartId')?.value)
+      .map(c => ({
+        sparePartId: c.get('sparePartId')!.value,
+        quantityUsed: c.get('quantityUsed')!.value
+      }));
+
+    this.interventionService.complete(this.intervention.id, solution, parts).subscribe({
       next: (updated) => {
         this.intervention = updated;
         this.isCompleting = false;
@@ -111,9 +145,9 @@ export class MyInterventionDetailComponent implements OnInit {
         this.successMessage = 'Intervention clôturée avec succès.';
         this.cdr.detectChanges();
       },
-      error: () => {
+      error: (err) => {
         this.isCompleting = false;
-        this.errorMessage = 'Erreur lors de la clôture.';
+        this.errorMessage = err.error?.error ?? 'Erreur lors de la clôture.';
         this.cdr.detectChanges();
       }
     });

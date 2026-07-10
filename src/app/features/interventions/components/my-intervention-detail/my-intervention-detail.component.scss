@@ -69,3 +69,45 @@ $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-ligh
 .badge--criticality-low    { background: #e8f5e9; color: #2e7d32; padding: 3px 10px; border-radius: 20px; font-size: 0.76rem; font-weight: 600; }
 .badge--criticality-medium { background: #fff8e1; color: #f57f17; padding: 3px 10px; border-radius: 20px; font-size: 0.76rem; font-weight: 600; }
 .badge--criticality-high   { background: #ffebee; color: #c62828; padding: 3px 10px; border-radius: 20px; font-size: 0.76rem; font-weight: 600; }
+
+// ── Pièces utilisées (formulaire de clôture) ─────────────
+.parts-section {
+  margin-top: 4px;
+  margin-bottom: 20px;
+  border-top: 1px solid $border;
+  padding-top: 16px;
+}
+.parts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  label { font-size: 0.82rem; font-weight: 600; color: $text-dark; }
+}
+.btn-add-part {
+  background: #e3f2fd; color: #1565c0; border: none;
+  padding: 6px 12px; border-radius: 6px; font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; transition: all 0.15s;
+  &:hover { background: #1565c0; color: white; }
+}
+.part-row {
+  display: flex; gap: 8px; margin-bottom: 8px; align-items: center;
+}
+.part-select {
+  flex: 1; padding: 9px 12px; border: 1.5px solid $border; border-radius: 8px;
+  font-size: 0.85rem; outline: none; background: $bg;
+  &:focus { border-color: $secondary; }
+}
+.part-qty {
+  width: 80px; padding: 9px 12px; border: 1.5px solid $border; border-radius: 8px;
+  font-size: 0.85rem; outline: none; background: $bg; text-align: center;
+  &:focus { border-color: $secondary; }
+}
+.btn-remove-part {
+  background: #ffebee; border: none; border-radius: 6px; padding: 8px 12px;
+  cursor: pointer; color: $error; font-weight: 700;
+  &:hover { background: $error; color: white; }
+}
+.parts-hint {
+  font-size: 0.78rem; color: $text-light; font-style: italic; margin: 4px 0 0;
+}

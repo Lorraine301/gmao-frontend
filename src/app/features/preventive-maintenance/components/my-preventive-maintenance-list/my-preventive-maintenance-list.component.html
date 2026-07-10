@@ -1,0 +1,58 @@
+<div class="page-wrapper">
+  <div class="page-header">
+    <h1 class="page-title">Mes maintenances préventives</h1>
+    <span class="page-subtitle">{{ maintenances.length }} maintenance(s) assignée(s)</span>
+  </div>
+
+  <div class="loading-state" *ngIf="isLoading">
+    <div class="spinner-lg"></div><p>Chargement...</p>
+  </div>
+
+  <div class="alert-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <div class="maintenances-grid" *ngIf="!isLoading">
+    <div class="maintenance-card" *ngFor="let pm of maintenances"
+         [routerLink]="['/my-preventive-maintenance', pm.id]"
+         style="cursor: pointer;"
+         [class.card--pending]="pm.executionStatus === 'Pending'"
+         [class.card--in-progress]="pm.executionStatus === 'In_Progress'">
+
+      <div class="card-header">
+        <div class="card-codes">
+          <span class="eq-code">{{ pm.equipmentCode }}</span>
+          <span class="type-badge">{{ pm.maintenanceType }}</span>
+        </div>
+        <span class="badge badge--exec-{{ (pm.executionStatus || '').toLowerCase().replace('_','-') }}">
+          {{ getExecutionStatusLabel(pm.executionStatus) }}
+        </span>
+      </div>
+
+      <div class="card-body">
+        <h3 class="eq-name">{{ pm.equipmentName }}</h3>
+        <p class="location" *ngIf="pm.equipmentLocation">{{ pm.equipmentLocation }}</p>
+
+        <div class="card-meta">
+          <div class="meta-item">
+            <span class="meta-label">Prochaine échéance</span>
+            <span class="meta-value">{{ pm.nextMaintenanceDate | date:'dd/MM/yyyy' }}</span>
+          </div>
+          <div class="meta-item" *ngIf="pm.technicianStartTime">
+            <span class="meta-label">Démarrée le</span>
+            <span class="meta-value">{{ pm.technicianStartTime | date:'dd/MM HH:mm' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="maintenances.length === 0">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+        <line x1="16" y1="2" x2="16" y2="6"/>
+        <line x1="8" y1="2" x2="8" y2="6"/>
+        <line x1="3" y1="10" x2="21" y2="10"/>
+      </svg>
+      <h3>Aucune maintenance assignée</h3>
+      <p>Vous n'avez pas de maintenance préventive en cours.</p>
+    </div>
+  </div>
+</div>

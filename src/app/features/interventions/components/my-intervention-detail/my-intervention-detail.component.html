@@ -96,12 +96,12 @@
 
     </div>
 
-    <!-- Formulaire de clôture -->
+<!-- Formulaire de clôture -->
     <div class="complete-section" *ngIf="showCompleteForm">
       <h2 class="section-title">Clôturer l'intervention</h2>
       <form [formGroup]="completeForm" (ngSubmit)="submitComplete()" novalidate>
         <div class="form-group"
-             [class.error]="completeForm.get('solution')?.invalid && completeForm.get('solution')?.touched">
+            [class.error]="completeForm.get('solution')?.invalid && completeForm.get('solution')?.touched">
           <label>Solution apportée <span class="required">*</span></label>
           <textarea formControlName="solution" rows="5"
                     placeholder="Décrivez les actions effectuées, les pièces remplacées, les réglages effectués..."></textarea>
@@ -110,6 +110,34 @@
             Minimum 10 caractères requis
           </span>
         </div>
+
+        <!-- ── Pièces utilisées ────────────────────────────────── -->
+        <div class="parts-section">
+          <div class="parts-header">
+            <label>Pièces utilisées (optionnel)</label>
+            <button type="button" class="btn-add-part" (click)="addPartRow()">
+              + Ajouter une pièce
+            </button>
+          </div>
+
+          <div formArrayName="parts">
+            <div class="part-row" *ngFor="let part of partsArray.controls; let i = index" [formGroupName]="i">
+              <select formControlName="sparePartId" class="part-select">
+                <option [ngValue]="null" disabled>— Sélectionner une pièce —</option>
+                <option *ngFor="let sp of spareParts" [ngValue]="sp.id">
+                  {{ sp.reference }} – {{ sp.name }} (stock : {{ sp.quantity }} {{ sp.unit || '' }})
+                </option>
+              </select>
+              <input type="number" formControlName="quantityUsed" min="1" class="part-qty" placeholder="Qté" />
+              <button type="button" class="btn-remove-part" (click)="removePartRow(i)">✕</button>
+            </div>
+          </div>
+
+          <p class="parts-hint" *ngIf="partsArray.length === 0">
+            Aucune pièce ajoutée — le stock ne sera pas modifié.
+          </p>
+        </div>
+
         <div class="form-actions">
           <button type="button" class="btn btn-ghost" (click)="showCompleteForm = false">Annuler</button>
           <button type="submit" class="btn btn-complete" [disabled]="isCompleting">

@@ -1,0 +1,78 @@
+<div class="page-wrapper">
+  <div class="page-header">
+    <button class="btn-back" routerLink="/stock">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+      </svg>
+      Retour au stock
+    </button>
+    <h1>{{ isEditMode ? 'Modifier la pièce' : 'Ajouter une pièce' }}</h1>
+  </div>
+
+  <div class="loading-state" *ngIf="isLoading"><div class="spinner-lg"></div></div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="!isLoading" novalidate>
+    <div class="alert-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <div class="form-section">
+      <h2 class="section-title">Identification</h2>
+      <div class="form-grid">
+        <div class="form-group" [class.error]="isInvalid('name')">
+          <label>Nom <span class="required">*</span></label>
+          <input formControlName="name" placeholder="ex: Cooling Fan Motor" />
+          <span class="error-msg" *ngIf="isInvalid('name')">Le nom est obligatoire</span>
+        </div>
+        <div class="form-group" [class.error]="isInvalid('reference')">
+          <label>Référence <span class="required">*</span></label>
+          <input formControlName="reference" placeholder="ex: FAN-CF05" />
+          <span class="error-msg" *ngIf="isInvalid('reference')">La référence est obligatoire</span>
+        </div>
+        <div class="form-group">
+          <label>Fournisseur</label>
+          <input formControlName="supplier" placeholder="ex: Siemens" />
+        </div>
+        <div class="form-group">
+          <label>Emplacement magasin</label>
+          <input formControlName="warehouseLocation" placeholder="ex: WH-A1" />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h2 class="section-title">Stock & Prix</h2>
+      <div class="form-grid">
+        <div class="form-group" [class.error]="isInvalid('quantity')">
+          <label>Quantité actuelle <span class="required">*</span></label>
+          <input type="number" formControlName="quantity" min="0" />
+        </div>
+        <div class="form-group" [class.error]="isInvalid('minimumStock')">
+          <label>Stock minimum <span class="required">*</span></label>
+          <input type="number" formControlName="minimumStock" min="0" />
+        </div>
+        <div class="form-group">
+          <label>Unité</label>
+          <select formControlName="unit">
+            <option value="Piece">Pièce</option>
+            <option value="Litre">Litre</option>
+            <option value="Metre">Mètre</option>
+            <option value="Kit">Kit</option>
+            <option value="Boite">Boîte</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Prix unitaire (MAD)</label>
+          <input type="number" formControlName="unitPrice" min="0" step="0.01" placeholder="0.00" />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-ghost" routerLink="/stock">Annuler</button>
+      <button type="submit" class="btn btn-primary" [disabled]="isSaving">
+        <span *ngIf="!isSaving">{{ isEditMode ? 'Enregistrer' : 'Ajouter la pièce' }}</span>
+        <span *ngIf="isSaving" class="btn-loading"><span class="spinner"></span> Sauvegarde...</span>
+      </button>
+    </div>
+  </form>
+</div>

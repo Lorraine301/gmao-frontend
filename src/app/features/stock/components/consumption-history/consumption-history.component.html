@@ -1,0 +1,94 @@
+<div class="page-wrapper">
+
+  <div class="page-header">
+    <div class="page-header__left">
+      <button class="btn-back" routerLink="/stock">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+        </svg>
+        Retour au stock
+      </button>
+      <h1 class="page-title">Historique de consommation des pièces</h1>
+      <span class="page-subtitle">{{ consumptions.length }} consommation(s)</span>
+    </div>
+  </div>
+
+  <!-- Filtres -->
+  <div class="filters">
+    <button class="filter-btn" [class.filter-btn--active]="activeFilter === 'ALL'" (click)="setFilter('ALL')">
+      Toutes
+    </button>
+    <button class="filter-btn" [class.filter-btn--active]="activeFilter === 'CORRECTIVE'" (click)="setFilter('CORRECTIVE')">
+      Interventions (pannes)
+    </button>
+    <button class="filter-btn" [class.filter-btn--active]="activeFilter === 'PREVENTIVE'" (click)="setFilter('PREVENTIVE')">
+      Maintenance préventive
+    </button>
+  </div>
+
+  <div class="alert-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <div class="loading-state" *ngIf="isLoading">
+    <div class="spinner-lg"></div><p>Chargement...</p>
+  </div>
+
+  <div class="table-card" *ngIf="!isLoading">
+    <table class="data-table" *ngIf="consumptions.length > 0; else emptyState">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Pièce</th>
+          <th>Équipement</th>
+          <th>Quantité</th>
+          <th>Prix unitaire</th>
+          <th>Prix total</th>
+          <th>Type</th>
+          <th>Technicien</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of consumptions">
+          <td class="date-cell">{{ c.consumptionDate | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td>
+            <span class="part-ref">{{ c.sparePartReference }}</span>
+            <span class="part-name">{{ c.sparePartName }}</span>
+          </td>
+          <td>
+            <span class="eq-code" *ngIf="c.equipmentCode">{{ c.equipmentCode }}</span>
+            <span class="eq-name" *ngIf="c.equipmentName">{{ c.equipmentName }}</span>
+            <span *ngIf="!c.equipmentCode">—</span>
+          </td>
+          <td>{{ c.quantityUsed }}</td>
+          <td>{{ c.unitPrice != null ? (c.unitPrice | number:'1.2-2') + ' MAD' : '—' }}</td>
+          <td class="total-price">{{ c.totalPrice != null ? (c.totalPrice | number:'1.2-2') + ' MAD' : '—' }}</td>
+          <td>
+            <span class="type-badge" [class.type-badge--preventive]="c.consumptionType === 'PREVENTIVE'">
+              {{ getTypeLabel(c.consumptionType) }}
+            </span>
+          </td>
+          <td>{{ c.technicianName || '—' }}</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="5" class="total-label">Total</td>
+          <td class="total-price">{{ totalCost | number:'1.2-2' }} MAD</td>
+          <td colspan="2"></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <ng-template #emptyState>
+      <div class="empty-state">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+        </svg>
+        <h3>Aucune consommation enregistrée</h3>
+        <p>Aucune pièce n'a encore été consommée pour ce filtre.</p>
+      </div>
+    </ng-template>
+  </div>
+
+</div>

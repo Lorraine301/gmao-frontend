@@ -120,6 +120,68 @@ export const routes: Routes = [
     import('./features/interventions/components/intervention-detail/intervention-detail.component')
       .then(m => m.InterventionDetailComponent)
 },
+
+// ── Maintenance préventive ──────────────────────────────
+{
+  path: 'preventive-maintenance',
+  canActivate: [authGuard, roleGuard],
+  data: { roles: ['Admin', 'Supervisor'] },
+  loadComponent: () =>
+    import('./features/preventive-maintenance/components/planning-list/planning-list.component')
+      .then(m => m.PlanningListComponent)
+},
+
+// ── Stock ────────────────────────────────────────────────
+{
+  path: 'stock',
+  canActivate: [authGuard, roleGuard],
+  data: { roles: ['Admin', 'Supervisor'] },
+  loadComponent: () =>
+    import('./features/stock/components/stock-list/stock-list.component')
+      .then(m => m.StockListComponent)
+},
+{
+  path: 'stock/new',
+  canActivate: [authGuard, roleGuard],
+  data: { roles: ['Admin'] },
+  loadComponent: () =>
+    import('./features/stock/components/stock-form/stock-form.component')
+      .then(m => m.StockFormComponent)
+},
+{
+  path: 'stock/consumption-history',
+  canActivate: [authGuard, roleGuard],
+  data: { roles: ['Admin', 'Supervisor'] },
+  loadComponent: () =>
+    import('./features/stock/components/consumption-history/consumption-history.component')
+      .then(m => m.ConsumptionHistoryComponent)
+},
+{
+  path: 'stock/:id/edit',
+  canActivate: [authGuard, roleGuard],
+  data: { roles: ['Admin'] },
+  loadComponent: () =>
+    import('./features/stock/components/stock-form/stock-form.component')
+      .then(m => m.StockFormComponent)
+},
+
+// ── Mes maintenances préventives (technicien) ────────────
+{
+  path: 'my-preventive-maintenance',
+  canActivate: [authGuard, roleGuard],
+  data: { roles: ['Technician'] },
+  loadComponent: () =>
+    import('./features/preventive-maintenance/components/my-preventive-maintenance-list/my-preventive-maintenance-list.component')
+      .then(m => m.MyPreventiveMaintenanceListComponent)
+},
+{
+  path: 'my-preventive-maintenance/:id',
+  canActivate: [authGuard, roleGuard],
+  data: { roles: ['Technician'] },
+  loadComponent: () =>
+    import('./features/preventive-maintenance/components/my-preventive-maintenance-detail/my-preventive-maintenance-detail.component')
+      .then(m => m.MyPreventiveMaintenanceDetailComponent)
+},
   // Redirections par rôle (placeholders à remplacer sprint par sprint)
  // { path: 'technician', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'admin',      redirectTo: '/failures', pathMatch: 'full' },

@@ -91,16 +91,43 @@
     <div class="modal" (click)="$event.stopPropagation()">
       <h3>Clôturer l'intervention</h3>
       <p>Décrivez la solution apportée pour résoudre la panne.</p>
-      <form [formGroup]="solutionForm" novalidate>
-        <div class="form-group" [class.error]="solutionForm.get('solution')?.invalid && solutionForm.get('solution')?.touched">
-          <label>Solution apportée <span class="required">*</span></label>
-          <textarea formControlName="solution" rows="4"
-                    placeholder="Décrivez les actions effectuées, les pièces remplacées, les réglages effectués..."></textarea>
-          <span class="error-msg" *ngIf="solutionForm.get('solution')?.invalid && solutionForm.get('solution')?.touched">
-            Minimum 10 caractères requis
-          </span>
-        </div>
-      </form>
+       <form [formGroup]="solutionForm" novalidate>
+          <div class="form-group" [class.error]="solutionForm.get('solution')?.invalid && solutionForm.get('solution')?.touched">
+            <label>Solution apportée <span class="required">*</span></label>
+            <textarea formControlName="solution" rows="4"
+                      placeholder="Décrivez les actions effectuées, les pièces remplacées, les réglages effectués..."></textarea>
+            <span class="error-msg" *ngIf="solutionForm.get('solution')?.invalid && solutionForm.get('solution')?.touched">
+              Minimum 10 caractères requis
+            </span>
+          </div>
+
+          <!-- ── Pièces utilisées ────────────────────────────────── -->
+          <div class="parts-section">
+            <div class="parts-header">
+              <label>Pièces utilisées (optionnel)</label>
+              <button type="button" class="btn-add-part" (click)="addPartRow()">
+                + Ajouter une pièce
+              </button>
+            </div>
+
+            <div formArrayName="parts">
+              <div class="part-row" *ngFor="let part of partsArray.controls; let i = index" [formGroupName]="i">
+                <select formControlName="sparePartId" class="part-select">
+                  <option [ngValue]="null" disabled>— Sélectionner une pièce —</option>
+                  <option *ngFor="let sp of spareParts" [ngValue]="sp.id">
+                    {{ sp.reference }} – {{ sp.name }} (stock : {{ sp.quantity }} {{ sp.unit || '' }})
+                  </option>
+                </select>
+                <input type="number" formControlName="quantityUsed" min="1" class="part-qty" placeholder="Qté" />
+                <button type="button" class="btn-remove-part" (click)="removePartRow(i)">✕</button>
+              </div>
+            </div>
+
+            <p class="parts-hint" *ngIf="partsArray.length === 0">
+              Aucune pièce ajoutée — le stock ne sera pas modifié.
+            </p>
+          </div>
+        </form>
       <div class="modal__actions">
         <button class="btn btn-ghost" (click)="cancelComplete()">Annuler</button>
         <button class="btn btn-complete-confirm"
