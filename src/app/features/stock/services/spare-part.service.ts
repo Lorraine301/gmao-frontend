@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { SparePart, SparePartRequest } from '../models/spare-part.model';
+import { SparePart, SparePartRequest, InterventionPart, PreventiveMaintenancePart} from '../models/spare-part.model';
 import { PartConsumption, ConsumptionType } from '../models/spare-part.model';
 
 @Injectable({ providedIn: 'root' })
@@ -35,5 +35,16 @@ export class SparePartService {
     let params = new HttpParams();
     if (type) params = params.set('type', type);
     return this.http.get<PartConsumption[]>(`${this.url}/consumption-history`, { params });
+  }
+  getInterventionParts(interventionId: number): Observable<InterventionPart[]> {
+  return this.http.get<InterventionPart[]>(
+    `${environment.apiUrl}/interventions/${interventionId}/parts`
+  );
+}
+
+  getPreventiveMaintenanceParts(maintenanceId: number): Observable<PreventiveMaintenancePart[]> {
+    return this.http.get<PreventiveMaintenancePart[]>(
+      `${environment.apiUrl}/preventive-maintenances/${maintenanceId}/parts`
+    );
   }
 }

@@ -50,4 +50,8 @@ export class PreventiveMaintenanceService {
   ): Observable<PreventiveMaintenance> {
     return this.http.put<PreventiveMaintenance>(`${this.url}/${id}/complete-technician`, dto);
   }
+  // ── Mes maintenances archivées (technicien connecté) ────────────────
+  findMyArchive(): Observable<PreventiveMaintenance[]> {
+  return this.http.get<PreventiveMaintenance[]>(`${this.url}/my/archive`);
+  }
 }

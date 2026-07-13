@@ -43,3 +43,11 @@ $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-ligh
 
 .empty-state { grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; padding: 60px; gap: 12px; color: $text-light;
   svg { width: 48px; height: 48px; opacity: 0.4; } h3 { font-size: 1.1rem; color: $text-dark; margin: 0; } p { font-size: 0.88rem; margin: 0; } }
+
+.link-archive {
+  font-size: 0.85rem;
+  color: $secondary;
+  text-decoration: none;
+  font-weight: 600;
+  &:hover { text-decoration: underline; }
+}

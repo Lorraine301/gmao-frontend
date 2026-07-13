@@ -111,3 +111,10 @@ $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-ligh
 .parts-hint {
   font-size: 0.78rem; color: $text-light; font-style: italic; margin: 4px 0 0;
 }
+.link-archive {
+  font-size: 0.85rem;
+  color: $secondary;
+  text-decoration: none;
+  font-weight: 600;
+  &:hover { text-decoration: underline; }
+}

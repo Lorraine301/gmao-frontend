@@ -182,6 +182,15 @@ export const routes: Routes = [
     import('./features/preventive-maintenance/components/my-preventive-maintenance-detail/my-preventive-maintenance-detail.component')
       .then(m => m.MyPreventiveMaintenanceDetailComponent)
 },
+
+{
+  path: 'my-archive',
+  canActivate: [authGuard, roleGuard],
+  data: { roles: ['Technician'] },
+  loadComponent: () =>
+    import('./features/archive/components/my-archive/my-archive.component')
+      .then(m => m.MyArchiveComponent)
+},
   // Redirections par rôle (placeholders à remplacer sprint par sprint)
  // { path: 'technician', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'admin',      redirectTo: '/failures', pathMatch: 'full' },

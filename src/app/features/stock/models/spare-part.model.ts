@@ -45,3 +45,23 @@ export interface PartConsumption {
   equipmentCode?: string;
   equipmentName?: string;
 }
+
+export interface InterventionPart {
+  id: number;
+  interventionId: number;
+  sparePartId: number;
+  sparePartName: string;
+  sparePartReference: string;
+  quantityUsed: number;
+  createdAt: string;
+}
+
+export interface PreventiveMaintenancePart {
+  id: number;
+  preventiveMaintenanceId: number;
+  sparePartId: number;
+  sparePartName: string;
+  sparePartReference: string;
+  quantityUsed: number;
+  createdAt: string;
+}

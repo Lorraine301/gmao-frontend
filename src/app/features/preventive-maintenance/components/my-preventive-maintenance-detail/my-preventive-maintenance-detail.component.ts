@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule } from '@angular
 import { PreventiveMaintenanceService } from '../../services/preventive-maintenance.service';
 import { SparePartService } from '../../../stock/services/spare-part.service';
 import { PreventiveMaintenance } from '../../models/preventive-maintenance.model';
-import { SparePart } from '../../../stock/models/spare-part.model';
+import { PreventiveMaintenancePart, SparePart } from '../../../stock/models/spare-part.model';
 
 @Component({
   selector: 'app-my-preventive-maintenance-detail',
@@ -24,6 +24,7 @@ export class MyPreventiveMaintenanceDetailComponent implements OnInit {
   completeForm!: FormGroup;
   isCompleting = false;
   showCompleteForm = false;
+  partsUsed: PreventiveMaintenancePart[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -55,24 +56,49 @@ export class MyPreventiveMaintenanceDetailComponent implements OnInit {
     });
   }
 
-  loadMaintenance(id: number): void {
-    this.isLoading = true;
-    this.pmService.findMy().subscribe({
-      next: (list) => {
-        this.maintenance = list.find(pm => pm.id === id);
-        if (!this.maintenance) {
-          this.errorMessage = 'Maintenance introuvable ou non assignée.';
-        }
-        this.isLoading = false;
-        this.cdr.detectChanges();
-      },
-      error: () => {
-        this.errorMessage = 'Erreur de chargement.';
-        this.isLoading = false;
-        this.cdr.detectChanges();
+loadMaintenance(id: number): void {
+  this.isLoading = true;
+  this.pmService.findMy().subscribe({
+    next: (activeList) => {
+      const found = activeList.find(pm => pm.id === id);
+      if (found) {
+        this.setMaintenance(found);
+        return;
       }
-    });
-  }
+      this.pmService.findMyArchive().subscribe({
+        next: (archiveList) => {
+          const archived = archiveList.find(pm => pm.id === id);
+          if (archived) {
+            this.setMaintenance(archived);
+          } else {
+            this.errorMessage = 'Maintenance introuvable ou non assignée.';
+            this.isLoading = false;
+            this.cdr.detectChanges();
+          }
+        },
+        error: () => {
+          this.errorMessage = 'Erreur de chargement.';
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        }
+      });
+    },
+    error: () => {
+      this.errorMessage = 'Erreur de chargement.';
+      this.isLoading = false;
+      this.cdr.detectChanges();
+    }
+  });
+}
+
+private setMaintenance(pm: PreventiveMaintenance): void {
+  this.maintenance = pm;
+  this.isLoading = false;
+  this.sparePartService.getPreventiveMaintenanceParts(pm.id).subscribe({
+    next: (parts) => { this.partsUsed = parts; this.cdr.detectChanges(); }
+  });
+  this.cdr.detectChanges();
+}
 
   startExecution(): void {
     if (!this.maintenance) return;

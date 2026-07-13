@@ -111,3 +111,9 @@ $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-ligh
 .parts-hint {
   font-size: 0.78rem; color: $text-light; font-style: italic; margin: 4px 0 0;
 }
+.parts-table {
+  width: 100%;
+  border-collapse: collapse;
+  th, td { padding: 8px 12px; text-align: left; font-size: 0.85rem; border-bottom: 1px solid $border; }
+  th { color: $text-light; font-weight: 600; text-transform: uppercase; font-size: 0.72rem; }
+}

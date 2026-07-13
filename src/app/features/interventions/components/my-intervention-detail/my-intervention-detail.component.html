@@ -93,6 +93,22 @@
           Clôturée par <strong>{{ intervention.closedByName }}</strong>
         </div>
       </div>
+      <!-- Pièces utilisées -->
+      <div class="detail-card full-width" *ngIf="partsUsed.length > 0">
+        <h2 class="card-title">Pièces utilisées</h2>
+        <table class="parts-table">
+          <thead>
+            <tr><th>Référence</th><th>Nom</th><th>Quantité</th></tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of partsUsed">
+              <td>{{ p.sparePartReference }}</td>
+              <td>{{ p.sparePartName }}</td>
+              <td>{{ p.quantityUsed }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
     </div>
 

@@ -1,0 +1,78 @@
+<div class="page-wrapper">
+  <div class="page-header">
+    <button class="btn-back" routerLink="/my-interventions">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+      </svg>
+      Retour
+    </button>
+    <h1 class="page-title">Archives</h1>
+    <span class="page-subtitle">Historique de vos interventions et maintenances terminées</span>
+  </div>
+
+  <!-- Onglets -->
+  <div class="tabs">
+    <button class="tab" [class.tab--active]="activeTab === 'interventions'" (click)="setTab('interventions')">
+      Interventions ({{ interventions.length }})
+    </button>
+    <button class="tab" [class.tab--active]="activeTab === 'maintenances'" (click)="setTab('maintenances')">
+      Maintenances préventives ({{ maintenances.length }})
+    </button>
+  </div>
+
+  <div class="loading-state" *ngIf="isLoading"><div class="spinner-lg"></div></div>
+  <div class="alert-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <!-- Onglet Interventions -->
+  <div class="archive-grid" *ngIf="!isLoading && activeTab === 'interventions'">
+    <!-- Onglet Interventions -->
+    <div class="archive-card" *ngFor="let i of interventions" [routerLink]="['/my-interventions', i.id]" style="cursor: pointer;">
+      <div class="card-header">
+        <span class="failure-code">{{ i.failureCode }}</span>
+        <span class="badge badge--priority-{{ i.priority.toLowerCase() }}">
+          {{ getPriorityLabel(i.priority) }}
+        </span>
+      </div>
+      <h3 class="failure-title">{{ i.failureTitle }}</h3>
+      <p class="equipment-name">{{ i.equipmentCode }} – {{ i.equipmentName }}</p>
+      <div class="card-meta">
+        <span>Terminée le {{ i.endTime | date:'dd/MM/yyyy HH:mm' }}</span>
+        <span *ngIf="i.duration">{{ i.duration }}h</span>
+      </div>
+      <div class="solution-text" *ngIf="i.solution">
+        <strong>Solution :</strong> {{ i.solution }}
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="interventions.length === 0">
+      <p>Aucune intervention terminée pour le moment.</p>
+    </div>
+  </div>
+
+  <!-- Onglet Maintenances préventives -->
+  <div class="archive-grid" *ngIf="!isLoading && activeTab === 'maintenances'">
+    <!-- Onglet Maintenances préventives -->
+      <div class="archive-card" *ngFor="let pm of maintenances" [routerLink]="['/my-preventive-maintenance', pm.id]" style="cursor: pointer;">
+      <div class="card-header">
+        <span class="failure-code">{{ pm.equipmentCode }}</span>
+        <span class="type-badge">{{ pm.maintenanceType }}</span>
+      </div>
+      <h3 class="failure-title">{{ pm.equipmentName }}</h3>
+      <p class="equipment-name" *ngIf="pm.equipmentLocation">{{ pm.equipmentLocation }}</p>
+      <div class="card-meta">
+        <span>Terminée le {{ pm.technicianEndTime | date:'dd/MM/yyyy HH:mm' }}</span>
+      </div>
+      <div class="solution-text">
+        <strong>Problème trouvé :</strong> {{ pm.problemFound || 'Aucun problème détecté' }}
+      </div>
+      <div class="solution-text" *ngIf="pm.solution">
+        <strong>Solution :</strong> {{ pm.solution }}
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="maintenances.length === 0">
+      <p>Aucune maintenance préventive terminée pour le moment.</p>
+    </div>
+  </div>
+</div>

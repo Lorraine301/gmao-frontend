@@ -38,4 +38,7 @@ export class InterventionService {
   getAtRiskEquipments(): Observable<AtRiskEquipment[]> {
     return this.http.get<AtRiskEquipment[]>(`${environment.apiUrl}/equipments/at-risk`);
   }
+  findMyArchive(): Observable<Intervention[]> {
+  return this.http.get<Intervention[]>(`${this.url}/my/archive`);
+  }
 }

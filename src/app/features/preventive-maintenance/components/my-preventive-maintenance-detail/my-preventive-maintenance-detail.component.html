@@ -65,7 +65,7 @@
         </div>
       </div>
 
-      <!-- Résultat (si déjà clôturée) -->
+   <!-- Résultat (si déjà clôturée) -->
       <div class="detail-card full-width" *ngIf="maintenance.executionStatus === 'Completed'">
         <h2 class="card-title">Résultat</h2>
         <div class="info-list">
@@ -78,6 +78,20 @@
             <span>{{ maintenance.solution }}</span>
           </div>
         </div>
+
+        <!-- ── Pièces utilisées ── -->
+        <table class="parts-table" *ngIf="partsUsed.length > 0">
+          <thead>
+            <tr><th>Référence</th><th>Nom</th><th>Quantité</th></tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of partsUsed">
+              <td>{{ p.sparePartReference }}</td>
+              <td>{{ p.sparePartName }}</td>
+              <td>{{ p.quantityUsed }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 

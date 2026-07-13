@@ -7,7 +7,7 @@ import { EquipmentService } from '../../../equipments/services/equipment.service
 import { SparePartService } from '../../../stock/services/spare-part.service';
 import { Intervention } from '../../models/intervention.model';
 import { Equipment } from '../../../equipments/models/equipment.model';
-import { SparePart } from '../../../stock/models/spare-part.model';
+import { InterventionPart, SparePart } from '../../../stock/models/spare-part.model';
 
 @Component({
   selector: 'app-my-intervention-detail',
@@ -27,6 +27,7 @@ export class MyInterventionDetailComponent implements OnInit {
   completeForm!: FormGroup;
   isCompleting = false;
   showCompleteForm = false;
+  partsUsed: InterventionPart[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -57,26 +58,50 @@ export class MyInterventionDetailComponent implements OnInit {
     });
   }
 
-  loadIntervention(id: number): void {
-    this.isLoading = true;
-    this.interventionService.findMy().subscribe({
-      next: (list) => {
-        this.intervention = list.find(i => i.id === id);
-        if (!this.intervention) {
-          this.errorMessage = 'Intervention introuvable ou non assignée.';
+// ── Remplace loadIntervention() ──
+loadIntervention(id: number): void {
+  this.isLoading = true;
+  this.interventionService.findMy().subscribe({
+    next: (activeList) => {
+      const found = activeList.find(i => i.id === id);
+      if (found) {
+        this.setIntervention(found);
+        return;
+      }
+      // Pas trouvé dans les actives → cherche dans les archives
+      this.interventionService.findMyArchive().subscribe({
+        next: (archiveList) => {
+          const archived = archiveList.find(i => i.id === id);
+          if (archived) {
+            this.setIntervention(archived);
+          } else {
+            this.errorMessage = 'Intervention introuvable ou non assignée.';
+            this.isLoading = false;
+            this.cdr.detectChanges();
+          }
+        },
+        error: () => {
+          this.errorMessage = 'Erreur de chargement.';
           this.isLoading = false;
           this.cdr.detectChanges();
-          return;
         }
-        this.loadEquipment(this.intervention.failureId);
-      },
-      error: () => {
-        this.errorMessage = 'Erreur de chargement.';
-        this.isLoading = false;
-        this.cdr.detectChanges();
-      }
-    });
-  }
+      });
+    },
+    error: () => {
+      this.errorMessage = 'Erreur de chargement.';
+      this.isLoading = false;
+      this.cdr.detectChanges();
+    }
+  });
+}
+
+private setIntervention(intervention: Intervention): void {
+  this.intervention = intervention;
+  this.loadEquipment(intervention.failureId);
+  this.sparePartService.getInterventionParts(intervention.id).subscribe({
+    next: (parts) => { this.partsUsed = parts; this.cdr.detectChanges(); }
+  });
+}
 
   loadEquipment(failureId: number): void {
     this.equipmentService.findAll().subscribe({

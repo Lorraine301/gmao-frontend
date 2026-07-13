@@ -61,3 +61,9 @@ $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-ligh
 .part-qty { width: 80px; padding: 9px 12px; border: 1.5px solid $border; border-radius: 8px; font-size: 0.85rem; outline: none; background: $bg; text-align: center; &:focus { border-color: $secondary; } }
 .btn-remove-part { background: #ffebee; border: none; border-radius: 6px; padding: 8px 12px; cursor: pointer; color: $error; font-weight: 700; &:hover { background: $error; color: white; } }
 .parts-hint { font-size: 0.78rem; color: $text-light; font-style: italic; margin: 4px 0 0; }
+.parts-table {
+  width: 100%;
+  border-collapse: collapse;
+  th, td { padding: 8px 12px; text-align: left; font-size: 0.85rem; border-bottom: 1px solid $border; }
+  th { color: $text-light; font-weight: 600; text-transform: uppercase; font-size: 0.72rem; }
+}
