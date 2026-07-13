@@ -1,0 +1,43 @@
+$primary: #1E3A5F; $secondary: #2E75B6; $error: #c0392b; $success: #2e7d32; $warning: #e65100;
+$border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-light: #718096;
+
+.page-wrapper { padding: 32px; max-width: 1400px; margin: 0 auto; }
+.page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
+.page-title { font-size: 1.6rem; font-weight: 700; color: $primary; margin: 0 0 4px; }
+.page-subtitle { font-size: 0.85rem; color: $text-light; }
+
+.period-selector { display: flex; gap: 4px; background: $bg; padding: 4px; border-radius: 10px; border: 1px solid $border; }
+.period-btn {
+  padding: 8px 16px; border: none; background: transparent; border-radius: 8px; cursor: pointer;
+  font-size: 0.85rem; font-weight: 600; color: $text-light; transition: all 0.15s;
+  &--active { background: $white; color: $primary; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+}
+
+.alert-error { padding: 12px 16px; background: #fdf3f2; border-left: 4px solid $error; border-radius: 8px; color: $error; font-size: 0.88rem; margin-bottom: 16px; }
+
+.kpi-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px; }
+.kpi-card {
+  background: $white; border: 1px solid $border; border-radius: 12px; padding: 20px;
+  display: flex; flex-direction: column; gap: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+.kpi-label { font-size: 0.78rem; color: $text-light; text-transform: uppercase; letter-spacing: 0.4px; font-weight: 600; }
+.kpi-value { font-size: 1.8rem; font-weight: 700; color: $primary; }
+
+.section-title { font-size: 1rem; font-weight: 700; color: $primary; margin: 0 0 16px; }
+.at-risk-section { margin-bottom: 28px; }
+.at-risk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.at-risk-card { background: #fff8f0; border-left: 4px solid #ffb74d; border-radius: 10px; padding: 16px; }
+.at-risk-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.eq-code { font-family: monospace; font-weight: 700; color: $primary; font-size: 0.88rem; }
+.criticality-badge { background: #ffebee; color: #c62828; padding: 2px 8px; border-radius: 12px; font-size: 0.72rem; font-weight: 600; }
+.eq-name { font-size: 0.85rem; color: $text-dark; margin: 0 0 4px; font-weight: 600; }
+.risk-reason { font-size: 0.8rem; color: $text-light; margin: 0; }
+
+.charts-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; .chart-card--wide { grid-column: 1 / -1; } }
+.chart-card { background: $white; border: 1px solid $border; border-radius: 12px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+.chart-title { font-size: 0.9rem; font-weight: 700; color: $primary; margin: 0 0 16px; }
+.chart-container { position: relative; height: 280px; &--small { height: 240px; } }
+
+@media (max-width: 900px) {
+  .charts-grid { grid-template-columns: 1fr; }
+}

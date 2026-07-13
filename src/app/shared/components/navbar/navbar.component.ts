@@ -208,6 +208,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     // Supervisor et Admin ont la même liste actuellement
     return [
+      { label: 'Dashboard', path: '/dashboard' },
       { label: 'Équipements', path: '/equipments' },
       { label: 'Pannes', path: '/failures' },
       { label: 'Interventions', path: '/interventions' },

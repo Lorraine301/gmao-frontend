@@ -51,14 +51,16 @@ export const routes: Routes = [
       import('./features/equipments/components/equipment-detail/equipment-detail.component')
         .then(m => m.EquipmentDetailComponent)
   },
-  // ── Dashboard ───────────────────────────────────────────
-  /*{
+
+// ── Dashboard ───────────────────────────────────────────
+{
   path: 'dashboard',
-  canActivate: [authGuard],
+  canActivate: [authGuard, roleGuard],
+  data: { roles: ['Admin', 'Supervisor'] },
   loadComponent: () =>
-    import('./shared/pages/coming-soon/coming-soon.component')
-      .then(m => m.ComingSoonComponent)
-  },*/
+    import('./features/dashboard/components/dashboard/dashboard.component')
+      .then(m => m.DashboardComponent)
+},
 
   // ── Pannes ───────────────────────────────────────────────
 {
@@ -193,8 +195,8 @@ export const routes: Routes = [
 },
   // Redirections par rôle (placeholders à remplacer sprint par sprint)
  // { path: 'technician', redirectTo: '/dashboard', pathMatch: 'full' },
-  { path: 'admin',      redirectTo: '/failures', pathMatch: 'full' },
-  { path: 'supervisor', redirectTo: '/failures', pathMatch: 'full' },
+  { path: 'admin',      redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: 'supervisor', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'technician', redirectTo: '/my-interventions', pathMatch: 'full' },
 
   { path: '**', redirectTo: '/login' }

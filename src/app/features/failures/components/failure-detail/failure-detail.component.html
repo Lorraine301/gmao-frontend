@@ -15,6 +15,7 @@
   </div>
 
   <div class="alert-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+  <div class="alert-success" *ngIf="successMessage">{{ successMessage }}</div>
 
   <div *ngIf="failure && !isLoading">
 
@@ -46,9 +47,20 @@
 
       <div class="failure-header__actions" *ngIf="isSupervisorOrAdmin">
         <a class="btn btn-secondary"
-           [routerLink]="['/interventions']">
+          [routerLink]="['/interventions']">
           Voir les interventions
         </a>
+        <button *ngIf="failure.status === 'Resolved'"
+                class="btn btn-close-definitively"
+                (click)="closeFailure()"
+                [disabled]="isClosing">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 12l2 2 4-4"/>
+            <circle cx="12" cy="12" r="10"/>
+          </svg>
+          <span *ngIf="!isClosing">Clôturer définitivement</span>
+          <span *ngIf="isClosing" class="btn-loading"><span class="spinner"></span> Clôture...</span>
+        </button>
       </div>
     </div>
 

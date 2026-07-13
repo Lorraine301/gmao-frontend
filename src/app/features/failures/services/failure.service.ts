@@ -37,4 +37,7 @@ export class FailureService {
   updatePriority(id: number, priority: string): Observable<Failure> {
     return this.http.put<Failure>(`${this.url}/${id}/priority`, { priority });
   }
+  close(id: number): Observable<Failure> {
+  return this.http.put<Failure>(`${this.url}/${id}/close`, {});
+  }
 }

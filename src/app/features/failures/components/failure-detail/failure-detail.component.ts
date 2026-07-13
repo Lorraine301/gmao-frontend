@@ -17,6 +17,8 @@ export class FailureDetailComponent implements OnInit {
   failure?: Failure;
   isLoading = true;
   errorMessage = '';
+  successMessage = '';
+  isClosing = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -28,15 +30,40 @@ export class FailureDetailComponent implements OnInit {
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.failureService.findById(+id).subscribe({
-        next: (f) => { this.failure = f; this.isLoading = false; this.cdr.detectChanges(); },
-        error: () => { this.errorMessage = 'Panne introuvable.'; this.isLoading = false; this.cdr.detectChanges(); }
-      });
+      this.loadFailure(+id);
     }
+  }
+
+  loadFailure(id: number): void {
+    this.failureService.findById(id).subscribe({
+      next: (f) => { this.failure = f; this.isLoading = false; this.cdr.detectChanges(); },
+      error: () => { this.errorMessage = 'Panne introuvable.'; this.isLoading = false; this.cdr.detectChanges(); }
+    });
   }
 
   get role(): string { return this.authService.getRole() ?? ''; }
   get isSupervisorOrAdmin(): boolean { return ['Admin', 'Supervisor'].includes(this.role); }
+
+  // ── Clôture définitive (Admin/Supervisor, uniquement si Resolved) ──
+  closeFailure(): void {
+    if (!this.failure) return;
+    this.isClosing = true;
+    this.errorMessage = '';
+
+    this.failureService.close(this.failure.id).subscribe({
+      next: (updated) => {
+        this.failure = updated;
+        this.isClosing = false;
+        this.successMessage = 'Panne clôturée définitivement.';
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.isClosing = false;
+        this.errorMessage = err.error?.error ?? 'Erreur lors de la clôture.';
+        this.cdr.detectChanges();
+      }
+    });
+  }
 
   getPriorityLabel(p: string): string {
     return { Low: 'Faible', Medium: 'Moyen', High: 'Élevé', Critical: 'Critique' }[p] ?? p;

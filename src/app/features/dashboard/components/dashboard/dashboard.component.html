@@ -1,0 +1,84 @@
+<div class="page-wrapper">
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Tableau de bord</h1>
+      <span class="page-subtitle">Vue d'ensemble des indicateurs de maintenance</span>
+    </div>
+
+    <div class="period-selector">
+      <button *ngFor="let opt of periodOptions"
+              class="period-btn"
+              [class.period-btn--active]="selectedPeriod === opt.value"
+              (click)="onPeriodChange(opt.value)">
+        {{ opt.label }}
+      </button>
+    </div>
+  </div>
+
+  <div class="alert-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <!-- ── Cartes KPI ── -->
+  <div class="kpi-cards">
+    <div class="kpi-card">
+      <span class="kpi-label">Total pannes</span>
+      <span class="kpi-value">{{ summary?.totalFailures ?? '—' }}</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">MTTR moyen</span>
+      <span class="kpi-value">{{ summary?.averageMttr != null ? (summary!.averageMttr | number:'1.1-1') + 'h' : '—' }}</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Taux de résolution</span>
+      <span class="kpi-value">{{ summary?.resolutionRate != null ? (summary!.resolutionRate | number:'1.0-1') + '%' : '—' }}</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Taux de disponibilité</span>
+      <span class="kpi-value">{{ availabilityRate != null ? (availabilityRate | number:'1.0-1') + '%' : '—' }}</span>
+    </div>
+  </div>
+
+  <!-- ── Équipements à risque ── -->
+  <div class="at-risk-section" *ngIf="atRiskEquipments.length > 0">
+    <h2 class="section-title">⚠ Équipements à risque</h2>
+    <div class="at-risk-grid">
+      <div class="at-risk-card" *ngFor="let eq of atRiskEquipments">
+        <div class="at-risk-header">
+          <span class="eq-code">{{ eq.equipmentCode }}</span>
+          <span class="criticality-badge">{{ eq.criticalityLevel }}</span>
+        </div>
+        <p class="eq-name">{{ eq.equipmentName }}</p>
+        <p class="risk-reason">{{ eq.riskReason }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Graphiques ── -->
+  <div class="charts-grid">
+    <div class="chart-card">
+      <h3 class="chart-title">Top 5 équipements les plus défaillants</h3>
+      <div class="chart-container"><canvas #equipmentChart></canvas></div>
+    </div>
+
+    <div class="chart-card">
+      <h3 class="chart-title">Répartition par statut</h3>
+      <div class="chart-container chart-container--small"><canvas #statusChart></canvas></div>
+    </div>
+
+    <div class="chart-card">
+      <h3 class="chart-title">Répartition par priorité</h3>
+      <div class="chart-container chart-container--small"><canvas #priorityChart></canvas></div>
+    </div>
+
+    <div class="chart-card chart-card--wide">
+      <h3 class="chart-title">Évolution mensuelle (6 mois)</h3>
+      <div class="chart-container"><canvas #trendsChart></canvas></div>
+    </div>
+
+    <div class="chart-card chart-card--wide">
+      <h3 class="chart-title">Charge de travail par technicien</h3>
+      <div class="chart-container"><canvas #workloadChart></canvas></div>
+    </div>
+  </div>
+
+</div>
