@@ -41,3 +41,26 @@ $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-ligh
 @media (max-width: 900px) {
   .charts-grid { grid-template-columns: 1fr; }
 }
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-reports-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: 8px;
+  background: $white;
+  border: 1.5px solid $border;
+  color: $text-dark;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.15s;
+  svg { width: 15px; height: 15px; }
+  &:hover { background: $bg; border-color: $secondary; color: $secondary; }
+}

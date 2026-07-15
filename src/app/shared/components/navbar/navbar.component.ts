@@ -213,7 +213,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
       { label: 'Pannes', path: '/failures' },
       { label: 'Interventions', path: '/interventions' },
       { label: 'Maintenance', path: '/preventive-maintenance' },
-      { label: 'Stock', path: '/stock' }
+      { label: 'Stock', path: '/stock' },
+      { label: 'Rapports', path: '/reports' }
     ];
   }
 

@@ -193,6 +193,23 @@ export const routes: Routes = [
     import('./features/archive/components/my-archive/my-archive.component')
       .then(m => m.MyArchiveComponent)
 },
+
+{
+  path: 'reports',
+  canActivate: [authGuard, roleGuard],
+  data: { roles: ['Admin', 'Supervisor'] },
+  loadComponent: () =>
+    import('./features/reporting/components/weekly-report-list/weekly-report-list.component')
+      .then(m => m.WeeklyReportListComponent)
+},
+{
+  path: 'reports/weekly/:id',
+  canActivate: [authGuard, roleGuard],
+  data: { roles: ['Admin', 'Supervisor'] },
+  loadComponent: () =>
+    import('./features/reporting/components/weekly-report-detail/weekly-report-detail.component')
+      .then(m => m.WeeklyReportDetailComponent)
+},
   // Redirections par rôle (placeholders à remplacer sprint par sprint)
  // { path: 'technician', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'admin',      redirectTo: '/dashboard', pathMatch: 'full' },

@@ -1,0 +1,55 @@
+$primary: #1E3A5F; $secondary: #2E75B6; $error: #c0392b; $success: #2e7d32;
+$border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-light: #718096;
+
+.page-wrapper { padding: 32px; max-width: 1400px; margin: 0 auto; }
+.page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;
+  &__left { display: flex; flex-direction: column; gap: 4px; } }
+.page-title { font-size: 1.6rem; font-weight: 700; color: $primary; margin: 0; }
+.page-subtitle { font-size: 0.85rem; color: $text-light; }
+
+.monthly-generator { display: flex; gap: 8px; align-items: center; }
+.monthly-generator select {
+  padding: 9px 12px; border: 1.5px solid $border; border-radius: 8px; font-size: 0.85rem;
+  background: $white; color: $text-dark; outline: none; cursor: pointer;
+  &:focus { border-color: $secondary; }
+}
+
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 8px;
+  font-size: 0.88rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.15s;
+  svg { width: 15px; height: 15px; }
+  &-primary { background: linear-gradient(135deg, $primary, $secondary); color: $white; &:disabled { opacity: 0.7; cursor: not-allowed; } }
+}
+.btn-loading { display: flex; align-items: center; gap: 8px; }
+.spinner { width: 14px; height: 14px; border: 2px solid rgba(white, 0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.alert-error { padding: 12px 16px; background: #fdf3f2; border-left: 4px solid $error; border-radius: 8px; color: $error; font-size: 0.88rem; margin-bottom: 16px; }
+.loading-state { display: flex; justify-content: center; padding: 60px; }
+.spinner-lg { width: 40px; height: 40px; border: 3px solid rgba($secondary, 0.2); border-top-color: $secondary; border-radius: 50%; animation: spin 0.7s linear infinite; }
+
+.table-card { background: $white; border: 1px solid $border; border-radius: 12px; overflow-x: auto; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+.data-table {
+  width: 100%; min-width: 800px; border-collapse: collapse;
+  thead tr { background: $bg; border-bottom: 2px solid $border; }
+  th { padding: 14px 16px; text-align: left; font-size: 0.78rem; font-weight: 700; color: $text-light; text-transform: uppercase; letter-spacing: 0.5px; }
+  tbody tr { border-bottom: 1px solid $border; transition: background 0.15s; &:last-child { border-bottom: none; } &:hover { background: #f7fbff; } }
+  td { padding: 12px 16px; font-size: 0.875rem; color: $text-dark; vertical-align: middle; }
+}
+.week-cell { font-weight: 700; color: $primary; }
+.date-cell { white-space: nowrap; font-size: 0.82rem; }
+
+.badge {
+  display: inline-flex; padding: 4px 10px; border-radius: 20px; font-size: 0.76rem; font-weight: 600;
+  &--analysed { background: #e8f5e9; color: #2e7d32; }
+  &--pending  { background: #f5f5f5; color: #616161; }
+}
+
+.btn-icon {
+  width: 32px; height: 32px; border: none; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s;
+  svg { width: 15px; height: 15px; }
+  &--download { background: #e3f2fd; color: #1565c0; &:hover { background: #1565c0; color: $white; } }
+}
+
+.empty-state { text-align: center; padding: 60px; color: $text-light;
+  h3 { font-size: 1.1rem; color: $text-dark; margin: 0 0 8px; } p { font-size: 0.88rem; margin: 0; } }

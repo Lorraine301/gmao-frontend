@@ -41,4 +41,7 @@ export class InterventionService {
   findMyArchive(): Observable<Intervention[]> {
   return this.http.get<Intervention[]>(`${this.url}/my/archive`);
   }
+  downloadPdf(id: number): Observable<Blob> {
+  return this.http.get(`${this.url}/${id}/pdf`, { responseType: 'blob' });
+}
 }

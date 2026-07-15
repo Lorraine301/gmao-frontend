@@ -1,0 +1,66 @@
+<div class="page-wrapper">
+
+  <div class="page-header">
+    <button class="btn-back" routerLink="/reports">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+      </svg>
+      Retour aux bilans
+    </button>
+  </div>
+
+  <div class="loading-state" *ngIf="isLoading"><div class="spinner-lg"></div></div>
+  <div class="alert alert-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <div *ngIf="report && !isLoading">
+
+    <div class="report-header">
+      <div>
+        <h1 class="report-title">Bilan hebdomadaire — Semaine {{ report.weekNumber }}</h1>
+        <span class="report-subtitle">Généré le {{ report.generatedAt | date:'dd/MM/yyyy HH:mm' }}
+          <span *ngIf="report.generatedBy"> — par {{ report.generatedBy }}</span>
+        </span>
+      </div>
+      <button class="btn btn-primary" (click)="downloadPdf()" [disabled]="isDownloading">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        <span *ngIf="!isDownloading">Télécharger PDF</span>
+        <span *ngIf="isDownloading" class="btn-loading"><span class="spinner"></span> Téléchargement...</span>
+      </button>
+    </div>
+
+    <div class="detail-grid">
+      <div class="detail-card">
+        <h2 class="card-title">Statistiques</h2>
+        <div class="info-list">
+          <div class="info-item"><span class="info-label">Total pannes</span><span>{{ report.totalFailures }}</span></div>
+          <div class="info-item"><span class="info-label">Pannes résolues</span><span>{{ report.resolvedFailures }}</span></div>
+          <div class="info-item"><span class="info-label">MTTR moyen</span>
+            <span>{{ report.averageRepairTime != null ? (report.averageRepairTime | number:'1.1-1') + ' h' : '—' }}</span>
+          </div>
+          <div class="info-item"><span class="info-label">Équipements critiques</span>
+            <span>{{ report.criticalMachines || 'Aucun' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-card full-width">
+        <h2 class="card-title">Synthèse IA</h2>
+        <p class="synthesis-text" [class.placeholder]="!report.llmSummary">
+          {{ report.llmSummary || 'En cours d\'analyse…' }}
+        </p>
+      </div>
+
+      <div class="detail-card full-width">
+        <h2 class="card-title">Recommandations</h2>
+        <p class="synthesis-text" [class.placeholder]="!report.recommendations">
+          {{ report.recommendations || 'En cours d\'analyse…' }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

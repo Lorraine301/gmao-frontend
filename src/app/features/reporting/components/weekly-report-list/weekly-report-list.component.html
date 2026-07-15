@@ -1,0 +1,81 @@
+<div class="page-wrapper">
+
+  <div class="page-header">
+    <div class="page-header__left">
+      <h1 class="page-title">Bilans hebdomadaires</h1>
+      <span class="page-subtitle">{{ reports.length }} bilan(s) généré(s)</span>
+    </div>
+
+    <div class="monthly-generator" *ngIf="isSupervisorOrAdmin">
+      <select [(ngModel)]="selectedMonth">
+        <option *ngFor="let m of months" [value]="m.value">{{ m.label }}</option>
+      </select>
+      <select [(ngModel)]="selectedYear">
+        <option [value]="selectedYear - 1">{{ selectedYear - 1 }}</option>
+        <option [value]="selectedYear">{{ selectedYear }}</option>
+      </select>
+      <button class="btn btn-primary" (click)="generateMonthlyPdf()" [disabled]="isGeneratingMonthly">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        <span *ngIf="!isGeneratingMonthly">Générer bilan mensuel PDF</span>
+        <span *ngIf="isGeneratingMonthly" class="btn-loading"><span class="spinner"></span> Génération...</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="alert-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <div class="loading-state" *ngIf="isLoading">
+    <div class="spinner-lg"></div>
+  </div>
+
+  <div class="table-card" *ngIf="!isLoading">
+    <table class="data-table" *ngIf="reports.length > 0; else emptyState">
+      <thead>
+        <tr>
+          <th>Semaine</th>
+          <th>Total pannes</th>
+          <th>Résolues</th>
+          <th>MTTR</th>
+          <th>Statut IA</th>
+          <th>Généré le</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let r of reports" [routerLink]="['/reports/weekly', r.id]" style="cursor: pointer;">
+          <td class="week-cell">Semaine {{ r.weekNumber }}</td>
+          <td>{{ r.totalFailures }}</td>
+          <td>{{ r.resolvedFailures }}</td>
+          <td>{{ r.averageRepairTime != null ? (r.averageRepairTime | number:'1.1-1') + ' h' : '—' }}</td>
+          <td>
+            <span class="badge" [ngClass]="r.llmSummary ? 'badge--analysed' : 'badge--pending'">
+              {{ getLlmStatusLabel(r) }}
+            </span>
+          </td>
+          <td class="date-cell">{{ r.generatedAt | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td>
+            <button class="btn-icon btn-icon--download" (click)="downloadPdf(r, $event)" title="Télécharger le PDF">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #emptyState>
+      <div class="empty-state">
+        <h3>Aucun bilan généré</h3>
+        <p>Les bilans hebdomadaires sont générés automatiquement chaque dimanche.</p>
+      </div>
+    </ng-template>
+  </div>
+
+</div>

@@ -5,6 +5,7 @@ import { InterventionService } from '../../services/intervention.service';
 import { EquipmentService } from '../../../equipments/services/equipment.service';
 import { Intervention } from '../../models/intervention.model';
 import { Equipment } from '../../../equipments/models/equipment.model';
+import { downloadBlob } from '../../../../core/utils/download.util';
 
 @Component({
   selector: 'app-intervention-detail',
@@ -19,6 +20,7 @@ export class InterventionDetailComponent implements OnInit {
   equipment?: Equipment;
   isLoading = true;
   errorMessage = '';
+  isDownloadingPdf = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -56,6 +58,22 @@ export class InterventionDetailComponent implements OnInit {
       });
     }
   }
+  downloadPdf(): void {
+  if (!this.intervention) return;
+  this.isDownloadingPdf = true;
+  this.interventionService.downloadPdf(this.intervention.id).subscribe({
+    next: (blob) => {
+      downloadBlob(blob, `intervention_${this.intervention!.id}.pdf`);
+      this.isDownloadingPdf = false;
+      this.cdr.detectChanges();
+    },
+    error: () => {
+      this.isDownloadingPdf = false;
+      this.errorMessage = 'Erreur lors du téléchargement du PDF.';
+      this.cdr.detectChanges();
+    }
+  });
+}
 
   getPriorityLabel(p: string): string {
     return { Low: 'Faible', Medium: 'Moyen', High: 'Élevé', Critical: 'Critique' }[p] ?? p;
