@@ -50,7 +50,7 @@
           <td class="week-cell">Semaine {{ r.weekNumber }}</td>
           <td>{{ r.totalFailures }}</td>
           <td>{{ r.resolvedFailures }}</td>
-          <td>{{ r.averageRepairTime != null ? (r.averageRepairTime | number:'1.1-1') + ' h' : '—' }}</td>
+          <td>{{ r.averageRepairTime != null ? (r.averageRepairTime | number:'1.2-2') + ' h' : '—' }}</td>
           <td>
             <span class="badge" [ngClass]="r.llmSummary ? 'badge--analysed' : 'badge--pending'">
               {{ getLlmStatusLabel(r) }}

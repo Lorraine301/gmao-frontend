@@ -40,7 +40,7 @@
           <div class="info-item"><span class="info-label">Total pannes</span><span>{{ report.totalFailures }}</span></div>
           <div class="info-item"><span class="info-label">Pannes résolues</span><span>{{ report.resolvedFailures }}</span></div>
           <div class="info-item"><span class="info-label">MTTR moyen</span>
-            <span>{{ report.averageRepairTime != null ? (report.averageRepairTime | number:'1.1-1') + ' h' : '—' }}</span>
+            <span>{{ report.averageRepairTime != null ? (report.averageRepairTime | number:'1.2-2') + ' h' : '—' }}</span>
           </div>
           <div class="info-item"><span class="info-label">Équipements critiques</span>
             <span>{{ report.criticalMachines || 'Aucun' }}</span>
