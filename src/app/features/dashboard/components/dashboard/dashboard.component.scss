@@ -64,3 +64,54 @@ $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-ligh
   svg { width: 15px; height: 15px; }
   &:hover { background: $bg; border-color: $secondary; color: $secondary; }
 }
+.ai-interpretation-section {
+  margin-bottom: 28px;
+}
+
+.ai-interpretation-card {
+  background: $white;
+  border: 1px solid $border;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.ai-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: $text-light;
+  font-size: 0.88rem;
+}
+
+.ai-error {
+  p { margin: 0 0 8px; color: $error; font-size: 0.9rem; }
+}
+
+.btn-retry {
+  padding: 8px 16px;
+  border: 1.5px solid $error;
+  border-radius: 8px;
+  background: transparent;
+  color: $error;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  &:hover { background: $error; color: white; }
+}
+
+.ai-text {
+  font-size: 0.9rem;
+  color: $text-dark;
+  line-height: 1.7;
+  margin: 0;
+  white-space: pre-line;
+}
+
+.ai-explanation {
+  font-size: 0.78rem;
+  color: $text-light;
+  font-style: italic;
+  margin: 8px 0 0;
+  line-height: 1.4;
+}

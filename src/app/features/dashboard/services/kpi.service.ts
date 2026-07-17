@@ -53,4 +53,7 @@ export class KpiService {
   getAtRiskEquipments(): Observable<AtRiskEquipment[]> {
     return this.http.get<AtRiskEquipment[]>(`${environment.apiUrl}/equipments/at-risk`);
   }
+  getAiInterpretation(): Observable<{ interpretation: string }> {
+  return this.http.get<{ interpretation: string }>(`${this.url}/ai-interpretation`);
+  }
 }

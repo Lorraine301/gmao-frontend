@@ -53,14 +53,37 @@
   <div class="at-risk-section" *ngIf="atRiskEquipments.length > 0">
     <h2 class="section-title">⚠ Équipements à risque</h2>
     <div class="at-risk-grid">
-      <div class="at-risk-card" *ngFor="let eq of atRiskEquipments">
+    <div class="at-risk-card" *ngFor="let eq of atRiskEquipments">
         <div class="at-risk-header">
           <span class="eq-code">{{ eq.equipmentCode }}</span>
           <span class="criticality-badge">{{ eq.criticalityLevel }}</span>
         </div>
         <p class="eq-name">{{ eq.equipmentName }}</p>
         <p class="risk-reason">{{ eq.riskReason }}</p>
+        <p class="ai-explanation" *ngIf="eq.llmExplanation">
+          💡 {{ eq.llmExplanation }}
+        </p>
       </div>
+    </div>
+  </div>
+
+  <!-- ── Interprétation IA des KPI ── -->
+  <div class="ai-interpretation-section">
+    <h2 class="section-title">🤖 Interprétation IA des KPI</h2>
+
+    <div class="ai-interpretation-card">
+      <div class="ai-loading" *ngIf="isLoadingInterpretation">
+        <span class="spinner"></span> Génération de l'analyse...
+      </div>
+
+      <div class="ai-error" *ngIf="interpretationError && !isLoadingInterpretation">
+        <p>Analyse indisponible, réessayez plus tard.</p>
+        <button class="btn-retry" (click)="loadAiInterpretation()">Réessayer</button>
+      </div>
+
+      <p class="ai-text" *ngIf="aiInterpretation && !isLoadingInterpretation">
+        {{ aiInterpretation }}
+      </p>
     </div>
   </div>
 

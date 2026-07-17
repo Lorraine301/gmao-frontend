@@ -98,5 +98,70 @@ $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-ligh
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
+.ai-card {
+  .ai-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid $border;
+
+    .card-title { margin: 0; padding: 0; border: none; }
+  }
+}
+
+.ai-loading, .ai-pending {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: $text-light;
+  font-size: 0.88rem;
+  padding: 16px 0;
+}
+
+.ai-content {
+  .ai-summary {
+    margin-top: 14px;
+    padding: 12px 16px;
+    background: #f0f7ff;
+    border-left: 3px solid $secondary;
+    border-radius: 4px;
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+}
+
+.ai-failed {
+  p { margin: 0 0 8px; font-size: 0.9rem; color: $error; }
+  .ai-error-detail {
+    font-size: 0.78rem;
+    color: $text-light;
+    font-style: italic;
+    margin-bottom: 12px;
+  }
+}
+
+.btn-retry {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border: 1.5px solid $error;
+  border-radius: 8px;
+  background: transparent;
+  color: $error;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  svg { width: 15px; height: 15px; }
+  &:hover:not(:disabled) { background: $error; color: white; }
+  &:disabled { opacity: 0.7; cursor: not-allowed; }
+}
+
+.badge--failed {
+  background: #ffebee;
+  color: #c62828;
+}
 
 @keyframes spin { to { transform: rotate(360deg); } }

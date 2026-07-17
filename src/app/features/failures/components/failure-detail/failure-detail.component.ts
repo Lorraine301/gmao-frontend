@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FailureService } from '../../services/failure.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { Failure } from '../../models/failure.model';
+import { AiAnalysis } from '../../models/ai-analysis.model';
 
 @Component({
   selector: 'app-failure-detail',
@@ -19,6 +20,11 @@ export class FailureDetailComponent implements OnInit {
   errorMessage = '';
   successMessage = '';
   isClosing = false;
+
+  // ── Analyse IA ────────────────────────────────────────────
+  aiAnalysis?: AiAnalysis;
+  isLoadingAnalysis = false;
+  isRetrying = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -36,15 +42,57 @@ export class FailureDetailComponent implements OnInit {
 
   loadFailure(id: number): void {
     this.failureService.findById(id).subscribe({
-      next: (f) => { this.failure = f; this.isLoading = false; this.cdr.detectChanges(); },
+      next: (f) => {
+        this.failure = f;
+        this.isLoading = false;
+        this.loadAnalysis(id);
+        this.cdr.detectChanges();
+      },
       error: () => { this.errorMessage = 'Panne introuvable.'; this.isLoading = false; this.cdr.detectChanges(); }
+    });
+  }
+
+  // ── Charge l'analyse IA (peut ne pas encore exister → 404 silencieux) ──
+  loadAnalysis(failureId: number): void {
+    this.isLoadingAnalysis = true;
+    this.failureService.getAnalysis(failureId).subscribe({
+      next: (analysis) => {
+        this.aiAnalysis = analysis;
+        this.isLoadingAnalysis = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        // 404 = analyse pas encore générée (asynchrone en cours) : normal, pas une erreur à afficher
+        this.aiAnalysis = undefined;
+        this.isLoadingAnalysis = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  retryAnalysis(): void {
+    if (!this.failure) return;
+    this.isRetrying = true;
+    this.failureService.retryAnalysis(this.failure.id).subscribe({
+      next: () => {
+        // La relance est asynchrone côté backend : on attend un peu puis on recharge
+        setTimeout(() => {
+          this.loadAnalysis(this.failure!.id);
+          this.isRetrying = false;
+          this.cdr.detectChanges();
+        }, 4000);
+      },
+      error: () => {
+        this.isRetrying = false;
+        this.errorMessage = 'Erreur lors de la relance de l\'analyse.';
+        this.cdr.detectChanges();
+      }
     });
   }
 
   get role(): string { return this.authService.getRole() ?? ''; }
   get isSupervisorOrAdmin(): boolean { return ['Admin', 'Supervisor'].includes(this.role); }
 
-  // ── Clôture définitive (Admin/Supervisor, uniquement si Resolved) ──
   closeFailure(): void {
     if (!this.failure) return;
     this.isClosing = true;

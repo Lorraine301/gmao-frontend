@@ -32,4 +32,5 @@ export interface AtRiskEquipment {
   recentFailuresCount: number;
   averageMttr: number;
   riskReason: string;
+  llmExplanation?: string; 
 }

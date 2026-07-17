@@ -130,24 +130,66 @@
         </div>
       </div>
 
-      <!-- Priorité IA -->
-      <div class="detail-card" *ngIf="failure.llmPriority">
+    <!-- Analyse IA complète -->
+    <div class="detail-card full-width ai-card">
+      <div class="ai-card-header">
         <h2 class="card-title">Analyse IA</h2>
+        <span class="badge" [ngClass]="{
+          'badge--llm-pending': !aiAnalysis || aiAnalysis.status === 'Pending',
+          'badge--analysed': aiAnalysis?.status === 'Completed',
+          'badge--failed': aiAnalysis?.status === 'Failed'
+        }">
+          {{ !aiAnalysis ? 'En attente' : (aiAnalysis.status === 'Completed' ? 'Analysée' : (aiAnalysis.status === 'Failed' ? 'Échec' : 'En cours')) }}
+        </span>
+      </div>
+
+      <!-- Chargement -->
+      <div class="ai-loading" *ngIf="isLoadingAnalysis">
+        <span class="spinner"></span> Chargement de l'analyse...
+      </div>
+
+      <!-- Pas encore d'analyse disponible -->
+      <div class="ai-pending" *ngIf="!isLoadingAnalysis && !aiAnalysis">
+        <span class="spinner"></span> Analyse IA en cours de génération...
+      </div>
+
+      <!-- Analyse complétée -->
+      <div class="ai-content" *ngIf="aiAnalysis && aiAnalysis.status === 'Completed'">
         <div class="info-list">
           <div class="info-item">
-            <span class="info-label">Priorité LLM</span>
-            <span class="badge badge--priority-{{ failure.llmPriority.toLowerCase() }}">
-              {{ getPriorityLabel(failure.llmPriority) }}
-            </span>
+            <span class="info-label">Cause probable</span>
+            <span>{{ aiAnalysis.predictedCause || '—' }}</span>
           </div>
           <div class="info-item">
-            <span class="info-label">Statut analyse</span>
-            <span class="badge" [ngClass]="failure.llmProcessed ? 'badge--analysed' : 'badge--llm-pending'">
-              {{ failure.llmProcessed ? 'Analysée' : 'En attente' }}
+            <span class="info-label">Action recommandée</span>
+            <span>{{ aiAnalysis.recommendedAction || '—' }}</span>
+          </div>
+          <div class="info-item" *ngIf="aiAnalysis.riskLevel">
+            <span class="info-label">Niveau de risque (IA)</span>
+            <span class="badge badge--priority-{{ aiAnalysis.riskLevel.toLowerCase() }}">
+              {{ getPriorityLabel(aiAnalysis.riskLevel) }}
             </span>
           </div>
         </div>
+        <div class="ai-summary" *ngIf="aiAnalysis.summary">
+          <strong>Résumé :</strong> {{ aiAnalysis.summary }}
+        </div>
       </div>
+
+      <!-- Échec de l'analyse -->
+      <div class="ai-failed" *ngIf="aiAnalysis && aiAnalysis.status === 'Failed'">
+        <p>Analyse indisponible, réessayez plus tard.</p>
+        <p class="ai-error-detail" *ngIf="aiAnalysis.errorMessage">{{ aiAnalysis.errorMessage }}</p>
+        <button class="btn-retry" (click)="retryAnalysis()" [disabled]="isRetrying">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"/>
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+          </svg>
+          <span *ngIf="!isRetrying">Réessayer</span>
+          <span *ngIf="isRetrying" class="btn-loading"><span class="spinner"></span> Relance...</span>
+        </button>
+      </div>
+    </div>
 
       <!-- Audit -->
       <div class="detail-card">

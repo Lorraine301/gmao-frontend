@@ -37,6 +37,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   availabilityRate: number | null = null;
   atRiskEquipments: AtRiskEquipment[] = [];
 
+  aiInterpretation: string | null = null;
+  isLoadingInterpretation = false;
+  interpretationError = false;
+
   selectedPeriod = 30;
   isLoading = false;
   errorMessage = '';
@@ -59,9 +63,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.loadAtRiskEquipments();
+  this.loadAtRiskEquipments();
+  this.loadAiInterpretation();
   }
-
   ngAfterViewInit(): void {
     this.viewReady = true;
     this.loadAll();
@@ -84,6 +88,22 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.kpiService.getAtRiskEquipments().subscribe({
       next: (data) => { this.atRiskEquipments = data; this.cdr.detectChanges(); }
     });
+  }
+  loadAiInterpretation(): void {
+  this.isLoadingInterpretation = true;
+  this.interpretationError = false;
+  this.kpiService.getAiInterpretation().subscribe({
+    next: (data) => {
+      this.aiInterpretation = data.interpretation;
+      this.isLoadingInterpretation = false;
+      this.cdr.detectChanges();
+    },
+    error: () => {
+      this.interpretationError = true;
+      this.isLoadingInterpretation = false;
+      this.cdr.detectChanges();
+    }
+  });
   }
 
   loadAll(): void {

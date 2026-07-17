@@ -2,15 +2,17 @@ import { Component } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
+import { ChatComponent } from './features/assistant/components/chat/chat.component';
 import { AuthService } from './core/services/auth.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, NavbarComponent],
+  imports: [RouterOutlet, CommonModule, NavbarComponent, ChatComponent],
   template: `
     <app-navbar *ngIf="showNavbar"></app-navbar>
     <router-outlet></router-outlet>
+    <app-chat *ngIf="showNavbar"></app-chat>
   `
 })
 export class App {

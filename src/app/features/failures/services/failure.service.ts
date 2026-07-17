@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { Failure, FailureFilters, FailureRequest } from '../models/failure.model';
+import { AiAnalysis } from '../models/ai-analysis.model';
 
 @Injectable({ providedIn: 'root' })
 export class FailureService {
@@ -39,5 +40,12 @@ export class FailureService {
   }
   close(id: number): Observable<Failure> {
   return this.http.put<Failure>(`${this.url}/${id}/close`, {});
+  }
+  getAnalysis(failureId: number): Observable<AiAnalysis> {
+  return this.http.get<AiAnalysis>(`${this.url}/${failureId}/analysis`);
+}
+
+  retryAnalysis(failureId: number): Observable<void> {
+    return this.http.post<void>(`${this.url}/${failureId}/analysis/retry`, {});
   }
 }
