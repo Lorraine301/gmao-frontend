@@ -1,0 +1,33 @@
+<div class="page-wrapper">
+  <button class="btn-back" routerLink="/users">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+    </svg>
+    Retour
+  </button>
+
+  <div class="loading-state" *ngIf="isLoading"><div class="spinner-lg"></div></div>
+  <div class="alert-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <div *ngIf="user && !isLoading" class="profile-card">
+    <div class="profile-header">
+      <div class="avatar">{{ user.fullName.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase() }}</div>
+      <div>
+        <h1 class="user-name">{{ user.fullName }}</h1>
+        <span class="badge badge--role-{{ user.role.toLowerCase() }}">{{ getRoleLabel(user.role) }}</span>
+        <a class="btn-edit-link" [routerLink]="['/users', user.id, 'edit']">Modifier</a>
+      </div>
+    </div>
+
+    <div class="info-list">
+      <div class="info-item"><span class="info-label">Code employé</span><span>{{ user.employeeCode }}</span></div>
+      <div class="info-item"><span class="info-label">Email</span><span>{{ user.email }}</span></div>
+      <div class="info-item" *ngIf="user.speciality"><span class="info-label">Spécialité</span><span>{{ user.speciality }}</span></div>
+      <div class="info-item" *ngIf="user.availabilityStatus"><span class="info-label">Disponibilité</span><span>{{ user.availabilityStatus }}</span></div>
+      <div class="info-item"><span class="info-label">Statut</span>
+        <span class="badge" [ngClass]="user.active ? 'badge--active' : 'badge--inactive'">{{ user.active ? 'Actif' : 'Désactivé' }}</span>
+      </div>
+      <div class="info-item"><span class="info-label">Créé le</span><span>{{ user.createdAt | date:'dd/MM/yyyy' }}</span></div>
+    </div>
+  </div>
+</div>

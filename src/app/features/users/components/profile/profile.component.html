@@ -1,0 +1,22 @@
+<div class="page-wrapper">
+  <h1 class="page-title">Mon profil</h1>
+
+  <div class="loading-state" *ngIf="isLoading"><div class="spinner-lg"></div></div>
+  <div class="alert-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <div *ngIf="profile && !isLoading" class="profile-card">
+    <div class="profile-header">
+      <div class="avatar">{{ profile.fullName.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase() }}</div>
+      <div>
+        <h2 class="user-name">{{ profile.fullName }}</h2>
+        <span class="badge badge--role-{{ profile.role.toLowerCase() }}">{{ getRoleLabel(profile.role) }}</span>
+      </div>
+    </div>
+
+    <div class="info-list">
+      <div class="info-item"><span class="info-label">Email</span><span>{{ profile.email }}</span></div>
+      <div class="info-item" *ngIf="profile.speciality"><span class="info-label">Spécialité</span><span>{{ profile.speciality }}</span></div>
+      <div class="info-item" *ngIf="profile.availabilityStatus"><span class="info-label">Disponibilité</span><span>{{ profile.availabilityStatus }}</span></div>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
@@ -67,7 +67,7 @@ import { interval, Subscription } from 'rxjs';
           </div>
         </div>
 
-        <div class="navbar__profile">
+        <div class="navbar__profile" routerLink="/profile" style="cursor: pointer;">
           <div class="navbar__avatar">{{ getInitials() }}</div>
           <div class="navbar__info">
             <span class="navbar__name">{{ user?.fullName }}</span>
@@ -142,7 +142,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
-    private notifService: AppNotificationService
+    private notifService: AppNotificationService,
+    private cdr: ChangeDetectorRef 
   ) {}
 
   ngOnInit(): void {
@@ -171,6 +172,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       next: (data) => {
         this.notifications = data;
         this.unreadCount = data.filter(n => n.status === 'Unread').length;
+        this.cdr.detectChanges(); // Forcer la détection de changement après la mise à jour des notifications
       }
     });
   }
@@ -183,14 +185,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
   markAsRead(notification: AppNotification): void {
     if (notification.status === 'Unread') {
       this.notifService.markAsRead(notification.id).subscribe({
-        next: () => { notification.status = 'Read'; this.unreadCount = Math.max(0, this.unreadCount - 1); }
+        next: () => { notification.status = 'Read'; this.unreadCount = Math.max(0, this.unreadCount - 1); this.cdr.detectChanges(); }
       });
     }
   }
 
   markAllAsRead(): void {
     this.notifService.markAllAsRead().subscribe({
-      next: () => { this.notifications.forEach(n => n.status = 'Read'); this.unreadCount = 0; }
+      next: () => { this.notifications.forEach(n => n.status = 'Read'); this.unreadCount = 0; this.cdr.detectChanges(); }
     });
   }
 
@@ -210,6 +212,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     return [
       { label: 'Dashboard', path: '/dashboard' },
       { label: 'Équipements', path: '/equipments' },
+      { label: 'Utilisateurs', path: '/users' },
       { label: 'Pannes', path: '/failures' },
       { label: 'Interventions', path: '/interventions' },
       { label: 'Maintenance', path: '/preventive-maintenance' },

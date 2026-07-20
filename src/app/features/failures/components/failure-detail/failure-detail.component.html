@@ -66,19 +66,19 @@
 
     <!-- Grille de détails -->
     <div class="detail-grid">
-    <div class="detail-card" *ngIf="failure.ruleEngineTriggered">
-    <h2 class="card-title">Moteur de règles</h2>
-    <div class="info-list">
-      <div class="info-item">
-        <span class="info-label">Règle déclenchée</span>
-        <span class="badge badge--rule">⚠ Oui – priorité recalculée</span>
-      </div>
-      <div class="info-item" *ngIf="failure.recommendedTechnicianName">
-        <span class="info-label">Technicien recommandé</span>
-        <span>{{ failure.recommendedTechnicianName }}</span>
+      <div class="detail-card" *ngIf="failure.ruleEngineTriggered">
+      <h2 class="card-title">Moteur de règles</h2>
+      <div class="info-list">
+        <div class="info-item">
+          <span class="info-label">Règle déclenchée</span>
+          <span class="badge badge--rule">⚠ Oui – priorité recalculée</span>
+        </div>
+        <div class="info-item" *ngIf="failure.recommendedTechnicianName && isSupervisorOrAdmin">
+          <span class="info-label">Technicien recommandé</span>
+          <span>{{ failure.recommendedTechnicianName }}</span>
+        </div>
       </div>
     </div>
-  </div>
 
       <!-- Description -->
       <div class="detail-card full-width">

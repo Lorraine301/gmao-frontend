@@ -1,0 +1,86 @@
+<div class="page-wrapper">
+
+  <div class="page-header">
+    <div class="page-header__left">
+      <h1 class="page-title">Gestion des utilisateurs</h1>
+      <span class="page-subtitle">{{ users.length }} utilisateur(s)</span>
+    </div>
+    <a class="btn btn-primary" routerLink="/users/new">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Ajouter un utilisateur
+    </a>
+  </div>
+
+  <div class="filters-bar">
+    <select [(ngModel)]="filterRole" (ngModelChange)="onFilterChange()">
+      <option value="">Tous les rôles</option>
+      <option value="Admin">Admin</option>
+      <option value="Supervisor">Superviseur</option>
+      <option value="Technician">Technicien</option>
+    </select>
+  </div>
+
+  <div class="alert alert-success" *ngIf="successMessage">{{ successMessage }}</div>
+  <div class="alert alert-error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <div class="loading-state" *ngIf="isLoading"><div class="spinner-lg"></div></div>
+
+  <div class="table-card" *ngIf="!isLoading">
+    <table class="data-table" *ngIf="users.length > 0; else emptyState">
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Nom</th>
+          <th>Email</th>
+          <th>Rôle</th>
+          <th>Spécialité</th>
+          <th>Disponibilité</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of users" [class.row--inactive]="!u.active">
+          <td class="code-cell">{{ u.employeeCode }}</td>
+          <td>{{ u.fullName }}</td>
+          <td>{{ u.email }}</td>
+          <td><span class="badge badge--role-{{ u.role.toLowerCase() }}">{{ getRoleLabel(u.role) }}</span></td>
+          <td>{{ u.speciality || '—' }}</td>
+          <td>{{ u.availabilityStatus || '—' }}</td>
+          <td>
+            <span class="badge" [ngClass]="u.active ? 'badge--active' : 'badge--inactive'">
+              {{ u.active ? 'Actif' : 'Désactivé' }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            <button class="btn-icon btn-icon--view" [routerLink]="['/users', u.id]" title="Voir le détail">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+            <button class="btn-icon btn-icon--edit" [routerLink]="['/users', u.id, 'edit']" title="Modifier">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+            </button>
+            <button class="btn-icon" [ngClass]="u.active ? 'btn-icon--deactivate' : 'btn-icon--reactivate'"
+                    (click)="toggleActive(u)" [title]="u.active ? 'Désactiver' : 'Réactiver'">
+              <svg *ngIf="u.active" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+              </svg>
+              <svg *ngIf="!u.active" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/>
+              </svg>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <ng-template #emptyState>
+      <div class="empty-state"><h3>Aucun utilisateur trouvé</h3></div>
+    </ng-template>
+  </div>
+</div>

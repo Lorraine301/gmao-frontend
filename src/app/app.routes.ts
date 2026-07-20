@@ -210,6 +210,48 @@ export const routes: Routes = [
     import('./features/reporting/components/weekly-report-detail/weekly-report-detail.component')
       .then(m => m.WeeklyReportDetailComponent)
 },
+// ── Utilisateurs (Admin uniquement) ──────────────────────
+{
+  path: 'users',
+  canActivate: [authGuard, roleGuard],
+  data: { roles: ['Admin'] },
+  loadComponent: () =>
+    import('./features/users/components/user-list/user-list.component')
+      .then(m => m.UserListComponent)
+},
+{
+  path: 'users/new',
+  canActivate: [authGuard, roleGuard],
+  data: { roles: ['Admin'] },
+  loadComponent: () =>
+    import('./features/users/components/user-form/user-form.component')
+      .then(m => m.UserFormComponent)
+},
+{
+  path: 'users/:id/edit',
+  canActivate: [authGuard, roleGuard],
+  data: { roles: ['Admin'] },
+  loadComponent: () =>
+    import('./features/users/components/user-form/user-form.component')
+      .then(m => m.UserFormComponent)
+},
+{
+  path: 'users/:id',
+  canActivate: [authGuard, roleGuard],
+  data: { roles: ['Admin'] },
+  loadComponent: () =>
+    import('./features/users/components/user-detail/user-detail.component')
+      .then(m => m.UserDetailComponent)
+},
+
+// ── Profil (tous les rôles connectés) ─────────────────────
+{
+  path: 'profile',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./features/users/components/profile/profile.component')
+      .then(m => m.ProfileComponent)
+},
   // Redirections par rôle (placeholders à remplacer sprint par sprint)
  // { path: 'technician', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'admin',      redirectTo: '/dashboard', pathMatch: 'full' },
