@@ -50,3 +50,8 @@ export interface EquipmentFilters {
   criticality?: CriticalityLevel;
   search?: string;
 }
+export interface EquipmentImportResult {
+  createdCount: number;
+  skippedCount: number;
+  errors: string[];
+}

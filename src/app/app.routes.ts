@@ -214,7 +214,7 @@ export const routes: Routes = [
 {
   path: 'users',
   canActivate: [authGuard, roleGuard],
-  data: { roles: ['Admin'] },
+  data: { roles: ['Admin', 'Supervisor'] },
   loadComponent: () =>
     import('./features/users/components/user-list/user-list.component')
       .then(m => m.UserListComponent)
@@ -238,7 +238,7 @@ export const routes: Routes = [
 {
   path: 'users/:id',
   canActivate: [authGuard, roleGuard],
-  data: { roles: ['Admin'] },
+  data: { roles: ['Admin','Supervisor'] },
   loadComponent: () =>
     import('./features/users/components/user-detail/user-detail.component')
       .then(m => m.UserDetailComponent)

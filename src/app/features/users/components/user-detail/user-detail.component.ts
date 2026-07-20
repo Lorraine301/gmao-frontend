@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { UserService } from '../../../../core/services/user.service';
 import { User } from '../../models/user.model';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-user-detail',
@@ -20,9 +21,14 @@ export class UserDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private userService: UserService,
+    private authService: AuthService, 
     private cdr: ChangeDetectorRef
   ) {}
 
+   get isAdmin(): boolean {
+  return this.authService.getRole() === 'Admin';
+  }
+  
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {

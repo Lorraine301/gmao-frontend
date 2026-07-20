@@ -15,7 +15,7 @@
       <div>
         <h1 class="user-name">{{ user.fullName }}</h1>
         <span class="badge badge--role-{{ user.role.toLowerCase() }}">{{ getRoleLabel(user.role) }}</span>
-        <a class="btn-edit-link" [routerLink]="['/users', user.id, 'edit']">Modifier</a>
+        <a class="btn-edit-link" [routerLink]="['/users', user.id, 'edit']" *ngIf="isAdmin">Modifier</a>
       </div>
     </div>
 

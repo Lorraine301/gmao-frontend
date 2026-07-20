@@ -1,12 +1,37 @@
 <div class="page-wrapper">
 
   <!-- En-tête -->
-  <div class="page-header">
-    <div class="page-header__left">
-      <h1 class="page-title">Parc machines</h1>
-      <span class="page-subtitle">{{ equipments.length }} équipement(s) trouvé(s)</span>
+<div class="page-header">
+  <div class="page-header__left">
+    <h1 class="page-title">Parc machines</h1>
+    <span class="page-subtitle">{{ equipments.length }} équipement(s) trouvé(s)</span>
+  </div>
+
+  <div class="page-header__actions" *ngIf="isAdmin">
+    <!-- Export avec menu déroulant -->
+    <div class="export-wrapper">
+      <button class="btn btn-ghost" (click)="toggleExportMenu()" [disabled]="isExporting">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Exporter
+      </button>
+      <div class="export-menu" *ngIf="showExportMenu">
+        <button (click)="exportEquipments('excel')">Format Excel (.xlsx)</button>
+        <button (click)="exportEquipments('json')">Format JSON</button>
+      </div>
     </div>
-    <button *ngIf="isAdmin" class="btn btn-primary" routerLink="/equipments/new">
+
+    <button class="btn btn-ghost" (click)="openImportModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+      Importer
+    </button>
+
+    <button class="btn btn-primary" routerLink="/equipments/new">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
            stroke-linecap="round" stroke-linejoin="round">
         <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
@@ -14,6 +39,69 @@
       Nouvel équipement
     </button>
   </div>
+  <!-- Modal Import -->
+<div class="modal-overlay" *ngIf="showImportModal" (click)="closeImportModal()">
+  <div class="modal modal--import" (click)="$event.stopPropagation()">
+    <h3>Importer des équipements</h3>
+    <p class="modal-subtitle">Formats acceptés : .xlsx (Excel) ou .json</p>
+
+    <!-- Zone glisser-déposer -->
+    <div class="dropzone"
+         [class.dropzone--active]="isDraggingFile"
+         [class.dropzone--has-file]="selectedFile"
+         (dragover)="onDragOver($event)"
+         (dragleave)="onDragLeave($event)"
+         (drop)="onDrop($event)"
+         (click)="fileInput.click()">
+
+      <input #fileInput type="file" accept=".xlsx,.json" hidden (change)="onFileSelected($event)" />
+
+      <ng-container *ngIf="!selectedFile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        <p class="dropzone-text">Glissez-déposez un fichier ici, ou cliquez pour parcourir</p>
+      </ng-container>
+
+      <div class="selected-file" *ngIf="selectedFile" (click)="$event.stopPropagation()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+        </svg>
+        <span>{{ selectedFile.name }}</span>
+        <button class="btn-remove-file" (click)="removeSelectedFile()">✕</button>
+      </div>
+    </div>
+
+    <div class="alert-error" *ngIf="importError">{{ importError }}</div>
+
+    <!-- Résultat de l'import -->
+    <div class="import-result" *ngIf="importResult">
+      <div class="result-summary">
+        <span class="result-created">✓ {{ importResult.createdCount }} créé(s)</span>
+        <span class="result-skipped" *ngIf="importResult.skippedCount > 0">
+          ⚠ {{ importResult.skippedCount }} ignoré(s)
+        </span>
+      </div>
+      <ul class="result-errors" *ngIf="importResult.errors.length > 0">
+        <li *ngFor="let err of importResult.errors">{{ err }}</li>
+      </ul>
+    </div>
+
+    <div class="modal__actions">
+      <button class="btn btn-ghost" (click)="closeImportModal()">
+        {{ importResult ? 'Fermer' : 'Annuler' }}
+      </button>
+      <button class="btn btn-primary" (click)="confirmImport()"
+              [disabled]="!selectedFile || isImporting" *ngIf="!importResult">
+        <span *ngIf="!isImporting">Importer</span>
+        <span *ngIf="isImporting" class="btn-loading"><span class="spinner"></span> Import...</span>
+      </button>
+    </div>
+  </div>
+</div>
+</div>
 
 <div class="filters-card">
 

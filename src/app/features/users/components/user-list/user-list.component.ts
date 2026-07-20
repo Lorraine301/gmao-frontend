@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../../core/services/user.service';
 import { User } from '../../models/user.model';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-user-list',
@@ -22,8 +23,13 @@ export class UserListComponent implements OnInit {
 
   constructor(
     private userService: UserService,
+    private authService: AuthService, 
     private cdr: ChangeDetectorRef
   ) {}
+
+  get isAdmin(): boolean {
+  return this.authService.getRole() === 'Admin';
+  }
 
   ngOnInit(): void {
     this.loadUsers();

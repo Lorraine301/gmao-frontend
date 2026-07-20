@@ -380,3 +380,123 @@ $text-light: #718096;
   from { transform: scale(0.92); opacity: 0; }
   to   { transform: scale(1); opacity: 1; }
 }
+.page-header__actions {
+  display: flex;
+  gap: 10px;
+}
+
+.export-wrapper {
+  position: relative;
+}
+
+.export-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: $white;
+  border: 1px solid $border;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  overflow: hidden;
+  z-index: 50;
+  min-width: 180px;
+
+  button {
+    display: block;
+    width: 100%;
+    padding: 10px 16px;
+    border: none;
+    background: none;
+    text-align: left;
+    font-size: 0.85rem;
+    cursor: pointer;
+    &:hover { background: $bg; }
+  }
+}
+
+.modal--import {
+  max-width: 480px;
+  text-align: left;
+}
+
+.modal-subtitle {
+  font-size: 0.82rem;
+  color: $text-light;
+  margin: -8px 0 16px;
+}
+
+.dropzone {
+  border: 2px dashed $border;
+  border-radius: 12px;
+  padding: 32px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 16px;
+
+  svg { width: 36px; height: 36px; color: $text-light; margin-bottom: 8px; }
+
+  &:hover, &--active {
+    border-color: $secondary;
+    background: #f0f7ff;
+  }
+
+  &--has-file {
+    padding: 16px 20px;
+    border-style: solid;
+    border-color: $success;
+    background: #e8f5e9;
+  }
+}
+
+.dropzone-text {
+  font-size: 0.85rem;
+  color: $text-light;
+  margin: 0;
+}
+
+.selected-file {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: $text-dark;
+  svg { width: 20px; height: 20px; color: $success; margin: 0; }
+  span { flex: 1; text-align: left; }
+}
+
+.btn-remove-file {
+  background: none;
+  border: none;
+  color: $error;
+  cursor: pointer;
+  font-weight: 700;
+  padding: 4px 8px;
+}
+
+.import-result {
+  margin-top: 12px;
+  padding: 14px;
+  background: $bg;
+  border-radius: 8px;
+}
+
+.result-summary {
+  display: flex;
+  gap: 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.result-created { color: $success; }
+.result-skipped { color: $warning; }
+
+.result-errors {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.78rem;
+  color: $text-light;
+  max-height: 150px;
+  overflow-y: auto;
+  li { margin-bottom: 4px; }
+}
