@@ -19,4 +19,42 @@
       <div class="info-item" *ngIf="profile.availabilityStatus"><span class="info-label">Disponibilité</span><span>{{ profile.availabilityStatus }}</span></div>
     </div>
   </div>
+
+  <!-- Changement de mot de passe -->
+<div class="profile-card" *ngIf="profile && !isLoading">
+  <div class="section-header" (click)="togglePasswordForm()">
+    <h2 class="card-title-inline">🔒 Changer mon mot de passe</h2>
+    <span class="toggle-icon">{{ showPasswordForm ? '−' : '+' }}</span>
+  </div>
+
+  <form [formGroup]="passwordForm" (ngSubmit)="onChangePassword()" *ngIf="showPasswordForm" class="password-form">
+
+    <div class="alert alert-success" *ngIf="passwordSuccess">{{ passwordSuccess }}</div>
+    <div class="alert alert-error" *ngIf="passwordError">{{ passwordError }}</div>
+
+    <div class="form-group">
+      <label>Mot de passe actuel</label>
+      <input type="password" formControlName="currentPassword" />
+    </div>
+
+    <div class="form-group">
+      <label>Nouveau mot de passe</label>
+      <input type="password" formControlName="newPassword" />
+      <span class="hint">Minimum 6 caractères</span>
+    </div>
+
+    <div class="form-group">
+      <label>Confirmer le nouveau mot de passe</label>
+      <input type="password" formControlName="confirmPassword" />
+      <span class="error-text" *ngIf="passwordForm.errors?.['passwordMismatch'] && passwordForm.get('confirmPassword')?.touched">
+        Les mots de passe ne correspondent pas
+      </span>
+    </div>
+
+    <button type="submit" class="btn-submit" [disabled]="isChangingPassword">
+      <span *ngIf="!isChangingPassword">Valider</span>
+      <span *ngIf="isChangingPassword" class="btn-loading"><span class="spinner"></span> Envoi...</span>
+    </button>
+  </form>
+ </div>
 </div>

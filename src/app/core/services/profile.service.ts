@@ -11,4 +11,11 @@ export class ProfileService {
   getMyProfile(): Observable<UserProfile> {
     return this.http.get<UserProfile>(`${environment.apiUrl}/auth/me`);
   }
+  
+  changePassword(currentPassword: string, newPassword: string): Observable<void> {
+  return this.http.put<void>(`${environment.apiUrl}/auth/change-password`, {
+    currentPassword,
+    newPassword
+  });
+ }
 }
