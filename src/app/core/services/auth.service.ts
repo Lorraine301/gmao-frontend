@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap, timeout } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { WebsocketService } from './websocket.service';
 
 export interface LoginRequest {
   email: string;
@@ -23,20 +24,22 @@ export class AuthService {
   private readonly TOKEN_KEY = 'gmao_token';
   private readonly USER_KEY  = 'gmao_user';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private wsService: WebsocketService ) {}
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, credentials)
-      .pipe(
-        timeout(5000),//5 seconds max
-        tap(response => {
-          localStorage.setItem(this.TOKEN_KEY, response.token);
-          localStorage.setItem(this.USER_KEY, JSON.stringify(response));
-        })
-      );
+  return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, credentials)
+    .pipe(
+      timeout(5000),
+      tap(response => {
+        localStorage.setItem(this.TOKEN_KEY, response.token);
+        localStorage.setItem(this.USER_KEY, JSON.stringify(response));
+        this.wsService.connect(response.token);   // ← ajouté
+      })
+    );
   }
 
   logout(): void {
+    this.wsService.disconnect();
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
     this.router.navigate(['/login']);

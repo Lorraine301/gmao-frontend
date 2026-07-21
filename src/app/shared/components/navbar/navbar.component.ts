@@ -5,6 +5,8 @@ import { AuthService } from '../../../core/services/auth.service';
 import { AppNotificationService } from '../../../core/services/notification.service';
 import { AppNotification } from '../../../core/models/notification.model';
 import { interval, Subscription } from 'rxjs';
+import { WebsocketService } from '../../../core/services/websocket.service';
+
 
 @Component({
   selector: 'app-navbar',
@@ -139,10 +141,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
   navLinks: { label: string; path: string }[] = [];
 
   private pollSubscription?: Subscription;
+  private wsSub?: Subscription;
 
   constructor(
     private authService: AuthService,
     private notifService: AppNotificationService,
+    private wsService: WebsocketService,  
     private cdr: ChangeDetectorRef 
   ) {}
 
@@ -151,15 +155,20 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     if (this.authService.isLoggedIn()) {
       this.loadNotifications();
-      // Polling toutes les 30 secondes
-      this.pollSubscription = interval(30000).subscribe(() => {
+      // Polling en filet de sécurité (60s, moins fréquent puisque le WebSocket est prioritaire)
+      this.pollSubscription = interval(60000).subscribe(() => {
+        this.loadNotifications();
+      });
+
+      // Mise à jour instantanée via WebSocket
+      this.wsSub = this.wsService.notification$.subscribe(() => {
         this.loadNotifications();
       });
     }
   }
-
   ngOnDestroy(): void {
     this.pollSubscription?.unsubscribe();
+    this.wsSub?.unsubscribe();
   }
 
   @HostListener('document:click')
