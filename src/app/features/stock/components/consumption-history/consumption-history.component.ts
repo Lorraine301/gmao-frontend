@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { SparePartService } from '../../services/spare-part.service';
 import { PartConsumption, ConsumptionType } from '../../models/spare-part.model';
+import { downloadBlob } from '../../../../core/utils/download.util';
 
 type FilterOption = 'ALL' | ConsumptionType;
 
@@ -19,6 +20,8 @@ export class ConsumptionHistoryComponent implements OnInit {
   isLoading = false;
   errorMessage = '';
   activeFilter: FilterOption = 'ALL';
+  showExportMenu = false;
+  isExporting = false;
 
   constructor(
     private sparePartService: SparePartService,
@@ -52,4 +55,28 @@ export class ConsumptionHistoryComponent implements OnInit {
   getTypeLabel(t: ConsumptionType): string {
     return t === 'CORRECTIVE' ? 'Intervention (panne)' : 'Maintenance préventive';
   }
+  toggleExportMenu(): void {
+    this.showExportMenu = !this.showExportMenu;
+  }
+
+  exportHistory(format: 'excel' | 'pdf'): void {
+    this.showExportMenu = false;
+    this.isExporting = true;
+
+    const typeParam = this.activeFilter === 'ALL' ? undefined : this.activeFilter;
+
+    this.sparePartService.exportConsumptionHistory(typeParam, format).subscribe({
+      next: (blob) => {
+        const extension = format === 'excel' ? 'xlsx' : 'pdf';
+        downloadBlob(blob, `historique_consommation.${extension}`);
+        this.isExporting = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.isExporting = false;
+        this.errorMessage = 'Erreur lors de l\'export.';
+        this.cdr.detectChanges();
+      }
+    });
+   }
 }

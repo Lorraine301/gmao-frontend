@@ -40,11 +40,18 @@ export class SparePartService {
   return this.http.get<InterventionPart[]>(
     `${environment.apiUrl}/interventions/${interventionId}/parts`
   );
-}
-
-  getPreventiveMaintenanceParts(maintenanceId: number): Observable<PreventiveMaintenancePart[]> {
+  }
+ getPreventiveMaintenanceParts(maintenanceId: number): Observable<PreventiveMaintenancePart[]> {
     return this.http.get<PreventiveMaintenancePart[]>(
       `${environment.apiUrl}/preventive-maintenances/${maintenanceId}/parts`
     );
   }
+ exportConsumptionHistory(type: ConsumptionType | undefined, format: 'excel' | 'pdf'): Observable<Blob> {
+  let params = new HttpParams().set('format', format);
+  if (type) params = params.set('type', type);
+  return this.http.get(`${this.url}/consumption-history/export`, {
+    params,
+    responseType: 'blob'
+  });
+ }
 }

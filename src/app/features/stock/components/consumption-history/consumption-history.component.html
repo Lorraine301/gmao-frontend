@@ -4,13 +4,28 @@
     <div class="page-header__left">
       <button class="btn-back" routerLink="/stock">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-             stroke-linecap="round" stroke-linejoin="round">
+            stroke-linecap="round" stroke-linejoin="round">
           <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
         </svg>
         Retour au stock
       </button>
       <h1 class="page-title">Historique de consommation des pièces</h1>
       <span class="page-subtitle">{{ consumptions.length }} consommation(s)</span>
+    </div>
+
+    <div class="export-wrapper">
+      <button class="btn btn-ghost" (click)="toggleExportMenu()" [disabled]="isExporting">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        <span *ngIf="!isExporting">Exporter</span>
+        <span *ngIf="isExporting" class="btn-loading"><span class="spinner"></span> Export...</span>
+      </button>
+      <div class="export-menu" *ngIf="showExportMenu">
+        <button (click)="exportHistory('excel')">Format Excel (.xlsx)</button>
+        <button (click)="exportHistory('pdf')">Format PDF</button>
+      </div>
     </div>
   </div>
 

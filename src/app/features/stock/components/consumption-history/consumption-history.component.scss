@@ -47,3 +47,73 @@ $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-ligh
 
 .empty-state { display: flex; flex-direction: column; align-items: center; padding: 60px; gap: 12px; color: $text-light;
   svg { width: 48px; height: 48px; opacity: 0.4; } h3 { font-size: 1.1rem; color: $text-dark; margin: 0; } p { font-size: 0.88rem; margin: 0; } }
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.export-wrapper {
+  position: relative;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  svg { width: 15px; height: 15px; }
+  &-ghost {
+    background: $white;
+    color: $text-dark;
+    border: 1.5px solid $border;
+    &:hover { background: $bg; }
+    &:disabled { opacity: 0.6; cursor: not-allowed; }
+  }
+}
+
+.btn-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.spinner {
+  width: 13px;
+  height: 13px;
+  border: 2px solid rgba($secondary, 0.3);
+  border-top-color: $secondary;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.export-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: $white;
+  border: 1px solid $border;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  overflow: hidden;
+  z-index: 50;
+  min-width: 180px;
+
+  button {
+    display: block;
+    width: 100%;
+    padding: 10px 16px;
+    border: none;
+    background: none;
+    text-align: left;
+    font-size: 0.85rem;
+    cursor: pointer;
+    &:hover { background: $bg; }
+  }
+}
