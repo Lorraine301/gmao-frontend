@@ -11,6 +11,9 @@
     </button>
     <h1>{{ isEditMode ? 'Modifier l\'équipement' : 'Nouvel équipement' }}</h1>
   </div>
+   <div class="alert alert-info" *ngIf="isDuplicated">
+    Ce formulaire a été pré-rempli à partir d'un équipement existant. Pensez à saisir un nouveau code unique.
+  </div>
 
   <div class="loading-state" *ngIf="isLoading">
     <div class="spinner-lg"></div>

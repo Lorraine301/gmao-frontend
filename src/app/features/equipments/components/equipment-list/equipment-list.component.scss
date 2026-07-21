@@ -500,3 +500,22 @@ $text-light: #718096;
   overflow-y: auto;
   li { margin-bottom: 4px; }
 }
+.btn-icon--duplicate {
+  background: #fff3e0;
+  color: #e65100;
+  &:hover { background: #e65100; color: $white; }
+}
+.status-select {
+  border: 1.5px solid transparent;
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  transition: opacity 0.15s;
+
+  &:hover { border-color: currentColor; }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+}

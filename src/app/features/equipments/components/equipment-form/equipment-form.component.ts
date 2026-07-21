@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule,AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { EquipmentService } from '../../services/equipment.service';
-import { EquipmentStatus, CriticalityLevel } from '../../models/equipment.model';
+import { EquipmentStatus, CriticalityLevel, EquipmentRequest } from '../../models/equipment.model';
 
 @Component({
   selector: 'app-equipment-form',
@@ -20,6 +20,7 @@ export class EquipmentFormComponent implements OnInit {
   isLoading = false;
   isSaving = false;
   errorMessage = '';
+  isDuplicated = false;
 
   statusOptions: EquipmentStatus[] = ['Active', 'Inactive', 'Under_Maintenance'];
   criticalityOptions: CriticalityLevel[] = ['Low', 'Medium', 'High'];
@@ -34,7 +35,7 @@ export class EquipmentFormComponent implements OnInit {
     private cdr: ChangeDetectorRef  // ← AJOUTER
   ) {}
 
-  ngOnInit(): void {
+ngOnInit(): void {
     this.buildForm();
 
     this.route.paramMap.subscribe(params => {
@@ -46,6 +47,24 @@ export class EquipmentFormComponent implements OnInit {
       } else {
         this.isEditMode = false;
         this.form.reset({ status: 'Active', criticalityLevel: 'Medium', plant: 'Suprajit Morocco' });
+
+        // ── Pré-remplissage si on vient d'une duplication ──
+        const navigation = this.router.getCurrentNavigation();
+        const duplicateFrom = (navigation?.extras?.state?.['duplicateFrom']
+          ?? history.state?.duplicateFrom) as EquipmentRequest | undefined;
+
+        if (duplicateFrom) {
+          this.form.patchValue({
+            ...duplicateFrom,
+            code: '', // ← le code doit être ressaisi, jamais dupliqué
+            installationDate: duplicateFrom.installationDate
+              ? String(duplicateFrom.installationDate).substring(0, 10) : '',
+            commissioningDate: duplicateFrom.commissioningDate
+              ? String(duplicateFrom.commissioningDate).substring(0, 10) : ''
+          });
+          this.isDuplicated = true;
+          this.cdr.detectChanges();
+        }
       }
     });
   }

@@ -21,6 +21,7 @@ export class EquipmentListComponent implements OnInit, OnDestroy {
   isLoading = false;
   errorMessage = '';
   deleteConfirmId: number | null = null;
+  updatingStatusId: number | null = null;
   
   searchInput$ = new Subject<string>();
   private destroy$ = new Subject<void>();
@@ -280,5 +281,28 @@ export class EquipmentListComponent implements OnInit, OnDestroy {
     if (err.status === 403) return 'Accès non autorisé.';
     if (err.status === 404) return 'Équipement introuvable.';
     return 'Une erreur est survenue. Veuillez réessayer.';
+  }
+  duplicateEquipment(eq: Equipment): void {
+  this.router.navigate(['/equipments/new'], { state: { duplicateFrom: eq } });
+  }
+  onStatusChange(eq: Equipment, newStatus: EquipmentStatus): void {
+    if (newStatus === eq.status) return;
+
+    const previousStatus = eq.status;
+    this.updatingStatusId = eq.id;
+
+    this.equipmentService.updateStatus(eq.id, newStatus).subscribe({
+      next: (updated) => {
+        eq.status = updated.status;
+        this.updatingStatusId = null;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        eq.status = previousStatus; // rollback visuel en cas d'échec
+        this.updatingStatusId = null;
+        this.errorMessage = 'Erreur lors du changement de statut.';
+        this.cdr.detectChanges();
+      }
+    });
   }
 }

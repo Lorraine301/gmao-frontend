@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { Equipment, EquipmentFilters, EquipmentImportResult, EquipmentRequest } from '../models/equipment.model';
+import { Equipment, EquipmentFilters, EquipmentImportResult, EquipmentRequest, EquipmentStatus } from '../models/equipment.model';
 
 @Injectable({ providedIn: 'root' })
 export class EquipmentService {
@@ -41,10 +41,13 @@ export class EquipmentService {
     responseType: 'blob'
   });
   }
-// ── Import ──────────────────────────────────────────────
+  // ── Import ──────────────────────────────────────────────
   importEquipments(file: File): Observable<EquipmentImportResult> {
     const formData = new FormData();
     formData.append('file', file);
     return this.http.post<EquipmentImportResult>(`${this.url}/import`, formData);
+  }
+  updateStatus(id: number, status: EquipmentStatus): Observable<Equipment> {
+  return this.http.patch<Equipment>(`${this.url}/${id}/status`, { status });
   }
 }
