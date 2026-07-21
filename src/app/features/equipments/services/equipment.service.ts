@@ -50,4 +50,7 @@ export class EquipmentService {
   updateStatus(id: number, status: EquipmentStatus): Observable<Equipment> {
   return this.http.patch<Equipment>(`${this.url}/${id}/status`, { status });
   }
+  downloadDatasheet(id: number): Observable<Blob> {
+  return this.http.get(`${this.url}/${id}/datasheet`, { responseType: 'blob' });
+  }
 }

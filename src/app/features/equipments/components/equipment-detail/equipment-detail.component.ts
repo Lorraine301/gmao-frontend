@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { EquipmentService } from '../../services/equipment.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { Equipment } from '../../models/equipment.model';
+import { downloadBlob } from '../../../../core/utils/download.util';
 
 @Component({
   selector: 'app-equipment-detail',
@@ -17,6 +18,7 @@ export class EquipmentDetailComponent implements OnInit {
   equipment?: Equipment;
   isLoading = true;
   errorMessage = '';
+  isDownloadingDatasheet = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -60,4 +62,21 @@ export class EquipmentDetailComponent implements OnInit {
     };
     return l[level] ?? level;
   }
+  downloadDatasheet(): void {
+    if (!this.equipment) return;
+    this.isDownloadingDatasheet = true;
+
+    this.equipmentService.downloadDatasheet(this.equipment.id).subscribe({
+      next: (blob) => {
+        downloadBlob(blob, `fiche_${this.equipment!.code}.pdf`);
+        this.isDownloadingDatasheet = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.isDownloadingDatasheet = false;
+        this.errorMessage = 'Erreur lors du téléchargement de la fiche.';
+        this.cdr.detectChanges();
+      }
+    });
+   }
 }

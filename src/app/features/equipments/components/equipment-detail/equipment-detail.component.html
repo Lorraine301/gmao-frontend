@@ -7,12 +7,22 @@
       </svg>
       Retour
     </button>
-    <div class="header-actions" *ngIf="equipment">
+   <div class="header-actions" *ngIf="equipment">
       <h1>{{ equipment.code }}</h1>
-      <button *ngIf="isAdmin" class="btn btn-primary"
-              [routerLink]="['/equipments', equipment.id, 'edit']">
-        Modifier
-      </button>
+      <div class="header-actions__buttons">
+        <button class="btn btn-ghost" (click)="downloadDatasheet()" [disabled]="isDownloadingDatasheet">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          <span *ngIf="!isDownloadingDatasheet">Fiche PDF</span>
+          <span *ngIf="isDownloadingDatasheet" class="btn-loading"><span class="spinner"></span> Génération...</span>
+        </button>
+        <button *ngIf="isAdmin" class="btn btn-primary"
+                [routerLink]="['/equipments', equipment.id, 'edit']">
+          Modifier
+        </button>
+      </div>
     </div>
   </div>
 

@@ -152,3 +152,40 @@ $text-light:#718096;
   line-height: 1.6;
   margin: 0;
 }
+.header-actions__buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: $white;
+  color: $text-dark;
+  border: 1.5px solid $border;
+  svg { width: 15px; height: 15px; }
+  &:hover { background: $bg; }
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
+}
+
+.btn-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.spinner {
+  width: 13px;
+  height: 13px;
+  border: 2px solid rgba($secondary, 0.3);
+  border-top-color: $secondary;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
