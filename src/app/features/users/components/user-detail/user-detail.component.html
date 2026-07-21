@@ -28,6 +28,10 @@
         <span class="badge" [ngClass]="user.active ? 'badge--active' : 'badge--inactive'">{{ user.active ? 'Actif' : 'Désactivé' }}</span>
       </div>
       <div class="info-item"><span class="info-label">Créé le</span><span>{{ user.createdAt | date:'dd/MM/yyyy' }}</span></div>
+      <div class="info-item" *ngIf="user.lastLoginAt">
+        <span class="info-label">Dernière connexion</span>
+        <span>{{ user.lastLoginAt | date:'dd/MM/yyyy HH:mm' }}</span>
+      </div>
     </div>
   </div>
 </div>

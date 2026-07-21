@@ -108,3 +108,37 @@ $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-ligh
   animation: spin 0.7s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+.password-wrapper {
+  position: relative;
+
+  input {
+    width: 100%;
+    padding-right: 42px;
+    box-sizing: border-box;
+  }
+}
+
+.toggle-visibility {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  margin-top: -12px;   // ← remplace transform: translateY(-50%) — moitié de la hauteur du bouton (24px)
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  color: $text-light;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    display: block;
+  }
+
+  &:hover { color: $secondary; }
+}

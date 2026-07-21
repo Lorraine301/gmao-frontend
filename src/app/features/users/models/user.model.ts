@@ -9,6 +9,7 @@ export interface User {
   active: boolean;
   createdAt: string;
   updatedAt: string;
+  lastLoginAt?: string;
 }
 
 export interface UserRequest {
@@ -28,4 +29,5 @@ export interface UserProfile {
   role: string;
   speciality?: string;
   availabilityStatus?: string;
+  lastLoginAt?: string;
 }

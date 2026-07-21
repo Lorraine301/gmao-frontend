@@ -30,6 +30,9 @@ export class ProfileComponent implements OnInit {
   isChangingPassword = false;
   passwordError = '';
   passwordSuccess = '';
+  showCurrentPassword = false;
+  showNewPassword = false;
+  showConfirmPassword = false;
 
   constructor(
     private profileService: ProfileService,
@@ -82,6 +85,11 @@ export class ProfileComponent implements OnInit {
         this.cdr.detectChanges();
       }
     });
+  }
+    toggleFieldVisibility(field: 'current' | 'new' | 'confirm'): void {
+    if (field === 'current') this.showCurrentPassword = !this.showCurrentPassword;
+    if (field === 'new') this.showNewPassword = !this.showNewPassword;
+    if (field === 'confirm') this.showConfirmPassword = !this.showConfirmPassword;
   }
 
   getRoleLabel(r: string): string {
