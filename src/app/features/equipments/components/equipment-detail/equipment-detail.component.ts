@@ -5,6 +5,7 @@ import { EquipmentService } from '../../services/equipment.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { Equipment } from '../../models/equipment.model';
 import { downloadBlob } from '../../../../core/utils/download.util';
+import * as QRCode from 'qrcode';
 
 @Component({
   selector: 'app-equipment-detail',
@@ -19,6 +20,7 @@ export class EquipmentDetailComponent implements OnInit {
   isLoading = true;
   errorMessage = '';
   isDownloadingDatasheet = false;
+  qrCodeDataUrl: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -27,14 +29,15 @@ export class EquipmentDetailComponent implements OnInit {
     private cdr: ChangeDetectorRef  // ← AJOUTER
   ) {}
 
-  ngOnInit(): void {
+ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.equipmentService.findById(+id).subscribe({
         next: (eq) => {
           this.equipment = eq;
           this.isLoading = false;
-          this.cdr.detectChanges(); // ← forcer le rendu
+          this.generateQrCode(eq.id);
+          this.cdr.detectChanges();
         },
         error: () => {
           this.errorMessage = 'Équipement introuvable.';
@@ -43,6 +46,26 @@ export class EquipmentDetailComponent implements OnInit {
         }
       });
     }
+  }
+
+  private generateQrCode(equipmentId: number): void {
+    const url = `${window.location.origin}/equipments/${equipmentId}`;
+    QRCode.toDataURL(url, { width: 200, margin: 1 })
+      .then((dataUrl) => {
+        this.qrCodeDataUrl = dataUrl;
+        this.cdr.detectChanges();
+      })
+      .catch(() => {
+        this.qrCodeDataUrl = null;
+      });
+  }
+
+  downloadQrCode(): void {
+    if (!this.qrCodeDataUrl || !this.equipment) return;
+    const a = document.createElement('a');
+    a.href = this.qrCodeDataUrl;
+    a.download = `qrcode_${this.equipment.code}.png`;
+    a.click();
   }
 
   get isAdmin(): boolean {

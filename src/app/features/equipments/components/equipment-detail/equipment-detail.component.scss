@@ -188,4 +188,47 @@ $text-light:#718096;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
+.qr-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.qr-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+}
+
+.qr-image {
+  width: 160px;
+  height: 160px;
+  border: 1px solid $border;
+  border-radius: 8px;
+  padding: 8px;
+  background: $white;
+}
+
+.qr-hint {
+  font-size: 0.78rem;
+  color: $text-light;
+  margin: 0;
+}
+
+.btn-download-qr {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 8px;
+  background: #e3f2fd;
+  color: #1565c0;
+  border: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  svg { width: 14px; height: 14px; }
+  &:hover { background: #1565c0; color: $white; }
+}
 @keyframes spin { to { transform: rotate(360deg); } }
