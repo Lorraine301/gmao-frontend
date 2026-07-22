@@ -20,6 +20,7 @@
     </div>
 
     <div class="info-list">
+      <div class="info-item"><span class="info-label">ID</span><span>{{ user.id }}</span></div>
       <div class="info-item"><span class="info-label">Code employé</span><span>{{ user.employeeCode }}</span></div>
       <div class="info-item"><span class="info-label">Email</span><span>{{ user.email }}</span></div>
       <div class="info-item" *ngIf="user.speciality"><span class="info-label">Spécialité</span><span>{{ user.speciality }}</span></div>

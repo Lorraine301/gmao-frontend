@@ -54,6 +54,7 @@
     <table class="data-table" *ngIf="maintenances.length > 0; else emptyState">
       <thead>
         <tr>
+          <th>ID</th>
           <th>Équipement</th>
           <th>Type</th>
           <th>Fréquence</th>
@@ -70,6 +71,7 @@
       <tbody>
         <tr *ngFor="let pm of maintenances"
             [class.row--overdue]="pm.status === 'Overdue'">
+          <td class="id-cell">{{ pm.id }}</td>
           <td>
             <span class="eq-code">{{ pm.equipmentCode }}</span>
             <span class="eq-name">{{ pm.equipmentName }}</span>

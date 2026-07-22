@@ -189,6 +189,7 @@
     <table class="data-table" *ngIf="equipments.length > 0; else emptyState">
       <thead>
         <tr>
+          <th>ID</th>
           <th>Code</th>
           <th>Nom</th>
           <th>Type</th>
@@ -201,6 +202,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let eq of equipments">
+          <td class="id-cell">{{ eq.id }}</td>
           <td class="code-cell">{{ eq.code }}</td>
           <td class="name-cell">
             <span class="name-text">{{ eq.name }}</span>

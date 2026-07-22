@@ -37,6 +37,7 @@
     <table class="data-table" *ngIf="parts.length > 0; else emptyState">
       <thead>
         <tr>
+          <th>ID</th>
           <th>Référence</th>
           <th>Nom</th>
           <th>Fournisseur</th>
@@ -51,6 +52,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let p of parts" [class.row--low-stock]="p.lowStock">
+          <td class="id-cell">{{ p.id }}</td>
           <td class="ref-cell">{{ p.reference }}</td>
           <td class="name-cell">{{ p.name }}</td>
           <td>{{ p.supplier || '—' }}</td>

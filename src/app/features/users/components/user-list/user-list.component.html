@@ -31,6 +31,7 @@
     <table class="data-table" *ngIf="users.length > 0; else emptyState">
       <thead>
         <tr>
+          <th>ID</th>
           <th>Code</th>
           <th>Nom</th>
           <th>Email</th>
@@ -43,6 +44,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let u of users" [class.row--inactive]="!u.active">
+          <td class="id-cell">{{ u.id }}</td>
           <td class="code-cell">{{ u.employeeCode }}</td>
           <td>{{ u.fullName }}</td>
           <td>{{ u.email }}</td>
