@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
+import { HttpParams } from '@angular/common/http';
 import {
   PreventiveMaintenance,
   PreventiveMaintenanceRequest,
   AssignTechnicianRequest,
   CompletePreventiveMaintenanceRequest
 } from '../models/preventive-maintenance.model';
+import { PreventiveMaintenanceHistory} from '../models/preventive-maintenance-history.model';
 
 @Injectable({ providedIn: 'root' })
 export class PreventiveMaintenanceService {
@@ -51,7 +53,14 @@ export class PreventiveMaintenanceService {
     return this.http.put<PreventiveMaintenance>(`${this.url}/${id}/complete-technician`, dto);
   }
   // ── Mes maintenances archivées (technicien connecté) ────────────────
-  findMyArchive(): Observable<PreventiveMaintenance[]> {
-  return this.http.get<PreventiveMaintenance[]>(`${this.url}/my/archive`);
-  }
+  findMyArchive(): Observable<PreventiveMaintenanceHistory[]> {
+  return this.http.get<PreventiveMaintenanceHistory[]>(`${this.url}/my/archive`);
+ }
+
+ findHistory(equipmentId?: number): Observable<PreventiveMaintenanceHistory[]> {
+  let params = new HttpParams();
+  if (equipmentId) params = params.set('equipmentId', equipmentId.toString());
+  return this.http.get<PreventiveMaintenanceHistory[]>(`${this.url}/history`, { params });
+ }
+
 }

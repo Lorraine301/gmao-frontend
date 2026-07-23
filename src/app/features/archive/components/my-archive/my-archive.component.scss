@@ -38,3 +38,33 @@ $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-ligh
 }
 
 .empty-state { grid-column: 1 / -1; text-align: center; padding: 60px; color: $text-light; font-size: 0.9rem; }
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  display: flex; align-items: center; justify-content: center; z-index: 1000;
+}
+.modal--large {
+  background: $white; border-radius: 12px; padding: 28px; max-width: 480px; width: 90%;
+  max-height: 85vh; overflow-y: auto;
+  h3 { margin: 0 0 20px; color: $primary; font-size: 1.1rem; }
+}
+.detail-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.detail-row {
+  display: flex; justify-content: space-between; gap: 16px; font-size: 0.85rem;
+  padding-bottom: 8px; border-bottom: 1px solid $border;
+  .detail-label { color: $text-light; font-weight: 600; }
+  span:last-child { text-align: right; }
+}
+.parts-title { font-size: 0.9rem; color: $primary; margin: 0 0 10px; }
+.loading-parts { font-size: 0.85rem; color: $text-light; }
+.parts-table {
+  width: 100%; border-collapse: collapse; margin-bottom: 16px;
+  th, td { padding: 8px 10px; text-align: left; font-size: 0.82rem; border-bottom: 1px solid $border; }
+  th { color: $text-light; font-weight: 600; text-transform: uppercase; font-size: 0.7rem; }
+}
+.no-parts { font-size: 0.82rem; color: $text-light; font-style: italic; }
+.modal__actions { display: flex; justify-content: flex-end; }
+.btn-ghost {
+  padding: 8px 18px; border: 1.5px solid $border; border-radius: 8px; background: transparent;
+  color: $text-dark; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+  &:hover { background: $bg; }
+}

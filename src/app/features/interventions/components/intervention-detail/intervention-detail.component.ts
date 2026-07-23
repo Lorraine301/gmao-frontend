@@ -6,6 +6,8 @@ import { EquipmentService } from '../../../equipments/services/equipment.service
 import { Intervention } from '../../models/intervention.model';
 import { Equipment } from '../../../equipments/models/equipment.model';
 import { downloadBlob } from '../../../../core/utils/download.util';
+import { SparePartService } from '../../../stock/services/spare-part.service';
+import { InterventionPart } from '../../../stock/models/spare-part.model';
 
 @Component({
   selector: 'app-intervention-detail',
@@ -21,11 +23,14 @@ export class InterventionDetailComponent implements OnInit {
   isLoading = true;
   errorMessage = '';
   isDownloadingPdf = false;
+  partsUsed: InterventionPart[] = [];
+  isLoadingParts = false;
 
   constructor(
     private route: ActivatedRoute,
     private interventionService: InterventionService,
     private equipmentService: EquipmentService,
+    private sparePartService: SparePartService, 
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -45,6 +50,7 @@ export class InterventionDetailComponent implements OnInit {
             next: (equipments) => {
               this.equipment = equipments.find(e => e.code === this.intervention?.equipmentCode);
               this.isLoading = false;
+              this.loadParts(this.intervention!.id);
               this.cdr.detectChanges();
             },
             error: () => { this.isLoading = false; this.cdr.detectChanges(); }
@@ -75,6 +81,20 @@ export class InterventionDetailComponent implements OnInit {
   });
 }
 
+loadParts(interventionId: number): void {
+    this.isLoadingParts = true;
+    this.sparePartService.getInterventionParts(interventionId).subscribe({
+      next: (parts) => {
+        this.partsUsed = parts;
+        this.isLoadingParts = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.isLoadingParts = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
   getPriorityLabel(p: string): string {
     return { Low: 'Faible', Medium: 'Moyen', High: 'Élevé', Critical: 'Critique' }[p] ?? p;
   }

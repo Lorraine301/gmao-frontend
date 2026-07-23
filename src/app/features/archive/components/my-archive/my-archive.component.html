@@ -26,7 +26,6 @@
 
   <!-- Onglet Interventions -->
   <div class="archive-grid" *ngIf="!isLoading && activeTab === 'interventions'">
-    <!-- Onglet Interventions -->
     <div class="archive-card" *ngFor="let i of interventions" [routerLink]="['/my-interventions', i.id]" style="cursor: pointer;">
       <div class="card-header">
         <span class="failure-code">{{ i.failureCode }}</span>
@@ -52,16 +51,14 @@
 
   <!-- Onglet Maintenances préventives -->
   <div class="archive-grid" *ngIf="!isLoading && activeTab === 'maintenances'">
-    <!-- Onglet Maintenances préventives -->
-      <div class="archive-card" *ngFor="let pm of maintenances" [routerLink]="['/my-preventive-maintenance', pm.id]" style="cursor: pointer;">
+    <div class="archive-card" (click)="openMaintenanceDetail(pm)" style="cursor: pointer;" *ngFor="let pm of maintenances">
       <div class="card-header">
         <span class="failure-code">{{ pm.equipmentCode }}</span>
         <span class="type-badge">{{ pm.maintenanceType }}</span>
       </div>
       <h3 class="failure-title">{{ pm.equipmentName }}</h3>
-      <p class="equipment-name" *ngIf="pm.equipmentLocation">{{ pm.equipmentLocation }}</p>
       <div class="card-meta">
-        <span>Terminée le {{ pm.technicianEndTime | date:'dd/MM/yyyy HH:mm' }}</span>
+        <span>Terminée le {{ pm.completedAt | date:'dd/MM/yyyy HH:mm' }}</span>
       </div>
       <div class="solution-text">
         <strong>Problème trouvé :</strong> {{ pm.problemFound || 'Aucun problème détecté' }}
@@ -73,6 +70,41 @@
 
     <div class="empty-state" *ngIf="maintenances.length === 0">
       <p>Aucune maintenance préventive terminée pour le moment.</p>
+    </div>
+  </div>
+
+  <!-- Modal détail maintenance -->
+  <div class="modal-overlay" *ngIf="detailHistory !== null" (click)="closeMaintenanceDetail()">
+    <div class="modal modal--large" (click)="$event.stopPropagation()">
+      <h3>Détail du cycle de maintenance</h3>
+
+      <div class="detail-list">
+        <div class="detail-row"><span class="detail-label">Équipement</span><span>{{ detailHistory.equipmentCode }} — {{ detailHistory.equipmentName }}</span></div>
+        <div class="detail-row"><span class="detail-label">Type</span><span>{{ detailHistory.maintenanceType }}</span></div>
+        <div class="detail-row"><span class="detail-label">Terminée le</span><span>{{ detailHistory.completedAt | date:'dd/MM/yyyy HH:mm' }}</span></div>
+        <div class="detail-row"><span class="detail-label">Problème trouvé</span><span>{{ detailHistory.problemFound || 'Aucun problème détecté' }}</span></div>
+        <div class="detail-row" *ngIf="detailHistory.solution"><span class="detail-label">Solution</span><span>{{ detailHistory.solution }}</span></div>
+      </div>
+
+      <h4 class="parts-title">Pièces utilisées</h4>
+      <div *ngIf="isLoadingParts" class="loading-parts">Chargement...</div>
+      <table class="parts-table" *ngIf="!isLoadingParts && detailParts.length > 0">
+        <thead>
+          <tr><th>Référence</th><th>Nom</th><th>Quantité</th></tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of detailParts">
+            <td>{{ p.sparePartReference }}</td>
+            <td>{{ p.sparePartName }}</td>
+            <td>{{ p.quantityUsed }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p *ngIf="!isLoadingParts && detailParts.length === 0" class="no-parts">Aucune pièce utilisée pour ce cycle.</p>
+
+      <div class="modal__actions">
+        <button class="btn btn-ghost" (click)="closeMaintenanceDetail()">Fermer</button>
+      </div>
     </div>
   </div>
 </div>

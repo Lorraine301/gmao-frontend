@@ -4,6 +4,7 @@
     <div class="page-header__left">
       <h1 class="page-title">Maintenance préventive</h1>
       <span class="page-subtitle">{{ maintenances.length }} planification(s)</span>
+      <a routerLink="/preventive-maintenance/history" class="link-history">Voir l'historique →</a>
     </div>
     <button *ngIf="isAdmin" class="btn btn-primary" (click)="openScheduleForm()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -21,6 +22,14 @@
     <option value="Overdue">En retard</option>
     <option value="Completed">Terminée</option>
     <option value="Cancelled">Annulée</option>
+  </select>
+
+  <select [(ngModel)]="filterProximity" (ngModelChange)="applyFilters()">
+    <option value="">Toutes les échéances</option>
+    <option value="OVERDUE">En retard</option>
+    <option value="THIS_WEEK">Cette semaine</option>
+    <option value="NEXT_WEEK">Semaine prochaine</option>
+    <option value="LATER">Plus tard</option>
   </select>
 
   <select [(ngModel)]="filterMaintenanceType" (ngModelChange)="applyFilters()">
@@ -63,8 +72,6 @@
           <th>Échéance</th>
           <th>Statut</th>
           <th>Technicien</th>
-          <th>Problème</th>
-          <th>Solution</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -79,9 +86,13 @@
           <td><span class="type-badge">{{ pm.maintenanceType }}</span></td>
           <td>{{ pm.frequencyDays }}j</td>
           <td class="date-cell">{{ pm.lastMaintenanceDate | date:'dd/MM/yyyy' }}</td>
-          <td class="date-cell">{{ pm.nextMaintenanceDate | date:'dd/MM/yyyy' }}</td>
+          <td class="date-cell">
+            <span *ngIf="pm.status !== 'Completed'">{{ pm.nextMaintenanceDate | date:'dd/MM/yyyy' }}</span>
+            <span *ngIf="pm.status === 'Completed'">—</span>
+          </td>
           <td>
-            <span class="days-badge"
+            <span *ngIf="pm.status !== 'Completed'"
+                  class="days-badge"
                   [ngClass]="{
                     'days-badge--overdue':  pm.daysUntilNext < 0,
                     'days-badge--urgent':   pm.daysUntilNext >= 0 && pm.daysUntilNext <= 7,
@@ -89,6 +100,7 @@
                   }">
               {{ getDaysLabel(pm.daysUntilNext) }}
             </span>
+            <span *ngIf="pm.status === 'Completed'">—</span>
           </td>
           <td>
             <span class="badge badge--status-{{ pm.status.toLowerCase() }}">
@@ -104,12 +116,6 @@
             <ng-template #notAssigned>
               <span class="eq-name">Non affecté</span>
             </ng-template>
-          </td>
-          <td class="text-truncate" [title]="pm.problemFound">
-            {{ pm.problemFound || '—' }}
-          </td>
-          <td class="text-truncate" [title]="pm.solution">
-            {{ pm.solution || '—' }}
           </td>
           <!-- ── Actions : Affecter + Terminer ── -->
         <td>
@@ -133,15 +139,6 @@
                     title="Marquer comme terminée">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            </button>
-            <!-- ── Nouveau bouton Détails ── -->
-            <button class="btn-icon btn-icon--view"
-                    (click)="openDetailPanel(pm)"
-                    title="Voir les détails">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                <circle cx="12" cy="12" r="3"/>
               </svg>
             </button>
           </div>
@@ -233,28 +230,6 @@
         </button>
       </div>
     </div>
-</div>
-<!-- Modal détails -->
-<div class="modal-overlay" *ngIf="detailMaintenance !== null" (click)="closeDetailPanel()">
-  <div class="modal modal--large" (click)="$event.stopPropagation()">
-    <h3>Détails de la maintenance</h3>
-
-    <div class="detail-list">
-      <div class="detail-row"><span class="detail-label">Équipement</span><span>{{ detailMaintenance.equipmentCode }} – {{ detailMaintenance.equipmentName }}</span></div>
-      <div class="detail-row"><span class="detail-label">Type</span><span>{{ detailMaintenance.maintenanceType }}</span></div>
-      <div class="detail-row"><span class="detail-label">Statut</span><span>{{ getStatusLabel(detailMaintenance.status) }}</span></div>
-      <div class="detail-row"><span class="detail-label">Technicien</span><span>{{ detailMaintenance.assignedTechnicianName || 'Non affecté' }}</span></div>
-      <div class="detail-row" *ngIf="detailMaintenance.assignedByName"><span class="detail-label">Affecté par</span><span>{{ detailMaintenance.assignedByName }}</span></div>
-      <div class="detail-row" *ngIf="detailMaintenance.technicianStartTime"><span class="detail-label">Démarrée le</span><span>{{ detailMaintenance.technicianStartTime | date:'dd/MM/yyyy HH:mm' }}</span></div>
-      <div class="detail-row" *ngIf="detailMaintenance.technicianEndTime"><span class="detail-label">Clôturée le</span><span>{{ detailMaintenance.technicianEndTime | date:'dd/MM/yyyy HH:mm' }}</span></div>
-      <div class="detail-row"><span class="detail-label">Problème trouvé</span><span>{{ detailMaintenance.problemFound || 'Aucun problème détecté' }}</span></div>
-      <div class="detail-row" *ngIf="detailMaintenance.solution"><span class="detail-label">Solution</span><span>{{ detailMaintenance.solution }}</span></div>
-    </div>
-
-    <div class="modal__actions">
-      <button class="btn btn-ghost" (click)="closeDetailPanel()">Fermer</button>
-    </div>
-  </div>
 </div>
 
 </div>

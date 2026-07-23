@@ -42,6 +42,7 @@ export class PlanningListComponent implements OnInit {
   filterMaintenanceType = '';
   filterTechnician = '';
   filterUnassignedOnly = false;
+  filterProximity = '';
 
   constructor(
     private pmService: PreventiveMaintenanceService,
@@ -165,18 +166,6 @@ export class PlanningListComponent implements OnInit {
     if (days === 0) return 'Aujourd\'hui';
     return `Dans ${days}j`;
   }
-  // ── Détails d'une maintenance ──────────────────────────────
-  detailMaintenance: PreventiveMaintenance | null = null;
-
-  openDetailPanel(pm: PreventiveMaintenance): void {
-    this.detailMaintenance = pm;
-    this.cdr.detectChanges();
-  }
-
-  closeDetailPanel(): void {
-    this.detailMaintenance = null;
-    this.cdr.detectChanges();
-  }
 
   get maintenanceTypeOptions(): string[] {
   return [...new Set(this.allMaintenances.map(pm => pm.maintenanceType))].sort();
@@ -196,9 +185,21 @@ applyFilters(): void {
     if (this.filterMaintenanceType && pm.maintenanceType !== this.filterMaintenanceType) return false;
     if (this.filterTechnician && pm.assignedTechnicianName !== this.filterTechnician) return false;
     if (this.filterUnassignedOnly && pm.assignedTechnicianId) return false;
+    if (this.filterProximity && !this.matchesProximity(pm, this.filterProximity)) return false;
     return true;
   });
   this.cdr.detectChanges();
+}
+
+private matchesProximity(pm: PreventiveMaintenance, proximity: string): boolean {
+  const days = pm.daysUntilNext;
+  switch (proximity) {
+    case 'OVERDUE':    return days < 0;
+    case 'THIS_WEEK':  return days >= 0 && days <= 7;
+    case 'NEXT_WEEK':  return days > 7 && days <= 14;
+    case 'LATER':      return days > 14;
+    default:           return true;
+  }
 }
 
 resetFilters(): void {
@@ -206,11 +207,13 @@ resetFilters(): void {
   this.filterMaintenanceType = '';
   this.filterTechnician = '';
   this.filterUnassignedOnly = false;
+  this.filterProximity = '';   // ← ajouté
   this.maintenances = [...this.allMaintenances];
   this.cdr.detectChanges();
 }
 
 get hasActiveFilters(): boolean {
-  return !!(this.filterStatus || this.filterMaintenanceType || this.filterTechnician || this.filterUnassignedOnly);
+  return !!(this.filterStatus || this.filterMaintenanceType || this.filterTechnician
+    || this.filterUnassignedOnly || this.filterProximity);
 }
 }

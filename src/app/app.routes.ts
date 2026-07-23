@@ -132,6 +132,14 @@ export const routes: Routes = [
     import('./features/preventive-maintenance/components/planning-list/planning-list.component')
       .then(m => m.PlanningListComponent)
 },
+{
+  path: 'preventive-maintenance/history',
+  canActivate: [authGuard, roleGuard],
+  data: { roles: ['Admin', 'Supervisor'] },
+  loadComponent: () =>
+    import('./features/preventive-maintenance/components/preventive-maintenance-history-list/preventive-maintenance-history-list.component')
+      .then(m => m.PreventiveMaintenanceHistoryListComponent)
+},
 
 // ── Stock ────────────────────────────────────────────────
 {

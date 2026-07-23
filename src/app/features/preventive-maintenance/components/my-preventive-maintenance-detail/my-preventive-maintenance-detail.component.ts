@@ -63,25 +63,12 @@ loadMaintenance(id: number): void {
       const found = activeList.find(pm => pm.id === id);
       if (found) {
         this.setMaintenance(found);
-        return;
+      } else {
+        // Le cycle a peut-être déjà été clôturé (réinitialisé ou archivé) entre-temps
+        this.errorMessage = 'Cette maintenance n\'est plus disponible : elle a probablement déjà été clôturée. Consultez l\'historique pour voir les détails du cycle terminé.';
+        this.isLoading = false;
+        this.cdr.detectChanges();
       }
-      this.pmService.findMyArchive().subscribe({
-        next: (archiveList) => {
-          const archived = archiveList.find(pm => pm.id === id);
-          if (archived) {
-            this.setMaintenance(archived);
-          } else {
-            this.errorMessage = 'Maintenance introuvable ou non assignée.';
-            this.isLoading = false;
-            this.cdr.detectChanges();
-          }
-        },
-        error: () => {
-          this.errorMessage = 'Erreur de chargement.';
-          this.isLoading = false;
-          this.cdr.detectChanges();
-        }
-      });
     },
     error: () => {
       this.errorMessage = 'Erreur de chargement.';

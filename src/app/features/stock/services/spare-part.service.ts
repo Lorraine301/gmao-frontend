@@ -54,4 +54,9 @@ export class SparePartService {
     responseType: 'blob'
   });
  }
+ getPartsByHistory(historyId: number): Observable<PreventiveMaintenancePart[]> {
+  return this.http.get<PreventiveMaintenancePart[]>(
+    `${environment.apiUrl}/preventive-maintenances/history/${historyId}/parts`
+  );
+ }
 }
