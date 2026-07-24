@@ -35,7 +35,6 @@ export class EquipmentListComponent implements OnInit, OnDestroy {
 
   statusOptions: EquipmentStatus[] = ['Active', 'Inactive', 'Under_Maintenance'];
   criticalityOptions: CriticalityLevel[] = ['Low', 'Medium', 'High'];
-  typeOptions = ['Extrusion', 'Winding', 'Molding', 'Rolling'];
 
   // ── Export ──────────────────────────────────────────────
   showExportMenu = false;

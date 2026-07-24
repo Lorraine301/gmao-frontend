@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule,AbstractControl
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { EquipmentService } from '../../services/equipment.service';
 import { EquipmentStatus, CriticalityLevel, EquipmentRequest } from '../../models/equipment.model';
+import { EquipmentZone, AREA_OPTIONS_BY_ZONE } from '../../models/equipment.model';
+
 
 @Component({
   selector: 'app-equipment-form',
@@ -21,11 +23,11 @@ export class EquipmentFormComponent implements OnInit {
   isSaving = false;
   errorMessage = '';
   isDuplicated = false;
+  areaOptions: string[] = [];
 
   statusOptions: EquipmentStatus[] = ['Active', 'Inactive', 'Under_Maintenance'];
   criticalityOptions: CriticalityLevel[] = ['Low', 'Medium', 'High'];
-  typeOptions = ['Extrusion', 'Winding', 'Molding', 'Rolling'];
-  categoryOptions = ['Production', 'Support', 'Quality'];
+  categoryOptions: EquipmentZone[] = ['Assemblage', 'Préparation'];
 
   constructor(
     private fb: FormBuilder,
@@ -62,14 +64,14 @@ ngOnInit(): void {
             commissioningDate: duplicateFrom.commissioningDate
               ? String(duplicateFrom.commissioningDate).substring(0, 10) : ''
           });
+          this.areaOptions = AREA_OPTIONS_BY_ZONE[duplicateFrom.category as EquipmentZone] || [];
           this.isDuplicated = true;
           this.cdr.detectChanges();
         }
       }
     });
   }
-
-  private buildForm(): void {
+ private buildForm(): void {
     this.form = this.fb.group({
       code:             ['', [Validators.required, Validators.maxLength(30)]],
       name:             ['', [Validators.required, Validators.maxLength(150)]],
@@ -80,30 +82,38 @@ ngOnInit(): void {
       manufacturer:     [''],
       model:            [''],
       type:             [''],
-      category:         [''],
+      category:         ['', Validators.required],
+      area:             ['', Validators.required],
       plant:            ['Suprajit Morocco'],
-      productionLine:   [''],
-      location:         [''],
       installationDate: [''],
       commissioningDate:[''],
-      maintenanceTeam:  [''],
       notes:            ['']
     },{ validators: dateOrderValidator});
+
+    // ── Réagit au changement de Zone pour proposer les bonnes Areas ──
+    this.form.get('category')?.valueChanges.subscribe((zone: EquipmentZone) => {
+      this.areaOptions = AREA_OPTIONS_BY_ZONE[zone] || [];
+      this.form.get('area')?.setValue(''); // réinitialise l'Area si la Zone change
+    });
   }
 
   private loadEquipment(): void {
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.equipmentService.findById(this.equipmentId).subscribe({
+      this.equipmentService.findById(this.equipmentId).subscribe({
       next: (eq) => {
+        // Prépare la liste des Areas AVANT de patcher le formulaire,
+        // pour que le select "area" ait ses options au bon moment
+        this.areaOptions = AREA_OPTIONS_BY_ZONE[eq.category as EquipmentZone] || [];
+
         this.form.patchValue({
           ...eq,
           installationDate:  eq.installationDate  ? eq.installationDate.substring(0, 10) : '',
           commissioningDate: eq.commissioningDate ? eq.commissioningDate.substring(0, 10) : ''
         });
         this.isLoading = false;
-        this.cdr.detectChanges(); // ← FORCER LE RENDU
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.errorMessage = err.status === 404

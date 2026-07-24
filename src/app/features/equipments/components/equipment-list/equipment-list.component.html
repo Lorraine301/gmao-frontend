@@ -145,17 +145,7 @@
         </option>
       </select>
     </div>
-
-    <div class="filter-group">
-      <label>Type</label>
-      <select [(ngModel)]="filters.type" (ngModelChange)="onFilterChange()">
-        <option [ngValue]="undefined">Tous les types</option>
-        <option *ngFor="let t of typeOptions" [ngValue]="t">
-          {{ t }}
-        </option>
-      </select>
-    </div>
-
+    
     <div class="filter-group">
       <label>Criticité</label>
       <select [(ngModel)]="filters.criticality" (ngModelChange)="onFilterChange()">
@@ -194,7 +184,7 @@
           <th>Nom</th>
           <th>Type</th>
           <th>Fabricant</th>
-          <th>Localisation</th>
+          <th>Zone / Area</th>
           <th>Statut</th>
           <th>Criticité</th>
           <th>Actions</th>
@@ -211,8 +201,8 @@
           <td>{{ eq.type || '—' }}</td>
           <td>{{ eq.manufacturer || '—' }}</td>
           <td>
-            <span class="location-text">{{ eq.location || '—' }}</span>
-            <span class="line-text" *ngIf="eq.productionLine">{{ eq.productionLine }}</span>
+            <span class="location-text">{{ eq.category || '—' }}</span>
+            <span class="line-text" *ngIf="eq.area">{{ eq.area }}</span>
           </td>
           <td>
             <select *ngIf="isAdmin"

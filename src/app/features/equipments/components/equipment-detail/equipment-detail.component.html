@@ -56,21 +56,19 @@
           <div class="info-item"><span class="info-label">N° série</span><span>{{ equipment.serialNumber || '—' }}</span></div>
           <div class="info-item"><span class="info-label">Fabricant</span><span>{{ equipment.manufacturer || '—' }}</span></div>
           <div class="info-item"><span class="info-label">Modèle</span><span>{{ equipment.model || '—' }}</span></div>
-          <div class="info-item"><span class="info-label">Catégorie</span><span>{{ equipment.category || '—' }}</span></div>
+          <div class="info-item"><span class="info-label">Type</span><span>{{ equipment.type || '—' }}</span></div>
         </div>
       </div>
 
       <!-- Localisation -->
-      <div class="detail-card">
+     <div class="detail-card">
         <h2 class="card-title">Localisation</h2>
         <div class="info-list">
-          <div class="info-item"><span class="info-label">Usine</span><span>{{ equipment.plant || '—' }}</span></div>
-          <div class="info-item"><span class="info-label">Ligne</span><span>{{ equipment.productionLine || '—' }}</span></div>
-          <div class="info-item"><span class="info-label">Zone</span><span>{{ equipment.location || '—' }}</span></div>
-          <div class="info-item"><span class="info-label">Équipe</span><span>{{ equipment.maintenanceTeam || '—' }}</span></div>
+          <div class="info-item"><span class="info-label">Zone (catégorie)</span><span>{{ equipment.category || '—' }}</span></div>
+          <div class="info-item"><span class="info-label">Area (petite zone)</span><span>{{ equipment.area || '—' }}</span></div>
+          <div class="info-item"><span class="info-label">Adresse de l'usine</span><span>{{ equipment.plant || '—' }}</span></div>
         </div>
       </div>
-
       <!-- Dates -->
       <div class="detail-card">
         <h2 class="card-title">Dates</h2>

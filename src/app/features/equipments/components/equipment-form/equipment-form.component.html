@@ -63,7 +63,7 @@
     <div class="form-section">
       <h2 class="section-title">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-             stroke-linecap="round" stroke-linejoin="round">
+            stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 2L2 7l10 5 10-5-10-5z"/>
           <path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
         </svg>
@@ -79,48 +79,41 @@
           <input formControlName="model" placeholder="ex: MX120, 470S" />
         </div>
         <div class="form-group">
-          <label>Type</label>
-          <select formControlName="type">
-            <option value="">Sélectionner...</option>
-            <option *ngFor="let t of typeOptions" [value]="t">{{ t }}</option>
-          </select>
+          <label>Type (poste)</label>
+          <input formControlName="type" placeholder="ex: Pin Pressing, Extrusion, Winding..." />
         </div>
-        <div class="form-group">
-          <label>Catégorie</label>
+        <div class="form-group" [class.error]="isInvalid('category')">
+          <label>Zone <span class="required">*</span></label>
           <select formControlName="category">
             <option value="">Sélectionner...</option>
             <option *ngFor="let c of categoryOptions" [value]="c">{{ c }}</option>
           </select>
+          <span class="error-msg" *ngIf="isInvalid('category')">La zone est obligatoire</span>
+        </div>
+        <div class="form-group" [class.error]="isInvalid('area')">
+          <label>Area (petite zone) <span class="required">*</span></label>
+          <select formControlName="area" [disabled]="areaOptions.length === 0">
+            <option value="">{{ areaOptions.length === 0 ? 'Choisissez d\'abord une zone' : 'Sélectionner...' }}</option>
+            <option *ngFor="let a of areaOptions" [value]="a">{{ a }}</option>
+          </select>
+          <span class="error-msg" *ngIf="isInvalid('area')">L'area est obligatoire</span>
         </div>
       </div>
     </div>
-
     <!-- Section Localisation -->
     <div class="form-section">
       <h2 class="section-title">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-             stroke-linecap="round" stroke-linejoin="round">
+            stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
           <circle cx="12" cy="10" r="3"/>
         </svg>
         Localisation
       </h2>
       <div class="form-grid">
-        <div class="form-group">
-          <label>Usine</label>
-          <input formControlName="plant" placeholder="ex: Suprajit Morocco" />
-        </div>
-        <div class="form-group">
-          <label>Ligne de production</label>
-          <input formControlName="productionLine" placeholder="ex: Line A" />
-        </div>
-        <div class="form-group">
-          <label>Localisation</label>
-          <input formControlName="location" placeholder="ex: Workshop A" />
-        </div>
-        <div class="form-group">
-          <label>Équipe de maintenance</label>
-          <input formControlName="maintenanceTeam" placeholder="ex: Mechanical Team" />
+        <div class="form-group full-width">
+          <label>Adresse de l'usine</label>
+          <input formControlName="plant" placeholder="ex: Zone Industrielle, Casablanca" />
         </div>
       </div>
     </div>
