@@ -61,4 +61,15 @@ export class AuthService {
   getRole(): string | null {
     return this.getCurrentUser()?.role ?? null;
   }
+  updateMyAvailability(availabilityStatus: 'Available' | 'Unavailable'): Observable<void> {
+  return this.http.put<void>(`${environment.apiUrl}/auth/me/availability`, { availabilityStatus })
+    .pipe(tap(() => {
+      // Met à jour aussi le cache local pour cohérence immédiate
+      const user = this.getCurrentUser();
+      if (user) {
+        (user as any).availabilityStatus = availabilityStatus;
+        localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+      }
+    }));
+  }
 }

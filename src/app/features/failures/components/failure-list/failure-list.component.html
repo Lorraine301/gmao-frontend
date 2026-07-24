@@ -143,9 +143,10 @@
         <label>Technicien</label>
         <select [(ngModel)]="selectedTechnicianId">
           <option [ngValue]="null" disabled>— Choisir un technicien —</option>
-          <option *ngFor="let t of technicians" [ngValue]="t.id">
-            {{ t.fullName }} ({{ t.employeeCode }}) — {{ t.speciality || 'Général' }}
-          </option>
+             <option *ngFor="let t of technicians" [ngValue]="t.id" [disabled]="t.availabilityStatus !== 'Available'">
+              {{ t.fullName }} ({{ t.employeeCode }}) — {{ t.speciality || 'Général' }}
+              {{ t.availabilityStatus !== 'Available' ? ' — Indisponible' : '' }}
+             </option>
         </select>
       </div>
 

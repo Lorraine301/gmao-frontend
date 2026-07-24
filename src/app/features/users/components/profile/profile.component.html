@@ -23,6 +23,18 @@
       </div>
     </div>
   </div>
+  <div class="availability-section" *ngIf="isTechnician">
+  <span class="info-label">Disponibilité</span>
+  <button class="availability-toggle"
+          [class.availability-toggle--available]="profile?.availabilityStatus === 'Available'"
+          [class.availability-toggle--unavailable]="profile?.availabilityStatus !== 'Available'"
+          (click)="toggleAvailability()"
+          [disabled]="isUpdatingAvailability">
+    <span class="dot"></span>
+    {{ profile?.availabilityStatus === 'Available' ? 'Disponible' : 'Indisponible' }}
+  </button>
+  <p class="availability-error" *ngIf="availabilityError">{{ availabilityError }}</p>
+</div>
 
   <!-- Changement de mot de passe -->
 <div class="profile-card" *ngIf="profile && !isLoading">

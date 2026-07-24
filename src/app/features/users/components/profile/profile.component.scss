@@ -142,3 +142,13 @@ $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-ligh
 
   &:hover { color: $secondary; }
 }
+.availability-section { margin-top: 16px; padding-top: 16px; border-top: 1px solid $border; }
+.availability-toggle {
+  display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 20px;
+  border: none; font-size: 0.85rem; font-weight: 600; cursor: pointer; margin-top: 8px;
+  .dot { width: 8px; height: 8px; border-radius: 50%; }
+  &--available { background: #e8f5e9; color: #2e7d32; .dot { background: #2e7d32; } }
+  &--unavailable { background: #f5f5f5; color: #616161; .dot { background: #616161; } }
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
+}
+.availability-error { font-size: 0.78rem; color: $error; margin-top: 6px; }

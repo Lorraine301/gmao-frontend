@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ProfileService } from '../../../../core/services/profile.service';
 import { UserProfile } from '../../models/user.model';
+import { AuthService } from '../../../../core/services/auth.service';
 
 // ── Validateur : les deux nouveaux mots de passe doivent correspondre ──
 function passwordsMatchValidator(control: AbstractControl): ValidationErrors | null {
@@ -34,8 +35,14 @@ export class ProfileComponent implements OnInit {
   showNewPassword = false;
   showConfirmPassword = false;
 
+  //changement de statu technicien
+  isUpdatingAvailability = false;
+  availabilityError = '';
+
+
   constructor(
     private profileService: ProfileService,
+    private authService: AuthService,
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef
   ) {}
@@ -94,5 +101,28 @@ export class ProfileComponent implements OnInit {
 
   getRoleLabel(r: string): string {
     return { Admin: 'Admin', Supervisor: 'Superviseur', Technician: 'Technicien' }[r] ?? r;
+  }
+  get isTechnician(): boolean {
+  return this.profile?.role === 'Technician';
+  }
+
+  toggleAvailability(): void {
+    if (!this.profile) return;
+    const newStatus = this.profile.availabilityStatus === 'Available' ? 'Unavailable' : 'Available';
+    this.isUpdatingAvailability = true;
+    this.availabilityError = '';
+
+    this.authService.updateMyAvailability(newStatus).subscribe({
+      next: () => {
+        this.profile!.availabilityStatus = newStatus;
+        this.isUpdatingAvailability = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.isUpdatingAvailability = false;
+        this.availabilityError = 'Erreur lors de la mise à jour.';
+        this.cdr.detectChanges();
+      }
+    });
   }
 }
