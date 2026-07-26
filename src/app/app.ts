@@ -5,6 +5,7 @@ import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { ChatComponent } from './features/assistant/components/chat/chat.component';
 import { AuthService } from './core/services/auth.service';
 import { ToastComponent } from './shared/components/toast/toast.component';
+import { LanguageService } from './core/services/language.service';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +19,7 @@ import { ToastComponent } from './shared/components/toast/toast.component';
   `
 })
 export class App {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private languageService: LanguageService ) {}
 
   get showNavbar(): boolean {
     // Masquer la navbar sur les pages login et unauthorized

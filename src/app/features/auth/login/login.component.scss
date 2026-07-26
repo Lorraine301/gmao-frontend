@@ -435,3 +435,39 @@ $white:        #ffffff;
     letter-spacing: 0.3px;
   }
 }
+.lang-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 8px 14px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: white;
+  z-index: 20;
+  &:hover { background: rgba(255,255,255,0.25); }
+}
+.back-to-welcome {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: white;
+  z-index: 20;
+
+  svg { width: 15px; height: 15px; }
+
+  &:hover { background: rgba(255,255,255,0.25); }
+}

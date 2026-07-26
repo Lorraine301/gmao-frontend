@@ -1,0 +1,121 @@
+{
+  "welcome": {
+    "title": "GMAO Intelligente",
+    "subtitle": "La maintenance industrielle, augmentée par l'intelligence artificielle.",
+    "feature1": "Gestion complète du parc machines et des interventions",
+    "feature2": "Moteur de règles hybride couplé à l'IA pour une maintenance prédictive",
+    "feature3": "Tableaux de bord, rapports automatisés et suivi en temps réel",
+    "cta": "Accéder à l'application"
+  },
+  "common": {
+    "backToHome": "Retour à l'accueil",
+    "back": "Retour",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "create": "Créer",
+    "add": "Ajouter",
+    "export": "Exporter",
+    "import": "Importer",
+    "search": "Rechercher",
+    "reset": "Réinitialiser",
+    "actions": "Actions",
+    "id": "ID",
+    "code": "Code",
+    "name": "Nom",
+    "email": "Email",
+    "role": "Rôle",
+    "status": "Statut",
+    "date": "Date",
+    "yes": "Oui",
+    "no": "Non",
+    "close": "Fermer",
+    "download": "Télécharger",
+    "loading": "Chargement...",
+    "confirm": "Confirmer",
+    "details": "Détails",
+    "view": "Voir",
+    "duplicate": "Dupliquer",
+    "generate": "Générer",
+    "retry": "Réessayer",
+    "activate": "Activer",
+    "deactivate": "Désactiver",
+    "all": "Tous",
+    "notFound": "Introuvable",
+    "errorGeneric": "Une erreur est survenue. Veuillez réessayer.",
+    "errorServer": "Impossible de contacter le serveur."
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "equipments": "Équipements",
+    "users": "Utilisateurs",
+    "failures": "Pannes",
+    "interventions": "Interventions",
+    "maintenance": "Maintenance",
+    "stock": "Stock",
+    "reports": "Rapports",
+    "myInterventions": "Mes interventions",
+    "myPreventiveMaintenance": "Maintenance préventive",
+    "logout": "Déconnexion",
+    "profile": "Mon profil"
+  },
+  "login": {
+    "title": "GMAO Intelligente",
+    "subtitle": "Connectez-vous à votre espace de maintenance",
+    "emailLabel": "Adresse email",
+    "emailPlaceholder": "vous@suprajit.ma",
+    "emailRequired": "L'adresse email est requise",
+    "emailInvalid": "Format d'email invalide",
+    "passwordLabel": "Mot de passe",
+    "passwordRequired": "Le mot de passe est requis",
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe",
+    "submit": "Se connecter",
+    "loading": "Connexion en cours...",
+    "footer": "Suprajit Maroc © {{year}}",
+    "errorInvalidCredentials": "Email ou mot de passe incorrect.",
+    "errorServerUnreachable": "Serveur inaccessible. Vérifiez que le backend est démarré.",
+    "errorGeneric": "Une erreur est survenue. Veuillez réessayer."
+  },
+  "roles": {
+    "Admin": "Admin",
+    "Supervisor": "Superviseur",
+    "Technician": "Technicien"
+  },
+  "status": {
+    "equipment": {
+      "Active": "Actif",
+      "Inactive": "Inactif",
+      "Under_Maintenance": "En maintenance"
+    },
+    "criticality": {
+      "Low": "Faible",
+      "Medium": "Moyen",
+      "High": "Élevé"
+    },
+    "failure": {
+      "Open": "Ouverte",
+      "In_Progress": "En cours",
+      "Resolved": "Résolue",
+      "Closed": "Clôturée"
+    },
+    "priority": {
+      "Low": "Faible",
+      "Medium": "Moyen",
+      "High": "Élevé",
+      "Critical": "Critique"
+    },
+    "intervention": {
+      "Pending": "En attente",
+      "In_Progress": "En cours",
+      "Completed": "Terminée"
+    },
+    "maintenance": {
+      "Scheduled": "Planifiée",
+      "Overdue": "En retard",
+      "Completed": "Terminée",
+      "Cancelled": "Annulée"
+    }
+  }
+}

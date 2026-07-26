@@ -3,7 +3,11 @@ import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  {
+  path: '',
+  loadComponent: () =>
+    import('./features/welcome/welcome.component').then(m => m.WelcomeComponent)
+  },
 
   {
     path: 'login',

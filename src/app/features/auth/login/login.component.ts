@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.service';
+import { TranslatePipe } from '@ngx-translate/core';
+import { LanguageService } from '../../../core/services/language.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule,TranslatePipe, RouterModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -22,7 +24,8 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private languageService: LanguageService
   ) {
     // Rediriger si déjà connecté
     if (this.authService.isLoggedIn()) {
@@ -34,7 +37,14 @@ export class LoginComponent {
       password: ['', [Validators.required, Validators.minLength(3)]]
     });
   }
+  
+  get currentLang(): string {
+  return this.languageService.getCurrentLanguage();
+  }
 
+  toggleLanguage(): void {
+    this.languageService.toggleLanguage();
+  }
   togglePassword(): void {
     this.showPassword = !this.showPassword;
   }
@@ -53,16 +63,16 @@ export class LoginComponent {
         this.isLoading = false;
         this.redirectByRole(response.role);
       },
-      error: (err) => {
-        this.isLoading = false;
-        if (err.status === 0) {
-          this.errorMessage = 'Serveur inaccessible. Vérifiez que le backend est démarré.';
-        } else if (err.status === 401 || err.status === 403) {
-          this.errorMessage = 'Email ou mot de passe incorrect.';
-        } else {
-          this.errorMessage = 'Une erreur est survenue. Veuillez réessayer.';
+        error: (err) => {
+          this.isLoading = false;
+          if (err.status === 0) {
+            this.errorMessage = 'login.errorServerUnreachable';
+          } else if (err.status === 401 || err.status === 403) {
+            this.errorMessage = 'login.errorInvalidCredentials';
+          } else {
+            this.errorMessage = 'login.errorGeneric';
+          }
         }
-      }
     });
   }
 

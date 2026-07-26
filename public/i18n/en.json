@@ -1,0 +1,121 @@
+{
+  "welcome": {
+    "title": "Smart CMMS",
+    "subtitle": "Industrial maintenance, powered by artificial intelligence.",
+    "feature1": "Complete management of equipment and interventions",
+    "feature2": "Hybrid rule engine coupled with AI for predictive maintenance",
+    "feature3": "Dashboards, automated reports and real-time tracking",
+    "cta": "Enter the application"
+  },
+  "common": {
+    "backToHome": "Back to home",
+    "back": "Back",
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "save": "Save",
+    "create": "Create",
+    "add": "Add",
+    "export": "Export",
+    "import": "Import",
+    "search": "Search",
+    "reset": "Reset",
+    "actions": "Actions",
+    "id": "ID",
+    "code": "Code",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "status": "Status",
+    "date": "Date",
+    "yes": "Yes",
+    "no": "No",
+    "close": "Close",
+    "download": "Download",
+    "loading": "Loading...",
+    "confirm": "Confirm",
+    "details": "Details",
+    "view": "View",
+    "duplicate": "Duplicate",
+    "generate": "Generate",
+    "retry": "Retry",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "all": "All",
+    "notFound": "Not found",
+    "errorGeneric": "An error occurred. Please try again.",
+    "errorServer": "Unable to reach the server."
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "equipments": "Equipment",
+    "users": "Users",
+    "failures": "Failures",
+    "interventions": "Interventions",
+    "maintenance": "Maintenance",
+    "stock": "Stock",
+    "reports": "Reports",
+    "myInterventions": "My Interventions",
+    "myPreventiveMaintenance": "Preventive Maintenance",
+    "logout": "Logout",
+    "profile": "My Profile"
+  },
+  "login": {
+    "title": "Smart CMMS",
+    "subtitle": "Sign in to your maintenance workspace",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "you@suprajit.ma",
+    "emailRequired": "Email address is required",
+    "emailInvalid": "Invalid email format",
+    "passwordLabel": "Password",
+    "passwordRequired": "Password is required",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "submit": "Sign in",
+    "loading": "Signing in...",
+    "footer": "Suprajit Morocco © {{year}}",
+    "errorInvalidCredentials": "Incorrect email or password.",
+    "errorServerUnreachable": "Server unreachable. Check that the backend is running.",
+    "errorGeneric": "An error occurred. Please try again."
+  },
+  "roles": {
+    "Admin": "Admin",
+    "Supervisor": "Supervisor",
+    "Technician": "Technician"
+  },
+  "status": {
+    "equipment": {
+      "Active": "Active",
+      "Inactive": "Inactive",
+      "Under_Maintenance": "Under Maintenance"
+    },
+    "criticality": {
+      "Low": "Low",
+      "Medium": "Medium",
+      "High": "High"
+    },
+    "failure": {
+      "Open": "Open",
+      "In_Progress": "In Progress",
+      "Resolved": "Resolved",
+      "Closed": "Closed"
+    },
+    "priority": {
+      "Low": "Low",
+      "Medium": "Medium",
+      "High": "High",
+      "Critical": "Critical"
+    },
+    "intervention": {
+      "Pending": "Pending",
+      "In_Progress": "In Progress",
+      "Completed": "Completed"
+    },
+    "maintenance": {
+      "Scheduled": "Scheduled",
+      "Overdue": "Overdue",
+      "Completed": "Completed",
+      "Cancelled": "Cancelled"
+    }
+  }
+}

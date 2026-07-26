@@ -1,0 +1,218 @@
+$primary: #1E3A5F;
+$secondary: #2E75B6;
+$accent: #4A9FD8;
+
+.welcome-wrapper {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  //background: linear-gradient(135deg, $primary 0%, #24527a 45%, $secondary 80%, $accent 100%);
+  //background-size: 200% 200%;
+  //animation: gradientShift 15s ease infinite;
+}
+// ── Image de fond ──
+.bg-image {
+  position: absolute;
+  inset: 0;
+  background-image: url('/images/china_pro.jpg');
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+  animation: slowZoom 5s ease-in-out infinite alternate;
+}
+
+@keyframes slowZoom {
+  from { transform: scale(1); }
+  to   { transform: scale(1.08); }
+}
+
+// ── Voile bleu semi-transparent par-dessus l'image, pour garder le contraste et la charte graphique ──
+.bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg,
+      rgba(30, 58, 95, 0.88) 0%,
+      rgba(36, 82, 122, 0.82) 45%,
+      rgba(46, 117, 182, 0.78) 80%,
+      rgba(74, 159, 216, 0.75) 100%);
+  z-index: 1;
+}
+
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+// ── Grille subtile en fond, façon "blueprint" industriel ──
+.bg-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  animation: gridDrift 20s linear infinite;
+}
+
+@keyframes gridDrift {
+  from { background-position: 0 0; }
+  to   { background-position: 48px 48px; }
+}
+
+// ── Halos lumineux flottants ──
+.glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.35;
+  background: radial-gradient(circle, rgba(255,255,255,0.6) 0%, transparent 70%);
+}
+.glow-1 { width: 400px; height: 400px; top: -100px; left: -100px; animation: floatSlow 12s ease-in-out infinite; }
+.glow-2 { width: 300px; height: 300px; bottom: -80px; right: -60px; animation: floatSlow 16s ease-in-out infinite reverse; }
+.glow-3 { width: 250px; height: 250px; top: 40%; right: 15%; animation: floatSlow 10s ease-in-out infinite; }
+
+@keyframes floatSlow {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(30px, -20px) scale(1.1); }
+}
+
+// ── Bouton langue ──
+.lang-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 8px 14px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: white;
+  z-index: 20;
+  &:hover { background: rgba(255,255,255,0.25); }
+}
+
+// ── Contenu central ──
+.welcome-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  color: white;
+  padding: 40px 24px;
+  max-width: 560px;
+  animation: fadeInUp 0.9s ease-out;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.logo-wrapper {
+  margin-bottom: 24px;
+  animation: logoPulse 3s ease-in-out infinite;
+}
+
+@keyframes logoPulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(255,255,255,0)); }
+  50%      { transform: scale(1.04); filter: drop-shadow(0 0 24px rgba(255,255,255,0.35)); }
+}
+
+.welcome-logo {
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
+  border-radius: 50%;
+  background: white;
+  padding: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+.welcome-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin: 0 0 12px;
+  letter-spacing: -0.5px;
+  animation: fadeInUp 0.9s ease-out 0.15s both;
+}
+
+.welcome-subtitle {
+  font-size: 1.05rem;
+  color: rgba(255,255,255,0.85);
+  margin: 0 0 32px;
+  line-height: 1.6;
+  animation: fadeInUp 0.9s ease-out 0.3s both;
+}
+
+.welcome-features {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 36px;
+  animation: fadeInUp 0.9s ease-out 0.45s both;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-size: 0.9rem;
+  text-align: left;
+  backdrop-filter: blur(4px);
+}
+
+.feature-icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.btn-enter {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  border-radius: 12px;
+  border: none;
+  background: white;
+  color: $primary;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  transition: transform 0.2s, box-shadow 0.2s;
+  animation: fadeInUp 0.9s ease-out 0.6s both;
+
+  svg { width: 18px; height: 18px; }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+  }
+}
+
+.welcome-footer {
+  margin-top: 28px;
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.6);
+  animation: fadeInUp 0.9s ease-out 0.75s both;
+}
+
+// ── Responsive ──
+@media (max-width: 480px) {
+  .welcome-title { font-size: 1.6rem; }
+  .welcome-subtitle { font-size: 0.9rem; }
+  .welcome-logo { width: 80px; height: 80px; }
+  .btn-enter { width: 100%; justify-content: center; }
+}

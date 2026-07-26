@@ -1,0 +1,71 @@
+<div class="welcome-wrapper">
+    <div class="bg-image"></div>
+   <div class="bg-overlay"></div>
+
+  <button class="lang-toggle" (click)="toggleLanguage()">
+          <img [src]="currentLang === 'fr' ? 'assets/gb.svg' : 'assets/fr.svg'" alt="" width="20" />
+          {{ currentLang === 'fr' ? 'EN' : 'FR' }}
+  </button>
+  <!-- Particules / formes animées -->
+  <div class="bg-grid"></div>
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+  <div class="glow glow-3"></div>
+
+  <div class="welcome-content">
+
+    <div class="logo-wrapper">
+      <img src="./images/logo_suprajit.png" alt="Logo Suprajit" class="welcome-logo" />
+    </div>
+
+    <h1 class="welcome-title">{{ 'welcome.title' | translate }}</h1>
+    <p class="welcome-subtitle">{{ 'welcome.subtitle' | translate }}</p>
+
+  <div class="welcome-features">
+  <div class="feature-item">
+    <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+    </svg>
+    <span>{{ 'welcome.feature1' | translate }}</span>
+    </div>
+    <div class="feature-item">
+      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="4" y="4" width="16" height="16" rx="2"/>
+        <rect x="9" y="9" width="6" height="6"/>
+        <line x1="9" y1="1" x2="9" y2="4"/>
+        <line x1="15" y1="1" x2="15" y2="4"/>
+        <line x1="9" y1="20" x2="9" y2="23"/>
+        <line x1="15" y1="20" x2="15" y2="23"/>
+        <line x1="20" y1="9" x2="23" y2="9"/>
+        <line x1="20" y1="15" x2="23" y2="15"/>
+        <line x1="1" y1="9" x2="4" y2="9"/>
+        <line x1="1" y1="15" x2="4" y2="15"/>
+      </svg>
+      <span>{{ 'welcome.feature2' | translate }}</span>
+    </div>
+    <div class="feature-item">
+      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="20" x2="18" y2="10"/>
+        <line x1="12" y1="20" x2="12" y2="4"/>
+        <line x1="6" y1="20" x2="6" y2="14"/>
+      </svg>
+      <span>{{ 'welcome.feature3' | translate }}</span>
+    </div>
+  </div>
+
+    <button class="btn-enter" routerLink="/login">
+      {{ 'welcome.cta' | translate }}
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="5" y1="12" x2="19" y2="12"/>
+        <polyline points="12 5 19 12 12 19"/>
+      </svg>
+    </button>
+
+    <p class="welcome-footer">Suprajit Morocco © {{ '' + (currentLang === 'fr' ? '' : '') }}2026</p>
+  </div>
+
+</div>

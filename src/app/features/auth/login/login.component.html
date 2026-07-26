@@ -1,6 +1,19 @@
 <div class="login-wrapper">
 
-  <!-- Particules décoratives -->
+  <button class="lang-toggle" (click)="toggleLanguage()">
+          <img [src]="currentLang === 'fr' ? 'assets/gb.svg' : 'assets/fr.svg'" alt="" width="20" />
+          {{ currentLang === 'fr' ? 'EN' : 'FR' }}
+  </button>
+
+  <button type="button" class="back-to-welcome" routerLink="/">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+       stroke-linecap="round" stroke-linejoin="round">
+    <line x1="19" y1="12" x2="5" y2="12"/>
+    <polyline points="12 19 5 12 12 5"/>
+  </svg>
+  {{ 'common.backToHome' | translate }}
+</button>
+
   <div class="bg-shapes">
     <div class="shape shape-1"></div>
     <div class="shape shape-2"></div>
@@ -10,15 +23,13 @@
 
   <div class="login-card">
 
-    <!-- Logo -->
     <div class="login-logo">
       <img src="./images/logo_suprajit.png" alt="Logo Suprajit" />
     </div>
 
-    <!-- Header -->
     <div class="login-header">
-      <h1>GMAO Intelligente</h1>
-      <p>Connectez-vous à votre espace de maintenance</p>
+      <h1>{{ 'login.title' | translate }}</h1>
+      <p>{{ 'login.subtitle' | translate }}</p>
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
@@ -26,9 +37,8 @@
       <!-- Email -->
       <div class="form-group"
            [class.has-error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
-        <label for="email">Adresse email</label>
+        <label for="email">{{ 'login.emailLabel' | translate }}</label>
         <div class="input-wrapper">
-          <!-- Icône email SVG -->
           <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <rect x="2" y="4" width="20" height="16" rx="2"/>
@@ -38,16 +48,16 @@
             id="email"
             type="email"
             formControlName="email"
-            placeholder="vous@suprajit.ma"
+            [placeholder]="'login.emailPlaceholder' | translate"
             autocomplete="email"
           />
         </div>
         <div class="field-errors">
           <span *ngIf="loginForm.get('email')?.errors?.['required'] && loginForm.get('email')?.touched">
-            L'adresse email est requise
+            {{ 'login.emailRequired' | translate }}
           </span>
           <span *ngIf="loginForm.get('email')?.errors?.['email'] && loginForm.get('email')?.touched">
-            Format d'email invalide
+            {{ 'login.emailInvalid' | translate }}
           </span>
         </div>
       </div>
@@ -55,9 +65,8 @@
       <!-- Mot de passe -->
       <div class="form-group"
            [class.has-error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-        <label for="password">Mot de passe</label>
+        <label for="password">{{ 'login.passwordLabel' | translate }}</label>
         <div class="input-wrapper password-wrapper">
-          <!-- Icône cadenas SVG -->
           <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
@@ -70,16 +79,13 @@
             placeholder="••••••••"
             autocomplete="current-password"
           />
-          <!-- Bouton œil SVG -->
           <button type="button" class="eye-btn" (click)="togglePassword()" tabindex="-1"
-                  [attr.aria-label]="showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'">
-            <!-- Œil ouvert -->
+                  [attr.aria-label]="(showPassword ? 'login.hidePassword' : 'login.showPassword') | translate">
             <svg *ngIf="!showPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                  stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
               <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
               <circle cx="12" cy="12" r="3"/>
             </svg>
-            <!-- Œil barré -->
             <svg *ngIf="showPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                  stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
               <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
@@ -90,7 +96,7 @@
         </div>
         <div class="field-errors">
           <span *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-            Le mot de passe est requis
+            {{ 'login.passwordRequired' | translate }}
           </span>
         </div>
       </div>
@@ -103,7 +109,7 @@
           <line x1="12" y1="8" x2="12" y2="12"/>
           <line x1="12" y1="16" x2="12.01" y2="16"/>
         </svg>
-        <span>{{ errorMessage }}</span>
+        <span>{{ errorMessage | translate }}</span>
       </div>
 
       <!-- Bouton submit -->
@@ -115,20 +121,19 @@
             <polyline points="10 17 15 12 10 7"/>
             <line x1="15" y1="12" x2="3" y2="12"/>
           </svg>
-          Se connecter
+          {{ 'login.submit' | translate }}
         </span>
         <span *ngIf="isLoading" class="btn-loading">
           <span class="spinner"></span>
-          Connexion en cours...
+          {{ 'login.loading' | translate }}
         </span>
       </button>
 
     </form>
 
-    <!-- Footer -->
     <div class="login-footer">
       <div class="divider"></div>
-      <p>Suprajit Maroc &copy; {{ currentYear }}</p>
+      <p>{{ 'login.footer' | translate:{ year: currentYear } }}</p>
     </div>
 
   </div>

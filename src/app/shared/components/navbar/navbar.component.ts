@@ -6,12 +6,14 @@ import { AppNotificationService } from '../../../core/services/notification.serv
 import { AppNotification } from '../../../core/models/notification.model';
 import { interval, Subscription } from 'rxjs';
 import { WebsocketService } from '../../../core/services/websocket.service';
+import { TranslatePipe } from '@ngx-translate/core';
+import { LanguageService } from '../../../core/services/language.service';
 
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule,TranslatePipe],
   template: `
     <nav class="navbar">
       <div class="navbar__brand">
@@ -20,8 +22,8 @@ import { WebsocketService } from '../../../core/services/websocket.service';
       </div>
 
       <div class="navbar__links">
-        <a *ngFor="let link of navLinks" [routerLink]="link.path" routerLinkActive="active">
-          {{ link.label }}
+         <a *ngFor="let link of navLinks" [routerLink]="link.path" routerLinkActive="active">
+          {{ link.label | translate }}
         </a>
       </div>
 
@@ -73,10 +75,13 @@ import { WebsocketService } from '../../../core/services/websocket.service';
           <div class="navbar__avatar">{{ getInitials() }}</div>
           <div class="navbar__info">
             <span class="navbar__name">{{ user?.fullName }}</span>
-            <span class="navbar__role">{{ user?.role }}</span>
+            <span class="navbar__role">{{ 'roles.' + user?.role | translate }}</span>
           </div>
         </div>
-
+         <button class="lang-toggle" (click)="toggleLanguage()">
+          <img [src]="currentLang === 'fr' ? 'assets/gb.svg' : 'assets/fr.svg'" alt="" width="20" />
+          {{ currentLang === 'fr' ? 'EN' : 'FR' }}
+        </button>
         <button class="navbar__logout" (click)="logout()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -84,7 +89,7 @@ import { WebsocketService } from '../../../core/services/websocket.service';
             <polyline points="16 17 21 12 16 7"/>
             <line x1="21" y1="12" x2="9" y2="12"/>
           </svg>
-          Déconnexion
+          {{ 'nav.logout' | translate }}
         </button>
       </div>
     </nav>
@@ -125,6 +130,17 @@ import { WebsocketService } from '../../../core/services/websocket.service';
     .notif-content { flex: 1; min-width: 0; }
     .notif-message { font-size: 0.82rem; color: #1a202c; margin: 0 0 4px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .notif-date { font-size: 0.72rem; color: #718096; }
+    .lang-toggle {
+      padding: 7px 12px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      color: rgba(255,255,255,0.85);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      &:hover { background: rgba(255,255,255,0.18); color: white; }
+    }
   `]
 })
 export class NavbarComponent implements OnInit, OnDestroy {
@@ -147,8 +163,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private notifService: AppNotificationService,
     private wsService: WebsocketService,  
+    private languageService: LanguageService, 
     private cdr: ChangeDetectorRef 
   ) {}
+
+  get currentLang(): string {
+  return this.languageService.getCurrentLanguage();
+  }
+
+  toggleLanguage(): void {
+    this.languageService.toggleLanguage();
+  }
 
   ngOnInit(): void {
     this.navLinks = this.computeNavLinks();
@@ -207,28 +232,27 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   get user() { return this.authService.getCurrentUser(); }
 
-  private computeNavLinks(): { label: string; path: string }[] {
-    const role = this.authService.getRole();
+private computeNavLinks(): { label: string; path: string }[] {
+  const role = this.authService.getRole();
 
-   if (role === 'Technician') {
+  if (role === 'Technician') {
     return [
-      { label: 'Mes interventions', path: '/my-interventions' },
-      { label: 'Maintenance préventive', path: '/my-preventive-maintenance' }
+      { label: 'nav.myInterventions', path: '/my-interventions' },
+      { label: 'nav.myPreventiveMaintenance', path: '/my-preventive-maintenance' }
     ];
   }
 
-    // Supervisor et Admin ont la même liste actuellement
-    return [
-      { label: 'Dashboard', path: '/dashboard' },
-      { label: 'Équipements', path: '/equipments' },
-      { label: 'Utilisateurs', path: '/users' },
-      { label: 'Pannes', path: '/failures' },
-      { label: 'Interventions', path: '/interventions' },
-      { label: 'Maintenance', path: '/preventive-maintenance' },
-      { label: 'Stock', path: '/stock' },
-      { label: 'Rapports', path: '/reports' }
-    ];
-  }
+  return [
+    { label: 'nav.dashboard', path: '/dashboard' },
+    { label: 'nav.users', path: '/users' },
+    { label: 'nav.equipments', path: '/equipments' },
+    { label: 'nav.failures', path: '/failures' },
+    { label: 'nav.interventions', path: '/interventions' },
+    { label: 'nav.maintenance', path: '/preventive-maintenance' },
+    { label: 'nav.stock', path: '/stock' },
+    { label: 'nav.reports', path: '/reports' }
+  ];
+}
 
   getInitials(): string {
     const name = this.user?.fullName ?? '';
