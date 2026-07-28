@@ -62,9 +62,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let i of interventions"
-        [routerLink]="['/interventions', i.id]"
-         style="cursor: pointer;">
+      <tr *ngFor="let i of interventions; let idx = index"
+          [routerLink]="['/interventions', i.id]"
+          style="cursor: pointer;"
+          [class.row--completed]="i.status === 'Completed'"
+          [style.animation-delay.ms]="idx * 30">
           <td>
             <span class="failure-code">{{ i.failureCode }}</span>
             <span class="failure-title">{{ i.failureTitle }}</span>

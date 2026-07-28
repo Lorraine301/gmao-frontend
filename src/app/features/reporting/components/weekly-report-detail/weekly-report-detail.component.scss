@@ -1,26 +1,114 @@
-$primary: #1E3A5F; $secondary: #2E75B6; $error: #c0392b; $text-dark: #1a202c; $text-light: #718096; $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff;
+$primary: #1E3A5F; $secondary: #2E75B6; $error: #c0392b; $success: #2e7d32; $warning: #e65100;
+$text-dark: #1a202c; $text-light: #718096; $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff;
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulseDot {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50%      { opacity: 1; transform: scale(1.4); }
+}
 
 .page-wrapper { padding: 32px; max-width: 1000px; margin: 0 auto; }
 .page-header { margin-bottom: 20px; }
-.btn-back { display: flex; align-items: center; gap: 6px; background: none; border: none; color: $text-light; cursor: pointer; font-size: 0.88rem; padding: 6px 0; svg { width: 16px; height: 16px; } &:hover { color: $text-dark; } }
+.btn-back {
+  display: flex; align-items: center; gap: 6px; background: none; border: none; color: $text-light;
+  cursor: pointer; font-size: 0.88rem; padding: 6px 0; transition: color 0.2s;
+  svg { width: 16px; height: 16px; transition: transform 0.2s; }
+  &:hover { color: $primary; svg { transform: translateX(-3px); } }
+}
 .loading-state { display: flex; justify-content: center; padding: 60px; }
 .spinner-lg { width: 36px; height: 36px; border: 3px solid rgba($secondary, 0.2); border-top-color: $secondary; border-radius: 50%; animation: spin 0.7s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .alert-error { padding: 12px 16px; background: #fdf3f2; border-left: 4px solid $error; border-radius: 8px; color: $error; font-size: 0.88rem; margin-bottom: 16px; }
 
-.report-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
-.report-title { font-size: 1.4rem; font-weight: 700; color: $primary; margin: 0 0 4px; }
+.report-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
+  animation: fadeInUp 0.4s ease-out;
+}
+.report-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 12px; border-radius: 20px; margin-bottom: 8px;
+  background: linear-gradient(135deg, $primary, $secondary); color: $white;
+  font-size: 0.75rem; font-weight: 700;
+  svg { width: 12px; height: 12px; }
+}
+.report-title { font-size: 1.5rem; font-weight: 800; color: $primary; margin: 0 0 4px; letter-spacing: -0.3px; }
 .report-subtitle { font-size: 0.85rem; color: $text-light; }
 
-.btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: none; svg { width: 16px; height: 16px; }
-  &-primary { background: linear-gradient(135deg, $primary, $secondary); color: $white; &:disabled { opacity: 0.7; cursor: not-allowed; } } }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 10px;
+  font-size: 0.9rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s;
+  svg { width: 16px; height: 16px; }
+  &-primary {
+    background: linear-gradient(135deg, $primary, $secondary); color: $white;
+    box-shadow: 0 4px 14px rgba($primary, 0.25);
+    &:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 20px rgba($primary, 0.35); }
+    &:disabled { opacity: 0.7; cursor: not-allowed; }
+  }
+}
 .btn-loading { display: flex; align-items: center; gap: 8px; }
 .spinner { width: 14px; height: 14px; border: 2px solid rgba(white, 0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; }
 
 .detail-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; .full-width { grid-column: 1 / -1; } }
-.detail-card { background: $white; border: 1px solid $border; border-radius: 12px; padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
-.card-title { font-size: 0.88rem; font-weight: 700; color: $primary; margin: 0 0 16px; padding-bottom: 10px; border-bottom: 1px solid $border; text-transform: uppercase; letter-spacing: 0.4px; }
-.info-list { display: flex; flex-direction: column; gap: 10px; }
-.info-item { display: flex; justify-content: space-between; font-size: 0.875rem; span:last-child { font-weight: 500; } }
-.info-label { color: $text-light; }
-.synthesis-text { font-size: 0.9rem; color: $text-dark; line-height: 1.7; margin: 0; &.placeholder { color: $text-light; font-style: italic; } }
+
+// ── Sans contour, ombre douce à la place ──
+.detail-card {
+  background: $white; border: none; border-radius: 16px; padding: 24px;
+  box-shadow: 0 4px 20px rgba($primary, 0.06);
+  animation: fadeInUp 0.4s ease-out backwards;
+  transition: box-shadow 0.25s ease;
+  &:hover { box-shadow: 0 8px 28px rgba($primary, 0.1); }
+}
+.detail-grid > .detail-card:nth-child(1) { animation-delay: 0.05s; }
+.detail-grid > .detail-card:nth-child(2) { animation-delay: 0.1s; }
+.detail-grid > .detail-card:nth-child(3) { animation-delay: 0.15s; }
+
+.card-title {
+  font-size: 0.85rem; font-weight: 700; color: $primary; margin: 0 0 18px;
+  padding-bottom: 12px; border-bottom: 1px solid #f0f0f0;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  display: flex; align-items: center; gap: 8px;
+  svg { width: 16px; height: 16px; color: $secondary; }
+}
+
+// ── Mini-cartes statistiques colorées ──
+.stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+.stat-box {
+  border-radius: 12px; padding: 14px 10px; text-align: center;
+  display: flex; flex-direction: column; gap: 4px;
+  &--blue   { background: #eef5ff; }
+  &--green  { background: #eefaf1; }
+  &--orange { background: #fff4e8; }
+}
+.stat-value { font-size: 1.3rem; font-weight: 800; color: $primary; }
+.stat-label { font-size: 0.68rem; color: $text-light; text-transform: uppercase; font-weight: 700; letter-spacing: 0.3px; }
+.stat-box--green .stat-value { color: $success; }
+.stat-box--orange .stat-value { color: $warning; }
+
+.critical-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding-top: 14px; border-top: 1px solid #f0f0f0;
+  svg { width: 18px; height: 18px; color: $warning; flex-shrink: 0; margin-top: 2px; }
+}
+.info-label { display: block; font-size: 0.72rem; color: $text-light; text-transform: uppercase; font-weight: 600; margin-bottom: 3px; }
+.critical-value { font-size: 0.88rem; color: $text-dark; font-weight: 500; }
+
+// ── Cartes IA ──
+.ai-card { background: linear-gradient(135deg, $white 0%, #f7fbff 100%); }
+.synthesis-text {
+  font-size: 0.9rem; color: $text-dark; line-height: 1.75; margin: 0;
+  display: flex; align-items: flex-start; gap: 8px;
+  &.placeholder { color: $text-light; font-style: italic; }
+}
+.pending-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: $secondary; margin-top: 7px; flex-shrink: 0;
+  animation: pulseDot 1.8s ease-in-out infinite;
+}
+
+@media (max-width: 700px) {
+  .detail-grid { grid-template-columns: 1fr; }
+  .stat-grid { grid-template-columns: 1fr; }
+}

@@ -20,6 +20,7 @@ export class UserListComponent implements OnInit {
   errorMessage = '';
   successMessage = '';
   filterRole = '';
+  allUsers: User[] = [];   // ← liste complète non filtrée, pour calculer les compteurs par rôle
 
   constructor(
     private userService: UserService,
@@ -30,16 +31,24 @@ export class UserListComponent implements OnInit {
   get isAdmin(): boolean {
   return this.authService.getRole() === 'Admin';
   }
+  get adminCount(): number { return this.allUsers.filter(u => u.role === 'Admin').length; }
+  get supervisorCount(): number { return this.allUsers.filter(u => u.role === 'Supervisor').length; }
+  get technicianCount(): number { return this.allUsers.filter(u => u.role === 'Technician').length; }
 
   ngOnInit(): void {
     this.loadUsers();
   }
 
-  loadUsers(): void {
+loadUsers(): void {
     this.isLoading = true;
     this.userService.findAll(this.filterRole || undefined).subscribe({
       next: (data) => { this.users = data; this.isLoading = false; this.cdr.detectChanges(); },
       error: () => { this.isLoading = false; this.errorMessage = 'Erreur de chargement.'; this.cdr.detectChanges(); }
+    });
+
+    // ── Charge aussi la liste complète (non filtrée) pour les compteurs des cartes ──
+    this.userService.findAll().subscribe({
+      next: (data) => { this.allUsers = data; this.cdr.detectChanges(); }
     });
   }
 
@@ -63,5 +72,8 @@ export class UserListComponent implements OnInit {
 
   getRoleLabel(r: string): string {
     return { Admin: 'Admin', Supervisor: 'Superviseur', Technician: 'Technicien' }[r] ?? r;
+  }
+  getInitials(fullName: string): string {
+    return fullName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
   }
 }

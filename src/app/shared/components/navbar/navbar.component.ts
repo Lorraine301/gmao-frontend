@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostListener, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
@@ -16,14 +16,46 @@ import { LanguageService } from '../../../core/services/language.service';
   imports: [CommonModule, RouterModule,TranslatePipe],
   template: `
     <nav class="navbar">
-      <div class="navbar__brand">
+    <button class="sidebar-toggle-btn" *ngIf="!isTechnician" (click)="toggleSidebar.emit()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+     <div class="navbar__brand" *ngIf="isTechnician">
         <img src="./images/logo_suprajit.png" alt="Suprajit" class="navbar__logo" width="36" height="36" />
         <span class="navbar__title">GMAO Intelligente</span>
       </div>
 
       <div class="navbar__links">
-         <a *ngFor="let link of navLinks" [routerLink]="link.path" routerLinkActive="active">
-          {{ link.label | translate }}
+        <a *ngFor="let link of navLinks" [routerLink]="link.path" routerLinkActive="active"
+          [title]="link.label | translate">
+          <svg *ngIf="link.path === '/dashboard'" class="nav-icon" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="9" rx="1"/>
+            <rect x="14" y="3" width="7" height="5" rx="1"/>
+            <rect x="14" y="12" width="7" height="9" rx="1"/>
+            <rect x="3" y="16" width="7" height="5" rx="1"/>
+          </svg>
+          <svg *ngIf="link.path === '/users'" class="nav-icon" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          <svg *ngIf="link.path === '/stock'" class="nav-icon" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+            <line x1="12" y1="22.08" x2="12" y2="12"/>
+          </svg>
+          <svg *ngIf="link.path === '/reports'" class="nav-icon" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/>
+          </svg>
+          <span *ngIf="link.path !== '/dashboard' && link.path !== '/users' && link.path !== '/stock' && link.path !== '/reports'">{{ link.label | translate }}</span>
         </a>
       </div>
 
@@ -59,7 +91,18 @@ import { LanguageService } from '../../../core/services/language.service';
                    class="notif-item"
                    [class.notif-item--unread]="n.status === 'Unread'"
                    (click)="markAsRead(n)">
-                <div class="notif-dot" [ngClass]="'notif-dot--' + n.type.toLowerCase()"></div>
+                <div class="notif-icon" [ngClass]="'notif-icon--' + n.type.toLowerCase()">
+                  <svg *ngIf="n.type === 'Critical'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                  </svg>
+                  <svg *ngIf="n.type === 'Warning'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                  <svg *ngIf="n.type === 'Info'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+                  </svg>
+                </div>
                 <div class="notif-content">
                   <p class="notif-message">{{ n.message }}</p>
                   <span class="notif-date">
@@ -126,7 +169,15 @@ import { LanguageService } from '../../../core/services/language.service';
     .notif-list { max-height: 320px; overflow-y: auto; }
     .notif-empty { padding: 32px; text-align: center; color: #718096; font-size: 0.88rem; }
     .notif-item { display: flex; gap: 12px; padding: 12px 16px; cursor: pointer; transition: background 0.15s; border-bottom: 1px solid #f0f0f0; &:last-child { border-bottom: none; } &:hover { background: #f8fafc; } &--unread { background: #f0f7ff; } }
-    .notif-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; &--info { background: #2E75B6; } &--warning { background: #e65100; } &--critical { background: #c62828; } }
+    .notif-icon {
+      width: 26px; height: 26px; border-radius: 8px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      svg { width: 14px; height: 14px; }
+
+      &--critical { background: #ffebee; color: #c62828; }
+      &--warning  { background: #fff3e0; color: #e65100; }
+      &--info     { background: #e3f2fd; color: #1565c0; }
+    }
     .notif-content { flex: 1; min-width: 0; }
     .notif-message { font-size: 0.82rem; color: #1a202c; margin: 0 0 4px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .notif-date { font-size: 0.72rem; color: #718096; }
@@ -140,6 +191,18 @@ import { LanguageService } from '../../../core/services/language.service';
       font-weight: 600;
       cursor: pointer;
       &:hover { background: rgba(255,255,255,0.18); color: white; }
+    }
+    .nav-icon {
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+    .sidebar-toggle-btn {
+      background: none; border: none; color: white; cursor: pointer;
+      padding: 8px; margin-right: 8px; display: flex; align-items: center;
+      border-radius: 6px; transition: background 0.15s;
+      svg { width: 20px; height: 20px; }
+      &:hover { background: rgba(255,255,255,0.1); }
     }
   `]
 })
@@ -155,6 +218,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   // (nouvelle référence) à chaque fois, ce qui déclenche une boucle
   // infinie de détection de changement (erreur NG0103) sur le *ngFor.
   navLinks: { label: string; path: string }[] = [];
+  @Output() toggleSidebar = new EventEmitter<void>();
 
   private pollSubscription?: Subscription;
   private wsSub?: Subscription;
@@ -232,7 +296,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   get user() { return this.authService.getCurrentUser(); }
 
-private computeNavLinks(): { label: string; path: string }[] {
+ private computeNavLinks(): { label: string; path: string }[] {
   const role = this.authService.getRole();
 
   if (role === 'Technician') {
@@ -249,8 +313,8 @@ private computeNavLinks(): { label: string; path: string }[] {
     { label: 'nav.failures', path: '/failures' },
     { label: 'nav.interventions', path: '/interventions' },
     { label: 'nav.maintenance', path: '/preventive-maintenance' },
-    { label: 'nav.stock', path: '/stock' },
-    { label: 'nav.reports', path: '/reports' }
+    { label: 'nav.reports', path: '/reports' },
+    { label: 'nav.stock', path: '/stock' }
   ];
 }
 
@@ -260,4 +324,7 @@ private computeNavLinks(): { label: string; path: string }[] {
   }
 
   logout(): void { this.authService.logout(); }
+  get isTechnician(): boolean {
+  return this.authService.getRole() === 'Technician';
+}
 }

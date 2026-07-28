@@ -1,27 +1,66 @@
 $primary: #1E3A5F; $secondary: #2E75B6; $error: #c0392b;
 $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-light: #718096;
 
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
 .page-wrapper { padding: 32px; max-width: 1400px; margin: 0 auto; }
-.page-header { margin-bottom: 20px;
-  &__left { display: flex; flex-direction: column; gap: 4px; } }
-.btn-back { display: flex; align-items: center; gap: 6px; background: none; border: none; color: $text-light; cursor: pointer; font-size: 0.85rem; margin-bottom: 8px; svg { width: 16px; height: 16px; } &:hover { color: $text-dark; } }
-.page-title { font-size: 1.6rem; font-weight: 700; color: $primary; margin: 0; }
+.page-header {
+  margin-bottom: 20px; animation: fadeInUp 0.4s ease-out;
+  &__left { display: flex; flex-direction: column; gap: 4px; }
+}
+.btn-back {
+  display: flex; align-items: center; gap: 6px; background: none; border: none;
+  color: $text-light; cursor: pointer; font-size: 0.85rem; margin-bottom: 8px; width: fit-content;
+  svg { width: 16px; height: 16px; transition: transform 0.2s ease; }
+  &:hover { color: $primary; svg { transform: translateX(-3px); } }
+}
+.page-title {
+  font-size: 1.6rem; font-weight: 800; margin: 0; letter-spacing: -0.3px;
+  background: linear-gradient(135deg, $primary, $secondary);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
 .page-subtitle { font-size: 0.85rem; color: $text-light; }
 
-.filters-bar { display: flex; gap: 10px; margin-bottom: 20px; align-items: center;
-  select { padding: 9px 14px; border: 1.5px solid $border; border-radius: 8px; font-size: 0.85rem; background: $white; min-width: 260px; }
-  .btn-reset { padding: 9px 14px; border: 1.5px solid $error; border-radius: 8px; background: transparent; color: $error; font-size: 0.85rem; font-weight: 600; cursor: pointer; &:hover { background: $error; color: white; } } }
+.filters-bar {
+  display: flex; gap: 10px; margin-bottom: 20px; align-items: center;
+  animation: fadeInUp 0.4s ease-out 0.05s backwards;
+  select {
+    padding: 9px 14px; border: 1.5px solid $border; border-radius: 8px; font-size: 0.85rem;
+    background: $white; min-width: 260px; cursor: pointer; transition: border-color 0.2s, transform 0.15s;
+    &:focus { border-color: $secondary; }
+    &:hover { transform: translateY(-1px); }
+  }
+  .btn-reset {
+    padding: 9px 14px; border: 1.5px solid $error; border-radius: 8px; background: transparent;
+    color: $error; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.15s;
+    &:hover { background: $error; color: white; transform: translateY(-1px); }
+  }
+}
 
 .alert-error { padding: 12px 16px; background: #fdf3f2; border-left: 4px solid $error; border-radius: 8px; color: $error; font-size: 0.88rem; margin-bottom: 16px; }
 .loading-state { display: flex; justify-content: center; padding: 60px; }
 .spinner-lg { width: 40px; height: 40px; border: 3px solid rgba($secondary, 0.2); border-top-color: $secondary; border-radius: 50%; animation: spin 0.7s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-.table-card { background: $white; border: 1px solid $border; border-radius: 12px; overflow-x: auto; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+.table-card {
+  background: $white; border: 1px solid $border; border-radius: 12px; overflow-x: auto;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  animation: fadeInUp 0.4s ease-out 0.1s backwards;
+}
 .data-table { width: 100%; min-width: 1100px; border-collapse: collapse;
   thead tr { background: $bg; border-bottom: 2px solid $border; }
   th { padding: 14px 16px; text-align: left; font-size: 0.78rem; font-weight: 700; color: $text-light; text-transform: uppercase; }
-  tbody tr { border-bottom: 1px solid $border; &:hover { background: #f7fbff; } }
+  tbody tr {
+  border-bottom: 1px solid $border; transition: background 0.15s;
+  animation: fadeInUp 0.3s ease-out backwards;
+  &:hover { background: #f7fbff; }
+}
   td { padding: 12px 16px; font-size: 0.875rem; color: $text-dark; vertical-align: middle; }
 }
 .id-cell { color: $text-light; font-size: 0.8rem; font-family: monospace; }
@@ -43,9 +82,12 @@ $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-ligh
   position: fixed; inset: 0; background: rgba(0,0,0,0.5);
   display: flex; align-items: center; justify-content: center; z-index: 1000;
 }
+.modal-overlay { animation: fadeInUp 0.2s ease-out; }
 .modal {
-  background: $white; border-radius: 12px; padding: 28px; max-width: 480px; width: 90%;
+  background: $white; border-radius: 16px; padding: 28px; max-width: 480px; width: 90%;
   max-height: 85vh; overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  animation: popIn 0.2s ease-out;
   h3 { margin: 0 0 20px; color: $primary; font-size: 1.1rem; }
 }
 .detail-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
@@ -69,3 +111,8 @@ $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-ligh
   color: $text-dark; font-size: 0.85rem; font-weight: 600; cursor: pointer;
   &:hover { background: $bg; }
 }
+// ── Petites finitions ──
+.btn-icon:hover { transform: scale(1.1); }
+.parts-table tbody tr { transition: background 0.15s ease; &:hover { background: $bg; } }
+.type-badge { transition: transform 0.15s ease; }
+tr:hover .type-badge { transform: scale(1.03); }

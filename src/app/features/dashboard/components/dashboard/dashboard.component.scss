@@ -1,117 +1,190 @@
-$primary: #1E3A5F; $secondary: #2E75B6; $error: #c0392b; $success: #2e7d32; $warning: #e65100;
+$primary: #1E3A5F; $secondary: #2E75B6; $accent: #4A9FD8; $error: #c0392b; $success: #2e7d32; $warning: #e65100;
 $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-light: #718096;
 
+// ── Animations ──
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
 .page-wrapper { padding: 32px; max-width: 1400px; margin: 0 auto; }
-.page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
-.page-title { font-size: 1.6rem; font-weight: 700; color: $primary; margin: 0 0 4px; }
+
+.page-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 24px; flex-wrap: wrap; gap: 16px;
+  animation: fadeInUp 0.5s ease-out;
+}
+.page-title {
+  font-size: 1.7rem; font-weight: 800; margin: 0 0 4px; letter-spacing: -0.3px;
+  background: linear-gradient(135deg, $primary, $secondary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
 .page-subtitle { font-size: 0.85rem; color: $text-light; }
 
-.period-selector { display: flex; gap: 4px; background: $bg; padding: 4px; border-radius: 10px; border: 1px solid $border; }
-.period-btn {
-  padding: 8px 16px; border: none; background: transparent; border-radius: 8px; cursor: pointer;
-  font-size: 0.85rem; font-weight: 600; color: $text-light; transition: all 0.15s;
-  &--active { background: $white; color: $primary; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
-}
-
-.alert-error { padding: 12px 16px; background: #fdf3f2; border-left: 4px solid $error; border-radius: 8px; color: $error; font-size: 0.88rem; margin-bottom: 16px; }
-
-.kpi-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px; }
-.kpi-card {
-  background: $white; border: 1px solid $border; border-radius: 12px; padding: 20px;
-  display: flex; flex-direction: column; gap: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-}
-.kpi-label { font-size: 0.78rem; color: $text-light; text-transform: uppercase; letter-spacing: 0.4px; font-weight: 600; }
-.kpi-value { font-size: 1.8rem; font-weight: 700; color: $primary; }
-
-.section-title { font-size: 1rem; font-weight: 700; color: $primary; margin: 0 0 16px; }
-.at-risk-section { margin-bottom: 28px; }
-.at-risk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
-.at-risk-card { background: #fff8f0; border-left: 4px solid #ffb74d; border-radius: 10px; padding: 16px; }
-.at-risk-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-.eq-code { font-family: monospace; font-weight: 700; color: $primary; font-size: 0.88rem; }
-.criticality-badge { background: #ffebee; color: #c62828; padding: 2px 8px; border-radius: 12px; font-size: 0.72rem; font-weight: 600; }
-.eq-name { font-size: 0.85rem; color: $text-dark; margin: 0 0 4px; font-weight: 600; }
-.risk-reason { font-size: 0.8rem; color: $text-light; margin: 0; }
-
-.charts-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; .chart-card--wide { grid-column: 1 / -1; } }
-.chart-card { background: $white; border: 1px solid $border; border-radius: 12px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
-.chart-title { font-size: 0.9rem; font-weight: 700; color: $primary; margin: 0 0 16px; }
-.chart-container { position: relative; height: 280px; &--small { height: 240px; } }
-
-@media (max-width: 900px) {
-  .charts-grid { grid-template-columns: 1fr; }
-}
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
+.header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 
 .btn-reports-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 9px 16px;
-  border-radius: 8px;
-  background: $white;
-  border: 1.5px solid $border;
-  color: $text-dark;
-  text-decoration: none;
-  font-size: 0.85rem;
-  font-weight: 600;
-  transition: all 0.15s;
+  display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 10px;
+  background: $white; border: 1.5px solid $border; color: $text-dark; text-decoration: none;
+  font-size: 0.85rem; font-weight: 600; transition: all 0.2s;
   svg { width: 15px; height: 15px; }
-  &:hover { background: $bg; border-color: $secondary; color: $secondary; }
-}
-.ai-interpretation-section {
-  margin-bottom: 28px;
+  &:hover { background: $secondary; border-color: $secondary; color: $white; transform: translateY(-1px); box-shadow: 0 4px 12px rgba($secondary, 0.25); }
 }
 
-.ai-interpretation-card {
-  background: $white;
-  border: 1px solid $border;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+.period-selector { display: flex; gap: 4px; background: $bg; padding: 4px; border-radius: 12px; border: 1px solid $border; }
+.period-btn {
+  padding: 8px 16px; border: none; background: transparent; border-radius: 9px; cursor: pointer;
+  font-size: 0.85rem; font-weight: 600; color: $text-light; transition: all 0.2s;
+  &--active { background: linear-gradient(135deg, $primary, $secondary); color: $white; box-shadow: 0 2px 8px rgba($primary, 0.3); }
+  &:hover:not(&--active) { color: $primary; }
 }
 
-.ai-loading {
+.alert-error {
+  padding: 12px 16px; background: #fdf3f2; border-left: 4px solid $error; border-radius: 10px;
+  color: $error; font-size: 0.88rem; margin-bottom: 16px; animation: fadeInUp 0.4s ease-out;
+}
+
+// ── Cartes KPI ──
+.kpi-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px; }
+
+.kpi-card {
+  position: relative;
+  overflow: hidden;
+  border: none;
+  border-radius: 16px;
+  padding: 22px;
   display: flex;
-  align-items: center;
-  gap: 10px;
-  color: $text-light;
-  font-size: 0.88rem;
+  flex-direction: column;
+  gap: 8px;
+  color: $white;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  animation: fadeInUp 0.5s ease-out backwards;
+
+  &:hover { transform: translateY(-4px); }
+  &:nth-child(1) { animation-delay: 0.05s; }
+  &:nth-child(2) { animation-delay: 0.1s; }
+  &:nth-child(3) { animation-delay: 0.15s; }
+  &:nth-child(4) { animation-delay: 0.2s; }
 }
 
-.ai-error {
-  p { margin: 0 0 8px; color: $error; font-size: 0.9rem; }
+.kpi-label { font-size: 0.76rem; color: rgba(255,255,255,0.85); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; position: relative; z-index: 2; }
+.kpi-value { font-size: 2.1rem; font-weight: 800; color: $white; letter-spacing: -0.5px; position: relative; z-index: 2; }
+
+.kpi-bg-icon {
+  position: absolute;
+  bottom: -10px;
+  right: -10px;
+  width: 90px;
+  height: 90px;
+  opacity: 0.18;
+  z-index: 1;
 }
 
+.kpi-card--pink {
+  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+  box-shadow: 0 10px 24px rgba(219, 39, 119, 0.35);
+}
+.kpi-card--purple {
+  background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+  box-shadow: 0 10px 24px rgba(109, 40, 217, 0.35);
+}
+.kpi-card--blue {
+  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+  box-shadow: 0 10px 24px rgba(30, 64, 175, 0.35);
+}
+.kpi-card--orange {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  box-shadow: 0 10px 24px rgba(234, 88, 12, 0.35);
+}
+
+.kpi-card--pink:hover  { box-shadow: 0 16px 32px rgba(219, 39, 119, 0.45); }
+.kpi-card--purple:hover{ box-shadow: 0 16px 32px rgba(109, 40, 217, 0.45); }
+.kpi-card--blue:hover  { box-shadow: 0 16px 32px rgba(30, 64, 175, 0.45); }
+.kpi-card--orange:hover{ box-shadow: 0 16px 32px rgba(234, 88, 12, 0.45); }
+// ── Titres de section ──
+.section-title {
+  font-size: 1.05rem; font-weight: 700; color: $primary; margin: 0 0 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.title-icon { width: 20px; height: 20px; color: $secondary; flex-shrink: 0; }
+.inline-icon { width: 13px; height: 13px; display: inline-block; vertical-align: -2px; margin-right: 4px; }
+
+// ── Équipements à risque ──
+.at-risk-section { margin-bottom: 28px; animation: fadeInUp 0.5s ease-out 0.25s backwards; }
+.at-risk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.at-risk-card {
+  background: linear-gradient(135deg, #fff8f0 0%, #fff4e8 100%);
+  border-left: 4px solid $warning; border-radius: 12px; padding: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  &:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba($warning, 0.15); }
+}
+.at-risk-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.eq-code { font-family: 'Courier New', monospace; font-weight: 700; color: $primary; font-size: 0.88rem; }
+.criticality-badge {
+  background: #ffebee; color: #c62828; padding: 3px 10px; border-radius: 20px;
+  font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px;
+}
+.eq-name { font-size: 0.85rem; color: $text-dark; margin: 0 0 4px; font-weight: 600; }
+.risk-reason { font-size: 0.8rem; color: $text-light; margin: 0; }
+.ai-explanation {
+  font-size: 0.78rem; color: $secondary; font-style: italic; margin: 10px 0 0;
+  line-height: 1.4; padding-top: 8px; border-top: 1px dashed rgba($secondary, 0.25);
+  display: flex; align-items: flex-start;
+}
+
+// ── Graphiques ──
+.charts-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  .chart-card--wide { grid-column: 1 / -1; }
+}
+
+@media (max-width: 1100px) {
+  .charts-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 700px) {
+  .charts-grid { grid-template-columns: 1fr; }
+}
+.chart-card {
+  background: $white; border: 1px solid $border; border-radius: 14px; padding: 22px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  transition: box-shadow 0.25s ease;
+  animation: fadeInUp 0.5s ease-out 0.3s backwards;
+  &:hover { box-shadow: 0 8px 24px rgba($primary, 0.08); }
+}
+.chart-title {
+  font-size: 0.9rem; font-weight: 700; color: $primary; margin: 0 0 16px;
+  padding-bottom: 12px; border-bottom: 1px solid $border;
+}
+.chart-container { position: relative; height: 280px; &--small { height: 240px; } }
+
+
+// ── Interprétation IA ──
+.ai-interpretation-section { margin-bottom: 28px; animation: fadeInUp 0.5s ease-out 0.35s backwards; }
+.ai-interpretation-card {
+  background: linear-gradient(135deg, $white 0%, #f7fbff 100%);
+  border: 1px solid $border; border-left: 4px solid $secondary;
+  border-radius: 14px; padding: 22px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.ai-loading {
+  display: flex; align-items: center; gap: 10px; color: $text-light; font-size: 0.88rem;
+}
+.ai-error { p { margin: 0 0 8px; color: $error; font-size: 0.9rem; } }
 .btn-retry {
-  padding: 8px 16px;
-  border: 1.5px solid $error;
-  border-radius: 8px;
-  background: transparent;
-  color: $error;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
+  padding: 8px 16px; border: 1.5px solid $error; border-radius: 8px; background: transparent;
+  color: $error; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
   &:hover { background: $error; color: white; }
 }
+.ai-text { font-size: 0.9rem; color: $text-dark; line-height: 1.75; margin: 0; white-space: pre-line; }
 
-.ai-text {
-  font-size: 0.9rem;
-  color: $text-dark;
-  line-height: 1.7;
-  margin: 0;
-  white-space: pre-line;
-}
-
-.ai-explanation {
-  font-size: 0.78rem;
-  color: $text-light;
-  font-style: italic;
-  margin: 8px 0 0;
-  line-height: 1.4;
+.spinner {
+  width: 14px; height: 14px; border: 2px solid rgba($secondary, 0.25);
+  border-top-color: $secondary; border-radius: 50%; animation: spin 0.7s linear infinite;
 }

@@ -46,13 +46,26 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let r of reports" [routerLink]="['/reports/weekly', r.id]" style="cursor: pointer;">
-          <td class="week-cell">Semaine {{ r.weekNumber }}</td>
+        <tr *ngFor="let r of reports; let i = index" [routerLink]="['/reports/weekly', r.id]"
+            style="cursor: pointer;" [style.animation-delay.ms]="i * 40">
+          <td class="week-cell">
+            <span class="week-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+            </span>
+            Semaine {{ r.weekNumber }}
+          </td>
           <td>{{ r.totalFailures }}</td>
           <td>{{ r.resolvedFailures }}</td>
           <td>{{ r.averageRepairTime != null ? (r.averageRepairTime | number:'1.2-2') + ' h' : '—' }}</td>
           <td>
             <span class="badge" [ngClass]="r.llmSummary ? 'badge--analysed' : 'badge--pending'">
+              <svg *ngIf="r.llmSummary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2l2.4 7.2H22l-6 4.6 2.3 7.2-6.3-4.6-6.3 4.6 2.3-7.2-6-4.6h7.6z"/>
+              </svg>
+              <span class="badge-dot" *ngIf="!r.llmSummary"></span>
               {{ getLlmStatusLabel(r) }}
             </span>
           </td>
@@ -72,6 +85,10 @@
 
     <ng-template #emptyState>
       <div class="empty-state">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+        </svg>
         <h3>Aucun bilan généré</h3>
         <p>Les bilans hebdomadaires sont générés automatiquement chaque dimanche.</p>
       </div>

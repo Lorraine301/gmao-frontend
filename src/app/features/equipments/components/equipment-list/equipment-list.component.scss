@@ -68,102 +68,81 @@ $text-light: #718096;
 }
 
 // ── Filtres ────────────────────────────────────────────────
-.filters-card {
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.page-title {
+  background: linear-gradient(135deg, $primary, $secondary);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  font-weight: 800; letter-spacing: -0.3px;
+}
+.page-header { animation: fadeInUp 0.4s ease-out; }
+
+// ── Barre de filtres, tout sur une ligne ──
+.filters-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
   background: $white;
   border: 1px solid $border;
-  border-radius: 12px;
-  padding: 20px 24px;
+  border-radius: 14px;
+  padding: 14px 18px;
   margin-bottom: 20px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  animation: fadeInUp 0.4s ease-out 0.05s backwards;
 }
+
 .search-wrapper {
   position: relative;
-  margin-bottom: 16px;
+  flex: 1 1 260px;
+  min-width: 220px;
 
   .search-icon {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 17px;
-    height: 17px;
-    color: #a0aec0;
-    pointer-events: none;
+    position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+    width: 16px; height: 16px; color: #a0aec0; pointer-events: none;
   }
 }
-
 .search-input {
   width: 100%;
-  padding: 11px 44px;
+  padding: 10px 40px;
   border: 1.5px solid $border;
   border-radius: 10px;
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   color: $text-dark;
   background: $bg;
   outline: none;
   font-family: inherit;
-  transition: border-color 0.2s, box-shadow 0.2s;
   box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
 
   &::placeholder { color: #c5cdd8; }
-
-  &:focus {
-    border-color: $secondary;
-    background: $white;
-    box-shadow: 0 0 0 3px rgba($secondary, 0.1);
-  }
+  &:focus { border-color: $secondary; background: $white; box-shadow: 0 0 0 3px rgba($secondary, 0.1); }
 }
-
 .search-clear {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #a0aec0;
-  padding: 4px;
-  display: flex;
-  border-radius: 4px;
-  transition: color 0.15s;
-
-  svg { width: 15px; height: 15px; }
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer; color: #a0aec0; padding: 4px;
+  display: flex; border-radius: 4px; transition: color 0.15s;
+  svg { width: 14px; height: 14px; }
   &:hover { color: $error; }
 }
 
-.filters-grid {
-  display: flex;
-  gap: 16px;
-  align-items: flex-end;
-  flex-wrap: wrap;
+.filter-select {
+  padding: 10px 14px;
+  border: 1.5px solid $border;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  color: $text-dark;
+  background: $bg;
+  outline: none;
+  cursor: pointer;
+  flex: 0 0 auto;
+  transition: border-color 0.2s;
+  &:focus { border-color: $secondary; }
 }
 
-.filter-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 160px;
-
-  label {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: $text-dark;
-  }
-
-  select {
-    padding: 9px 12px;
-    border: 1.5px solid $border;
-    border-radius: 8px;
-    font-size: 0.88rem;
-    color: $text-dark;
-    background: $bg;
-    outline: none;
-    cursor: pointer;
-    transition: border-color 0.2s;
-    &:focus { border-color: $secondary; }
-  }
-}
 
 // ── Alertes ────────────────────────────────────────────────
 .alert {
@@ -524,3 +503,9 @@ $text-light: #718096;
   font-size: 0.8rem;
   font-family: monospace;
 }
+.table-card { animation: fadeInUp 0.4s ease-out 0.1s backwards; }
+.data-table tbody tr {
+  animation: fadeInUp 0.3s ease-out backwards;
+  &:hover { transform: translateX(2px); }
+}
+.btn-icon:hover { transform: scale(1.08); }

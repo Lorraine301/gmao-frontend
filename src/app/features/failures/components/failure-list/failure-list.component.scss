@@ -26,18 +26,7 @@ $text-light:#718096;
     &:hover { background: $bg; color: $text-dark; } }
 }
 
-.filters-card {
-  background: $white; border: 1px solid $border; border-radius: 12px;
-  padding: 20px 24px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-}
-.filters-grid { display: flex; gap: 16px; align-items: flex-end; flex-wrap: wrap; }
-.filter-group {
-  display: flex; flex-direction: column; gap: 6px; min-width: 180px;
-  label { font-size: 0.8rem; font-weight: 600; color: $text-dark; }
-  select { padding: 9px 12px; border: 1.5px solid $border; border-radius: 8px;
-    font-size: 0.88rem; background: $bg; outline: none; cursor: pointer; transition: border-color 0.2s;
-    &:focus { border-color: $secondary; } }
-}
+
 
 .alert-error { padding: 12px 16px; background: #fdf3f2; border: 1px solid #e8b4b0;
   border-left: 4px solid $error; border-radius: 8px; color: $error; font-size: 0.88rem; margin-bottom: 16px; }
@@ -130,4 +119,53 @@ $text-light:#718096;
   background: #e8f5e9; color: #2e7d32;
   font-size: 0.72rem; font-weight: 600;
   svg { width: 11px; height: 11px; }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes criticalPulse {
+  0%, 100% { box-shadow: inset 3px 0 0 0 #c62828; }
+  50%      { box-shadow: inset 3px 0 0 0 rgba(198, 40, 40, 0.3); }
+}
+
+.page-header { animation: fadeInUp 0.4s ease-out; }
+.page-title {
+  background: linear-gradient(135deg, $primary, $secondary);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  font-weight: 800; letter-spacing: -0.3px;
+}
+
+// ── Barre de filtres, tout sur une ligne ──
+.filters-bar {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  background: $white; border: 1px solid $border; border-radius: 14px;
+  padding: 14px 18px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  animation: fadeInUp 0.4s ease-out 0.05s backwards;
+}
+.filter-select {
+  padding: 10px 14px; border: 1.5px solid $border; border-radius: 10px;
+  font-size: 0.85rem; color: $text-dark; background: $bg; outline: none; cursor: pointer;
+  transition: border-color 0.2s;
+  &:focus { border-color: $secondary; }
+}
+
+.table-card { animation: fadeInUp 0.4s ease-out 0.1s backwards; }
+
+.data-table tbody tr {
+  animation: fadeInUp 0.3s ease-out backwards;
+  &.row--critical { animation: criticalPulse 2.5s ease-in-out infinite; }
+}
+
+.rule-tag, .recommend-tag { transition: transform 0.15s ease; }
+tr:hover .rule-tag, tr:hover .recommend-tag { transform: translateX(2px); }
+
+.btn-icon:hover { transform: scale(1.1); }
+
+.badge--priority-critical {
+  animation: criticalGlow 2s ease-in-out infinite;
+}
+@keyframes criticalGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(198, 40, 40, 0.3); }
+  50%      { box-shadow: 0 0 0 4px rgba(198, 40, 40, 0); }
 }

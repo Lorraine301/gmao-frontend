@@ -15,24 +15,21 @@
   </div>
 
   <!-- Filtres -->
-  <div class="filters-card">
-    <div class="filters-grid">
-      <div class="filter-group">
-        <label>Statut</label>
-        <select [(ngModel)]="filters.status" (ngModelChange)="onFilterChange()">
-          <option [ngValue]="undefined">Tous les statuts</option>
-          <option *ngFor="let s of statusOptions" [ngValue]="s">{{ getStatusLabel(s) }}</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label>Priorité</label>
-        <select [(ngModel)]="filters.priority" (ngModelChange)="onFilterChange()">
-          <option [ngValue]="undefined">Toutes les priorités</option>
-          <option *ngFor="let p of priorityOptions" [ngValue]="p">{{ getPriorityLabel(p) }}</option>
-        </select>
-      </div>
-      <button class="btn btn-ghost" (click)="resetFilters()">Réinitialiser</button>
-    </div>
+  <div class="filters-bar">
+    <select class="filter-select" [(ngModel)]="filters.status" (ngModelChange)="onFilterChange()">
+      <option [ngValue]="undefined">Tous les statuts</option>
+      <option *ngFor="let s of statusOptions" [ngValue]="s">{{ getStatusLabel(s) }}</option>
+    </select>
+    <select class="filter-select" [(ngModel)]="filters.priority" (ngModelChange)="onFilterChange()">
+      <option [ngValue]="undefined">Toutes les priorités</option>
+      <option *ngFor="let p of priorityOptions" [ngValue]="p">{{ getPriorityLabel(p) }}</option>
+    </select>
+    <button class="btn btn-ghost" (click)="resetFilters()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+      </svg>
+      Réinitialiser
+    </button>
   </div>
 
   <!-- Erreur -->
@@ -60,7 +57,9 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let f of failures">
+        <tr *ngFor="let f of failures; let i = index"
+            [class.row--critical]="f.priority === 'Critical' && f.status !== 'Closed' && f.status !== 'Resolved'"
+            [style.animation-delay.ms]="i * 30">
           <td class="code-cell">{{ f.failureCode }}</td>
           <td>
             <span class="eq-code">{{ f.equipmentCode }}</span>

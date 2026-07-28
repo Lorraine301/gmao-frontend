@@ -41,4 +41,10 @@ export class StockListComponent implements OnInit {
   toggleFilter(): void { this.showLowStockOnly = !this.showLowStockOnly; this.loadParts(); }
 
   get lowStockCount(): number { return this.parts.filter(p => p.lowStock).length; }
+  
+  getStockPercent(p: SparePart): number {
+    if (!p.minimumStock || p.minimumStock === 0) return 100;
+    const ratio = (p.quantity / (p.minimumStock * 2)) * 100; // le double du minimum = jauge pleine
+    return Math.min(100, Math.max(4, ratio)); // toujours un minimum visible de 4%
+  }
 }

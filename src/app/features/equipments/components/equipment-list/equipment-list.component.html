@@ -103,9 +103,8 @@
 </div>
 </div>
 
-<div class="filters-card">
+<div class="filters-bar">
 
-  <!-- Barre de recherche -->
   <div class="search-wrapper">
     <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -133,36 +132,25 @@
     </button>
   </div>
 
-  <!-- Filtres -->
-  <div class="filters-grid">
+  <select class="filter-select" [(ngModel)]="filters.status" (ngModelChange)="onFilterChange()">
+    <option [ngValue]="undefined">Tous les statuts</option>
+    <option *ngFor="let s of statusOptions" [ngValue]="s">{{ getStatusLabel(s) }}</option>
+  </select>
 
-    <div class="filter-group">
-      <label>Statut</label>
-      <select [(ngModel)]="filters.status" (ngModelChange)="onFilterChange()">
-        <option [ngValue]="undefined">Tous les statuts</option>
-        <option *ngFor="let s of statusOptions" [ngValue]="s">
-          {{ getStatusLabel(s) }}
-        </option>
-      </select>
-    </div>
-    
-    <div class="filter-group">
-      <label>Criticité</label>
-      <select [(ngModel)]="filters.criticality" (ngModelChange)="onFilterChange()">
-        <option [ngValue]="undefined">Toutes</option>
-        <option *ngFor="let c of criticalityOptions" [ngValue]="c">
-          {{ getCriticalityLabel(c) }}
-        </option>
-      </select>
-    </div>
+  <select class="filter-select" [(ngModel)]="filters.criticality" (ngModelChange)="onFilterChange()">
+    <option [ngValue]="undefined">Toutes criticités</option>
+    <option *ngFor="let c of criticalityOptions" [ngValue]="c">{{ getCriticalityLabel(c) }}</option>
+  </select>
 
-    <button class="btn btn-ghost" (click)="resetFilters()">
-      Réinitialiser
-    </button>
+  <button class="btn btn-ghost" (click)="resetFilters()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="23 4 23 10 17 10"/>
+      <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+    </svg>
+    Réinitialiser
+  </button>
 
-  </div>
 </div>
-
   <!-- Erreur -->
   <div class="alert alert-error" *ngIf="errorMessage">
     {{ errorMessage }}

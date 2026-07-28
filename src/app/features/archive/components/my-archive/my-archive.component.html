@@ -26,23 +26,30 @@
 
   <!-- Onglet Interventions -->
   <div class="archive-grid" *ngIf="!isLoading && activeTab === 'interventions'">
-    <div class="archive-card" *ngFor="let i of interventions" [routerLink]="['/my-interventions', i.id]" style="cursor: pointer;">
-      <div class="card-header">
-        <span class="failure-code">{{ i.failureCode }}</span>
-        <span class="badge badge--priority-{{ i.priority.toLowerCase() }}">
-          {{ getPriorityLabel(i.priority) }}
-        </span>
-      </div>
+    <div class="archive-card" *ngFor="let i of interventions; let idx = index"
+     [routerLink]="['/my-interventions', i.id]" style="cursor: pointer;"
+     [style.animation-delay.ms]="idx * 40">
+
+  <div class="card-banner" [ngClass]="'card-banner--' + i.priority.toLowerCase()">
+    {{ getPriorityLabel(i.priority) | uppercase }}
+  </div>
+
+  <div class="card-body">
+      <span class="failure-code">{{ i.failureCode }}</span>
       <h3 class="failure-title">{{ i.failureTitle }}</h3>
       <p class="equipment-name">{{ i.equipmentCode }} – {{ i.equipmentName }}</p>
       <div class="card-meta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+        </svg>
         <span>Terminée le {{ i.endTime | date:'dd/MM/yyyy HH:mm' }}</span>
-        <span *ngIf="i.duration">{{ i.duration }}h</span>
+        <span class="duration-tag" *ngIf="i.duration">{{ i.duration }}h</span>
       </div>
       <div class="solution-text" *ngIf="i.solution">
         <strong>Solution :</strong> {{ i.solution }}
       </div>
     </div>
+  </div>
 
     <div class="empty-state" *ngIf="interventions.length === 0">
       <p>Aucune intervention terminée pour le moment.</p>
@@ -51,23 +58,31 @@
 
   <!-- Onglet Maintenances préventives -->
   <div class="archive-grid" *ngIf="!isLoading && activeTab === 'maintenances'">
-    <div class="archive-card" (click)="openMaintenanceDetail(pm)" style="cursor: pointer;" *ngFor="let pm of maintenances">
-      <div class="card-header">
-        <span class="failure-code">{{ pm.equipmentCode }}</span>
-        <span class="type-badge">{{ pm.maintenanceType }}</span>
-      </div>
-      <h3 class="failure-title">{{ pm.equipmentName }}</h3>
-      <div class="card-meta">
-        <span>Terminée le {{ pm.completedAt | date:'dd/MM/yyyy HH:mm' }}</span>
-      </div>
-      <div class="solution-text">
-        <strong>Problème trouvé :</strong> {{ pm.problemFound || 'Aucun problème détecté' }}
-      </div>
-      <div class="solution-text" *ngIf="pm.solution">
-        <strong>Solution :</strong> {{ pm.solution }}
-      </div>
+      <div class="archive-card" (click)="openMaintenanceDetail(pm)" style="cursor: pointer;"
+      *ngFor="let pm of maintenances; let idx = index"
+      [style.animation-delay.ms]="idx * 40">
+
+    <div class="card-banner" [ngClass]="'card-banner--' + getTypeClass(pm.maintenanceType)">
+      {{ pm.maintenanceType | uppercase }}
     </div>
 
+      <div class="card-body">
+        <span class="failure-code">{{ pm.equipmentCode }}</span>
+        <h3 class="failure-title">{{ pm.equipmentName }}</h3>
+        <div class="card-meta">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <span>Terminée le {{ pm.completedAt | date:'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+        <div class="solution-text">
+          <strong>Problème trouvé :</strong> {{ pm.problemFound || 'Aucun problème détecté' }}
+        </div>
+        <div class="solution-text" *ngIf="pm.solution">
+          <strong>Solution :</strong> {{ pm.solution }}
+        </div>
+      </div>
+    </div>
     <div class="empty-state" *ngIf="maintenances.length === 0">
       <p>Aucune maintenance préventive terminée pour le moment.</p>
     </div>

@@ -79,25 +79,6 @@
         </div>
       </div>
 
-      <!-- Panne -->
-      <div class="detail-card">
-        <h2 class="card-title">Panne</h2>
-        <div class="info-list">
-          <div class="info-item">
-            <span class="info-label">Code</span>
-            <a [routerLink]="['/failures', intervention.failureId]" class="link-code">
-              {{ intervention.failureCode }}
-            </a>
-          </div>
-          <div class="info-item"><span class="info-label">Titre</span><span>{{ intervention.failureTitle }}</span></div>
-          <div class="info-item"><span class="info-label">Priorité</span>
-            <span class="badge badge--priority-{{ intervention.priority.toLowerCase() }}">
-              {{ getPriorityLabel(intervention.priority) }}
-            </span>
-          </div>
-        </div>
-      </div>
-
       <!-- Technicien & Temps -->
       <div class="detail-card">
         <h2 class="card-title">Technicien & Temps</h2>
@@ -119,6 +100,25 @@
           </div>
           <div class="info-item" *ngIf="intervention.closedByName">
             <span class="info-label">Clôturée par</span><span>{{ intervention.closedByName }}</span>
+          </div>
+        </div>
+      </div>
+
+            <!-- Panne -->
+      <div class="detail-card">
+        <h2 class="card-title">Panne</h2>
+        <div class="info-list">
+          <div class="info-item">
+            <span class="info-label">Code</span>
+            <a [routerLink]="['/failures', intervention.failureId]" class="link-code">
+              {{ intervention.failureCode }}
+            </a>
+          </div>
+          <div class="info-item"><span class="info-label">Titre</span><span>{{ intervention.failureTitle }}</span></div>
+          <div class="info-item"><span class="info-label">Priorité</span>
+            <span class="badge badge--priority-{{ intervention.priority.toLowerCase() }}">
+              {{ getPriorityLabel(intervention.priority) }}
+            </span>
           </div>
         </div>
       </div>

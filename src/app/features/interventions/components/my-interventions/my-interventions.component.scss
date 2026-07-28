@@ -12,28 +12,47 @@ $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-ligh
 
 .interventions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
 
-.intervention-card {
-  background: $white; border: 1px solid $border; border-radius: 12px;
-  padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); transition: box-shadow 0.2s;
-  &:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
-  &--pending { border-left: 4px solid #90caf9; }
-  &--in-progress { border-left: 4px solid #ffb74d; }
-  &--completed { border-left: 4px solid #81c784; opacity: 0.85; }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
+
+.intervention-card {
+  background: $white; border: none; border-radius: 16px; overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06); transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: fadeInUp 0.4s ease-out backwards;
+  &:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,0.12); }
+}
+
+// ── Bannière colorée selon la priorité ──
+.card-banner {
+  padding: 9px 16px; text-align: center; color: $white;
+  font-size: 0.72rem; font-weight: 800; letter-spacing: 0.6px;
+
+  &--low      { background: linear-gradient(135deg, #22c55e, #15803d); }
+  &--medium   { background: linear-gradient(135deg, #f59e0b, #b45309); }
+  &--high     { background: linear-gradient(135deg, #f97316, #c2410c); }
+  &--critical { background: linear-gradient(135deg, #ef4444, #b91c1c); }
+}
+
+.card-body { padding: 20px; }
 
 .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
 .card-codes { display: flex; flex-direction: column; gap: 2px; }
 .failure-code { font-family: monospace; font-weight: 700; color: $primary; font-size: 0.9rem; }
 .eq-code { font-family: monospace; font-size: 0.78rem; color: $text-light; }
-
-.card-body { margin-bottom: 16px; }
 .failure-title { font-size: 1rem; font-weight: 600; color: $text-dark; margin: 0 0 4px; }
-.equipment-name { font-size: 0.85rem; color: $text-light; margin: 0 0 12px; }
+.equipment-name { font-size: 0.85rem; color: $text-light; margin: 0 0 14px; }
 
-.card-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-.meta-item { display: flex; flex-direction: column; gap: 3px; }
-.meta-label { font-size: 0.72rem; color: $text-light; text-transform: uppercase; letter-spacing: 0.3px; }
-.meta-value { font-size: 0.85rem; color: $text-dark; font-weight: 500; }
+.card-meta {
+  display: flex; gap: 16px; margin-bottom: 12px; flex-wrap: wrap;
+  padding-bottom: 12px; border-bottom: 1px solid #f0f0f0;
+}
+.meta-item {
+  display: flex; align-items: center; gap: 6px;
+  svg { width: 14px; height: 14px; color: $text-light; flex-shrink: 0; }
+}
+.meta-value { font-size: 0.8rem; color: $text-dark; font-weight: 500; }
 
 .solution-text { font-size: 0.82rem; color: $text-dark; background: #f0f7ff; border-left: 3px solid $secondary; padding: 8px 12px; border-radius: 4px; line-height: 1.5; }
 
@@ -118,3 +137,6 @@ $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-ligh
   font-weight: 600;
   &:hover { text-decoration: underline; }
 }
+// ── Petites finitions ──
+.btn:hover:not(:disabled) { transform: translateY(-1px); }
+.link-archive { transition: gap 0.2s ease; display: inline-flex; align-items: center; gap: 4px; &:hover { gap: 8px; } }

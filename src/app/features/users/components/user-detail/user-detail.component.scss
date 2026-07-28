@@ -1,27 +1,97 @@
 $primary: #1E3A5F; $secondary: #2E75B6; $error: #c0392b; $success: #2e7d32; $warning: #e65100;
 $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-light: #718096;
 
-.page-wrapper { padding: 32px; max-width: 700px; margin: 0 auto; }
-.btn-back { display: flex; align-items: center; gap: 6px; background: none; border: none; color: $text-light; cursor: pointer; font-size: 0.88rem; margin-bottom: 20px; svg { width: 16px; height: 16px; } }
+.page-wrapper { padding: 32px; max-width: 720px; margin: 0 auto; }
+.btn-back {
+  display: flex; align-items: center; gap: 6px; background: none; border: none;
+  color: $text-light; cursor: pointer; font-size: 0.88rem; margin-bottom: 20px;
+  svg { width: 16px; height: 16px; }
+  &:hover { color: $primary; }
+}
 .loading-state { display: flex; justify-content: center; padding: 60px; }
 .spinner-lg { width: 36px; height: 36px; border: 3px solid rgba($secondary, 0.2); border-top-color: $secondary; border-radius: 50%; animation: spin 0.7s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .alert-error { padding: 12px 16px; background: #fdf3f2; border-left: 4px solid $error; border-radius: 8px; color: $error; font-size: 0.88rem; }
 
-.profile-card { background: $white; border: 1px solid $border; border-radius: 12px; padding: 28px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
-.profile-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid $border; }
-.avatar { width: 64px; height: 64px; border-radius: 50%; background: $secondary; color: $white; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 700; }
-.user-name { font-size: 1.3rem; font-weight: 700; color: $primary; margin: 0 0 6px; }
-.btn-edit-link { margin-left: 12px; font-size: 0.82rem; color: $secondary; text-decoration: none; font-weight: 600; &:hover { text-decoration: underline; } }
+.profile-card {
+  background: $white; border: 1px solid $border; border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
 
-.info-list { display: flex; flex-direction: column; gap: 12px; }
-.info-item { display: flex; justify-content: space-between; font-size: 0.9rem; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0; span:last-child { font-weight: 500; } }
-.info-label { color: $text-light; }
+// ── Bannière colorée fine en haut de la carte, selon le rôle ──
+.profile-banner {
+  height: 6px;
+  &--admin { background: linear-gradient(90deg, #3b82f6, #1e40af); }
+  &--supervisor { background: linear-gradient(90deg, #f97316, #ea580c); }
+  &--technician { background: linear-gradient(90deg, #10b981, #047857); }
+}
 
-.badge { display: inline-flex; padding: 4px 10px; border-radius: 20px; font-size: 0.76rem; font-weight: 600;
+.profile-header {
+  display: flex; align-items: center; gap: 16px;
+  padding: 24px 28px; border-bottom: 1px solid $border;
+}
+.profile-header__info { flex: 1; }
+.profile-header__meta { display: flex; gap: 8px; align-items: center; margin-top: 6px; }
+
+.avatar {
+  width: 60px; height: 60px; border-radius: 50%; color: $white;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; font-weight: 700; flex-shrink: 0;
+  &--admin { background: linear-gradient(135deg, #3b82f6, #1e40af); }
+  &--supervisor { background: linear-gradient(135deg, #f97316, #ea580c); }
+  &--technician { background: linear-gradient(135deg, #10b981, #047857); }
+}
+
+.user-name { font-size: 1.2rem; font-weight: 700; color: $primary; margin: 0; }
+
+.btn-edit-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border-radius: 8px;
+  background: $bg; border: 1.5px solid $border;
+  font-size: 0.82rem; font-weight: 600; color: $text-dark; text-decoration: none;
+  flex-shrink: 0;
+  svg { width: 14px; height: 14px; }
+  &:hover { background: $secondary; border-color: $secondary; color: $white; }
+}
+
+// ── Grille d'infos avec icônes ──
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  padding: 8px 28px 24px;
+}
+.info-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid #f2f2f2;
+}
+.info-icon {
+  width: 34px; height: 34px; border-radius: 9px; background: $bg;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  svg { width: 16px; height: 16px; color: $secondary; }
+}
+.info-label { display: block; font-size: 0.72rem; color: $text-light; text-transform: uppercase; letter-spacing: 0.3px; font-weight: 600; margin-bottom: 2px; }
+.info-value { display: block; font-size: 0.9rem; color: $text-dark; font-weight: 500; }
+.info-value--mono { font-family: 'Courier New', monospace; }
+
+.dot-status {
+  display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px;
+  &--available { background: $success; }
+  &--unavailable { background: #cbd5e0; }
+}
+
+.badge {
+  display: inline-flex; padding: 4px 10px; border-radius: 20px; font-size: 0.74rem; font-weight: 600;
   &--role-admin { background: #e3f2fd; color: #1565c0; }
   &--role-supervisor { background: #fff3e0; color: $warning; }
   &--role-technician { background: #e8f5e9; color: $success; }
   &--active { background: #e8f5e9; color: $success; }
   &--inactive { background: #f5f5f5; color: #616161; }
+}
+
+@media (max-width: 560px) {
+  .info-grid { grid-template-columns: 1fr; }
+  .profile-header { flex-wrap: wrap; }
 }

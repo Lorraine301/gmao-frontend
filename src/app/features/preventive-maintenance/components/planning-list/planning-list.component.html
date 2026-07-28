@@ -1,18 +1,23 @@
 <div class="page-wrapper">
 
-  <div class="page-header">
-    <div class="page-header__left">
-      <h1 class="page-title">Maintenance préventive</h1>
-      <span class="page-subtitle">{{ maintenances.length }} planification(s)</span>
-      <a routerLink="/preventive-maintenance/history" class="link-history">Voir l'historique →</a>
-    </div>
-    <button *ngIf="isAdmin" class="btn btn-primary" (click)="openScheduleForm()">
+<div class="page-header">
+  <div class="page-header__left">
+    <h1 class="page-title">Maintenance préventive</h1>
+    <span class="page-subtitle">{{ maintenances.length }} planification(s)</span>
+    <a routerLink="/preventive-maintenance/history" class="link-history">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        <path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/>
       </svg>
-      Planifier
-    </button>
+      Voir l'historique
+    </a>
   </div>
+  <button *ngIf="isAdmin" class="btn btn-primary" (click)="openScheduleForm()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+    </svg>
+    Planifier
+  </button>
+</div>
 
   <!-- ── Filtres ──────────────────────────────────────────── -->
 <div class="filters-bar">

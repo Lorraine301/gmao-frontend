@@ -1,6 +1,10 @@
 $primary: #1E3A5F; $secondary: #2E75B6; $success: #2e7d32; $error: #c0392b;
 $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-light: #718096;
 
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 .page-wrapper { padding: 32px; max-width: 1000px; margin: 0 auto; }
 .page-header { margin-bottom: 24px; }
 .btn-back { display: flex; align-items: center; gap: 6px; background: none; border: none; color: $text-light; cursor: pointer; font-size: 0.88rem; padding: 6px 10px; border-radius: 6px; transition: all 0.15s; svg { width: 16px; height: 16px; } &:hover { background: $bg; color: $text-dark; } }
@@ -13,8 +17,13 @@ $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-ligh
 
 .intervention-header {
   display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; gap: 16px; flex-wrap: wrap;
+  animation: fadeInUp 0.4s ease-out;
   .int-id    { font-family: monospace; font-size: 0.88rem; color: $text-light; display: block; margin-bottom: 4px; }
-  .int-title { font-size: 1.4rem; font-weight: 700; color: $primary; margin: 0 0 8px; }
+  .int-title {
+    font-size: 1.4rem; font-weight: 800; margin: 0 0 8px; letter-spacing: -0.3px;
+    background: linear-gradient(135deg, $primary, $secondary);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
   .badges    { display: flex; gap: 8px; flex-wrap: wrap; }
 }
 .header-actions { display: flex; gap: 10px; }
@@ -39,8 +48,19 @@ $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-ligh
 }
 
 .detail-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 24px; .full-width { grid-column: 1 / -1; } }
-.detail-card { background: $white; border: 1px solid $border; border-radius: 12px; padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
-.card-title { font-size: 0.88rem; font-weight: 700; color: $primary; margin: 0 0 16px; padding-bottom: 10px; border-bottom: 1px solid $border; text-transform: uppercase; letter-spacing: 0.4px; }
+.detail-card {
+  background: $white; border: none; border-radius: 16px; padding: 24px;
+  box-shadow: 0 4px 20px rgba($primary, 0.06);
+  animation: fadeInUp 0.4s ease-out backwards;
+  transition: box-shadow 0.25s ease;
+  &:hover { box-shadow: 0 8px 26px rgba($primary, 0.1); }
+}
+.detail-grid > .detail-card:nth-child(1) { animation-delay: 0.05s; }
+.detail-grid > .detail-card:nth-child(2) { animation-delay: 0.1s; }
+.detail-grid > .detail-card:nth-child(3) { animation-delay: 0.15s; }
+.detail-grid > .detail-card:nth-child(4) { animation-delay: 0.2s; }
+
+.card-title { font-size: 0.88rem; font-weight: 700; color: $primary; margin: 0 0 16px; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0; text-transform: uppercase; letter-spacing: 0.4px; }
 .info-list { display: flex; flex-direction: column; gap: 10px; }
 .info-item { display: flex; justify-content: space-between; font-size: 0.875rem; gap: 12px; span:last-child { font-weight: 500; text-align: right; } }
 .info-label { color: $text-light; white-space: nowrap; }
@@ -49,7 +69,12 @@ $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-ligh
 .solution-text { font-size: 0.9rem; color: $text-dark; line-height: 1.7; margin: 0 0 12px; }
 .closed-by { font-size: 0.82rem; color: $text-light; }
 
-.complete-section { background: $white; border: 1px solid $border; border-radius: 12px; padding: 28px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+.complete-section {
+  background: linear-gradient(135deg, $white 0%, #f7fbff 100%);
+  border: none; border-radius: 16px; padding: 28px;
+  box-shadow: 0 4px 20px rgba($primary, 0.08);
+  animation: fadeInUp 0.4s ease-out 0.1s backwards;
+}
 .section-title { font-size: 1rem; font-weight: 700; color: $primary; margin: 0 0 20px; }
 .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px;
   label { font-size: 0.82rem; font-weight: 600; color: $text-dark; }
@@ -61,7 +86,7 @@ $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-ligh
 .btn-loading { display: flex; align-items: center; gap: 8px; }
 .spinner { width: 16px; height: 16px; border: 2px solid rgba(white, 0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; }
 .highlight-card {
-  border-left: 4px solid #2E75B6;
+  border-left: 4px solid $secondary !important;
   background: linear-gradient(to right, #f0f7ff, #ffffff);
 }
 .code-value { font-family: monospace; font-weight: 700; color: #1E3A5F; font-size: 1rem; }
@@ -116,4 +141,16 @@ $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-ligh
   border-collapse: collapse;
   th, td { padding: 8px 12px; text-align: left; font-size: 0.85rem; border-bottom: 1px solid $border; }
   th { color: $text-light; font-weight: 600; text-transform: uppercase; font-size: 0.72rem; }
+}
+// ── Petites finitions ──
+.btn-back svg { transition: transform 0.2s ease; }
+.btn-back:hover svg { transform: translateX(-3px); }
+.btn:hover:not(:disabled) { transform: translateY(-1px); }
+.link { transition: color 0.15s ease; }
+
+.btn-add-part:hover, .btn-remove-part:hover { transform: scale(1.05); }
+
+.parts-table tbody tr {
+  transition: background 0.15s ease;
+  &:hover { background: $bg; }
 }

@@ -17,7 +17,14 @@
 
     <div class="report-header">
       <div>
-        <h1 class="report-title">Bilan hebdomadaire — Semaine {{ report.weekNumber }}</h1>
+        <div class="report-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          Semaine {{ report.weekNumber }}
+        </div>
+        <h1 class="report-title">Bilan hebdomadaire</h1>
         <span class="report-subtitle">Généré le {{ report.generatedAt | date:'dd/MM/yyyy HH:mm' }}
           <span *ngIf="report.generatedBy"> — par {{ report.generatedBy }}</span>
         </span>
@@ -36,28 +43,54 @@
     <div class="detail-grid">
       <div class="detail-card">
         <h2 class="card-title">Statistiques</h2>
-        <div class="info-list">
-          <div class="info-item"><span class="info-label">Total pannes</span><span>{{ report.totalFailures }}</span></div>
-          <div class="info-item"><span class="info-label">Pannes résolues</span><span>{{ report.resolvedFailures }}</span></div>
-          <div class="info-item"><span class="info-label">MTTR moyen</span>
-            <span>{{ report.averageRepairTime != null ? (report.averageRepairTime | number:'1.2-2') + ' h' : '—' }}</span>
+        <div class="stat-grid">
+          <div class="stat-box stat-box--blue">
+            <span class="stat-value">{{ report.totalFailures }}</span>
+            <span class="stat-label">Total pannes</span>
           </div>
-          <div class="info-item"><span class="info-label">Équipements critiques</span>
-            <span>{{ report.criticalMachines || 'Aucun' }}</span>
+          <div class="stat-box stat-box--green">
+            <span class="stat-value">{{ report.resolvedFailures }}</span>
+            <span class="stat-label">Résolues</span>
+          </div>
+          <div class="stat-box stat-box--orange">
+            <span class="stat-value">{{ report.averageRepairTime != null ? (report.averageRepairTime | number:'1.1-1') + 'h' : '—' }}</span>
+            <span class="stat-label">MTTR moyen</span>
+          </div>
+        </div>
+        <div class="critical-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <div>
+            <span class="info-label">Équipements critiques</span>
+            <span class="critical-value">{{ report.criticalMachines || 'Aucun' }}</span>
           </div>
         </div>
       </div>
 
-      <div class="detail-card full-width">
-        <h2 class="card-title">Synthèse IA</h2>
+      <div class="detail-card full-width ai-card">
+        <h2 class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2l2.4 7.2H22l-6 4.6 2.3 7.2-6.3-4.6-6.3 4.6 2.3-7.2-6-4.6h7.6z"/>
+          </svg>
+          Synthèse IA
+        </h2>
         <p class="synthesis-text" [class.placeholder]="!report.llmSummary">
+          <span class="pending-dot" *ngIf="!report.llmSummary"></span>
           {{ report.llmSummary || 'En cours d\'analyse…' }}
         </p>
       </div>
 
-      <div class="detail-card full-width">
-        <h2 class="card-title">Recommandations</h2>
+      <div class="detail-card full-width ai-card">
+        <h2 class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/>
+          </svg>
+          Recommandations
+        </h2>
         <p class="synthesis-text" [class.placeholder]="!report.recommendations">
+          <span class="pending-dot" *ngIf="!report.recommendations"></span>
           {{ report.recommendations || 'En cours d\'analyse…' }}
         </p>
       </div>

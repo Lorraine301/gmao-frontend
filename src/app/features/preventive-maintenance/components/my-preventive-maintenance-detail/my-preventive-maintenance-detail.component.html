@@ -21,7 +21,9 @@
         <span class="eq-code">{{ maintenance.equipmentCode }}</span>
         <h1 class="eq-title">{{ maintenance.equipmentName }}</h1>
         <div class="badges">
-          <span class="type-badge">{{ maintenance.maintenanceType }}</span>
+          <span class="type-badge" [ngClass]="'type-badge--' + getTypeClass(maintenance.maintenanceType)">
+            {{ maintenance.maintenanceType }}
+          </span>
           <span class="badge badge--exec-{{ (maintenance.executionStatus || '').toLowerCase().replace('_','-') }}">
             {{ getExecutionStatusLabel(maintenance.executionStatus) }}
           </span>

@@ -31,52 +31,47 @@
 
   <!-- ── Cartes KPI ── -->
   <div class="kpi-cards">
-    <div class="kpi-card">
-      <span class="kpi-label">Total pannes</span>
-      <span class="kpi-value">{{ summary?.totalFailures ?? '—' }}</span>
-    </div>
-    <div class="kpi-card">
-      <span class="kpi-label">MTTR moyen</span>
-      <span class="kpi-value">{{ summary?.averageMttr != null ? (summary!.averageMttr | number:'1.1-1') + 'h' : '—' }}</span>
-    </div>
-    <div class="kpi-card">
-      <span class="kpi-label">Taux de résolution</span>
-      <span class="kpi-value">{{ summary?.resolutionRate != null ? (summary!.resolutionRate | number:'1.0-1') + '%' : '—' }}</span>
-    </div>
-    <div class="kpi-card">
-      <span class="kpi-label">Taux de disponibilité</span>
-      <span class="kpi-value">{{ availabilityRate != null ? (availabilityRate | number:'1.0-1') + '%' : '—' }}</span>
-    </div>
+  <div class="kpi-card kpi-card--pink">
+    <span class="kpi-label">Total pannes</span>
+    <span class="kpi-value">{{ summary?.totalFailures ?? '—' }}</span>
+    <svg class="kpi-bg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+    </svg>
   </div>
-
-  <!-- ── Équipements à risque ── -->
-  <div class="at-risk-section" *ngIf="atRiskEquipments.length > 0">
-    <h2 class="section-title">⚠ Équipements à risque</h2>
-    <div class="at-risk-grid">
-    <div class="at-risk-card" *ngFor="let eq of atRiskEquipments">
-        <div class="at-risk-header">
-          <span class="eq-code">{{ eq.equipmentCode }}</span>
-          <span class="criticality-badge">{{ eq.criticalityLevel }}</span>
-        </div>
-        <p class="eq-name">{{ eq.equipmentName }}</p>
-        <p class="risk-reason">{{ eq.riskReason }}</p>
-        <p class="ai-explanation" *ngIf="eq.llmExplanation">
-          💡 {{ eq.llmExplanation }}
-        </p>
-      </div>
-    </div>
+  <div class="kpi-card kpi-card--purple">
+    <span class="kpi-label">MTTR moyen</span>
+    <span class="kpi-value">{{ summary?.averageMttr != null ? (summary!.averageMttr | number:'1.1-1') + 'h' : '—' }}</span>
+    <svg class="kpi-bg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+    </svg>
   </div>
+  <div class="kpi-card kpi-card--blue">
+    <span class="kpi-label">Taux de résolution</span>
+    <span class="kpi-value">{{ summary?.resolutionRate != null ? (summary!.resolutionRate | number:'1.0-1') + '%' : '—' }}</span>
+    <svg class="kpi-bg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+    </svg>
+  </div>
+  <div class="kpi-card kpi-card--orange">
+    <span class="kpi-label">Taux de disponibilité</span>
+    <span class="kpi-value">{{ availabilityRate != null ? (availabilityRate | number:'1.0-1') + '%' : '—' }}</span>
+    <svg class="kpi-bg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+    </svg>
+  </div>
+</div>
 
+ 
   <!-- ── Graphiques ── -->
   <div class="charts-grid">
     <div class="chart-card">
-      <h3 class="chart-title">Top 5 équipements les plus défaillants</h3>
-      <div class="chart-container"><canvas #equipmentChart></canvas></div>
+      <h3 class="chart-title">Répartition par statut</h3>
+      <div class="chart-container chart-container--small"><canvas #statusChart></canvas></div>
     </div>
 
     <div class="chart-card">
-      <h3 class="chart-title">Répartition par statut</h3>
-      <div class="chart-container chart-container--small"><canvas #statusChart></canvas></div>
+      <h3 class="chart-title">Top 5 équipements les plus défaillants</h3>
+      <div class="chart-container chart-container--small"><canvas #equipmentChart></canvas></div>
     </div>
 
     <div class="chart-card">
@@ -95,9 +90,44 @@
     </div>
   </div>
   <br>
+  
+   <!-- ── Équipements à risque ── -->
+  <div class="at-risk-section" *ngIf="atRiskEquipments.length > 0">
+    <h2 class="section-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="title-icon">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+      Équipements à risque
+    </h2>
+    <div class="at-risk-grid">
+    <div class="at-risk-card" *ngFor="let eq of atRiskEquipments">
+        <div class="at-risk-header">
+          <span class="eq-code">{{ eq.equipmentCode }}</span>
+          <span class="criticality-badge">{{ eq.criticalityLevel }}</span>
+        </div>
+        <p class="eq-name">{{ eq.equipmentName }}</p>
+        <p class="risk-reason">{{ eq.riskReason }}</p>
+        <p class="ai-explanation" *ngIf="eq.llmExplanation">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="inline-icon">
+            <path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/>
+          </svg>
+          {{ eq.llmExplanation }}
+        </p>
+      </div>
+    </div>
+  </div>
+
   <!-- ── Interprétation IA des KPI ── -->
   <div class="ai-interpretation-section">
-    <h2 class="section-title">🤖 Interprétation IA des KPI</h2>
+    <h2 class="section-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="title-icon">
+        <rect x="3" y="11" width="18" height="10" rx="2"/>
+        <circle cx="12" cy="5" r="2"/><path d="M12 7v4"/>
+        <line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/>
+      </svg>
+      Interprétation IA des KPI
+    </h2>
 
     <div class="ai-interpretation-card">
       <div class="ai-loading" *ngIf="isLoadingInterpretation">

@@ -12,26 +12,45 @@ $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-ligh
 
 .maintenances-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
 
-.maintenance-card {
-  background: $white; border: 1px solid $border; border-radius: 12px;
-  padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); transition: box-shadow 0.2s;
-  &:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
-  &--pending { border-left: 4px solid #90caf9; }
-  &--in-progress { border-left: 4px solid #ffb74d; }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-.card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-.card-codes { display: flex; flex-direction: column; gap: 4px; }
+.maintenance-card {
+  background: $white; border: none; border-radius: 16px; overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06); transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: fadeInUp 0.4s ease-out backwards;
+  &:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,0.12); }
+}
+
+// ── Bannière colorée selon le type de maintenance ──
+.card-banner {
+  padding: 9px 16px; text-align: center; color: $white;
+  font-size: 0.72rem; font-weight: 800; letter-spacing: 0.6px;
+
+  &--pt            { background: linear-gradient(135deg, $primary, $secondary); }
+  &--pc            { background: linear-gradient(135deg, #0891b2, #0e7490); }
+  &--inspection    { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
+  &--lubrification { background: linear-gradient(135deg, #ca8a04, #a16207); }
+  &--urgente       { background: linear-gradient(135deg, #ef4444, #b91c1c); }
+  &--default       { background: linear-gradient(135deg, #64748b, #475569); }
+}
+.card-body { padding: 20px; }
+
+.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .eq-code { font-family: monospace; font-weight: 700; color: $primary; font-size: 0.9rem; }
-.type-badge { background: #e3f2fd; color: #1565c0; padding: 2px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 600; width: fit-content; }
-
-.card-body { margin-bottom: 4px; }
 .eq-name { font-size: 1rem; font-weight: 600; color: $text-dark; margin: 0 0 4px; }
-.location { font-size: 0.82rem; color: $text-light; margin: 0 0 12px; }
+.location { font-size: 0.82rem; color: $text-light; margin: 0 0 14px; }
 
-.card-meta { display: flex; flex-direction: column; gap: 8px; }
-.meta-item { display: flex; justify-content: space-between; }
-.meta-label { font-size: 0.72rem; color: $text-light; text-transform: uppercase; letter-spacing: 0.3px; }
+.card-meta {
+  display: flex; flex-direction: column; gap: 10px;
+  padding-top: 12px; border-top: 1px solid #f0f0f0;
+}
+.meta-item {
+  display: flex; align-items: center; gap: 8px;
+  svg { width: 14px; height: 14px; color: $text-light; flex-shrink: 0; }
+}
 .meta-value { font-size: 0.85rem; color: $text-dark; font-weight: 500; }
 
 .badge {
@@ -51,3 +70,4 @@ $border: #e2e8f0; $bg: #f8fafc; $white: #ffffff; $text-dark: #1a202c; $text-ligh
   font-weight: 600;
   &:hover { text-decoration: underline; }
 }
+.link-archive { transition: gap 0.2s ease; display: inline-flex; align-items: center; gap: 4px; &:hover { gap: 8px; } }

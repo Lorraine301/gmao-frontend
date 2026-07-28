@@ -83,4 +83,15 @@ export class MyArchiveComponent implements OnInit {
     this.detailHistory = null;
     this.cdr.detectChanges();
    }
+   getTypeClass(type: string): string {
+    const normalized = type?.toLowerCase().trim() ?? '';
+    const map: Record<string, string> = {
+      'pt': 'pt',
+      'pc': 'pc',
+      'inspection': 'inspection',
+      'lubrification': 'lubrification',
+      'urgente': 'urgente'
+    };
+    return map[normalized] ?? 'default';
+   }
 }

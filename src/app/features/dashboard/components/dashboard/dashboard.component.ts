@@ -147,26 +147,30 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // ── Graphique 1 : Barres – pannes par équipement (top 5) ──
-  private renderEquipmentChart(data: EquipmentFailureCount[]): void {
-    this.equipmentChart?.destroy();
-    this.equipmentChart = new Chart(this.equipmentChartRef.nativeElement, {
-      type: 'bar',
-      data: {
-        labels: data.map(d => d.equipmentCode),
-        datasets: [{
-          label: 'Nombre de pannes',
-          data: data.map(d => d.failureCount),
-          backgroundColor: '#2E75B6'
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
-      }
-    });
-  }
+private renderEquipmentChart(data: EquipmentFailureCount[]): void {
+  this.equipmentChart?.destroy();
+
+  const barColors = ['#ec4899', '#8b5cf6', '#3b82f6', '#f97316', '#10b981'];
+
+  this.equipmentChart = new Chart(this.equipmentChartRef.nativeElement, {
+    type: 'bar',
+    data: {
+      labels: data.map(d => d.equipmentCode),
+      datasets: [{
+        label: 'Nombre de pannes',
+        data: data.map(d => d.failureCount),
+        backgroundColor: data.map((_, i) => barColors[i % barColors.length]),
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+    }
+  });
+}
 
   // ── Graphique 2 : Donut – pannes par statut ──
   private renderStatusChart(data: StatusCount[]): void {

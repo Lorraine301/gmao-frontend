@@ -7,13 +7,23 @@ $white:     #ffffff;
 $text-dark: #1a202c;
 $text-light:#718096;
 
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 .page-wrapper { padding: 32px; max-width: 1400px; margin: 0 auto; }
 
 .page-header {
   display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px;
+  animation: fadeInUp 0.4s ease-out;
   &__left { display: flex; flex-direction: column; gap: 4px; }
 }
-.page-title  { font-size: 1.6rem; font-weight: 700; color: $primary; margin: 0; }
+.page-title {
+  font-size: 1.6rem; font-weight: 800; margin: 0; letter-spacing: -0.3px;
+  background: linear-gradient(135deg, $primary, $secondary);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
 .page-subtitle { font-size: 0.85rem; color: $text-light; }
 
 .loading-state {
@@ -39,6 +49,7 @@ $text-light:#718096;
   background: $white; border: 1px solid $border; border-radius: 12px;
   overflow-x: auto; max-height: calc(100vh - 260px); overflow-y: auto;
   box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  animation: fadeInUp 0.4s ease-out 0.1s backwards;
   &::-webkit-scrollbar { height: 6px; width: 6px; }
   &::-webkit-scrollbar-track { background: $bg; }
   &::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 3px; &:hover { background: $secondary; } }
@@ -91,10 +102,11 @@ $text-light:#718096;
 }
 
 .filters-bar {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    animation: fadeInUp 0.4s ease-out 0.05s backwards;
 
   select {
     padding: 9px 14px;
@@ -122,3 +134,19 @@ $text-light:#718096;
     &:hover { background: $error; color: white; }
   }
 }
+.data-table tbody tr {
+  animation: fadeInUp 0.3s ease-out backwards;
+}
+
+// ── Petite pastille de progression visuelle par statut ──
+.duration-cell { position: relative; padding-left: 22px !important; }
+tr td.duration-cell::before {
+  content: '';
+  position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+  width: 7px; height: 7px; border-radius: 50%;
+}
+
+.filters-bar select, .filters-bar .btn-reset { transition: transform 0.15s ease; }
+.filters-bar select:hover, .filters-bar .btn-reset:hover { transform: translateY(-1px); }
+.data-table tbody tr.row--completed { opacity: 0.75; }
+.data-table tbody tr.row--completed:hover { opacity: 1; }

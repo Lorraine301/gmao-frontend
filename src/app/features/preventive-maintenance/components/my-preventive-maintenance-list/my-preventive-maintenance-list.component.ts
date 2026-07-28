@@ -37,4 +37,15 @@ export class MyPreventiveMaintenanceListComponent implements OnInit {
   getExecutionStatusLabel(s?: string): string {
     return { Pending: 'À faire', In_Progress: 'En cours', Completed: 'Terminée' }[s ?? ''] ?? '—';
   }
+  getTypeClass(type: string): string {
+    const normalized = type?.toLowerCase().trim() ?? '';
+    const map: Record<string, string> = {
+      'pt': 'pt',
+      'pc': 'pc',
+      'inspection': 'inspection',
+      'lubrification': 'lubrification',
+      'urgente': 'urgente'
+    };
+    return map[normalized] ?? 'default';
+  }
 }

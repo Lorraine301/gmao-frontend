@@ -13,13 +13,20 @@
     </a>
   </div>
 
-  <div class="filters-bar">
-    <select [(ngModel)]="filterRole" (ngModelChange)="onFilterChange()">
-      <option value="">Tous les rôles</option>
-      <option value="Admin">Admin</option>
-      <option value="Supervisor">Superviseur</option>
-      <option value="Technician">Technicien</option>
-    </select>
+  <!-- Filtres rapides par rôle -->
+  <div class="role-filters">
+    <button class="role-chip" [class.role-chip--active]="filterRole === ''" (click)="filterRole = ''; onFilterChange()">
+      Tous <span class="chip-count">{{ allUsers.length }}</span>
+    </button>
+    <button class="role-chip role-chip--admin" [class.role-chip--active]="filterRole === 'Admin'" (click)="filterRole = 'Admin'; onFilterChange()">
+      <span class="chip-dot"></span> Admins <span class="chip-count">{{ adminCount }}</span>
+    </button>
+    <button class="role-chip role-chip--supervisor" [class.role-chip--active]="filterRole === 'Supervisor'" (click)="filterRole = 'Supervisor'; onFilterChange()">
+      <span class="chip-dot"></span> Superviseurs <span class="chip-count">{{ supervisorCount }}</span>
+    </button>
+    <button class="role-chip role-chip--technician" [class.role-chip--active]="filterRole === 'Technician'" (click)="filterRole = 'Technician'; onFilterChange()">
+      <span class="chip-dot"></span> Techniciens <span class="chip-count">{{ technicianCount }}</span>
+    </button>
   </div>
 
   <div class="alert alert-success" *ngIf="successMessage">{{ successMessage }}</div>
@@ -46,16 +53,24 @@
         <tr *ngFor="let u of users" [class.row--inactive]="!u.active">
           <td class="id-cell">{{ u.id }}</td>
           <td class="code-cell">{{ u.employeeCode }}</td>
-          <td>{{ u.fullName }}</td>
-          <td>{{ u.email }}</td>
+          <td class="name-cell">
+            <span class="avatar-mini" [ngClass]="'avatar-mini--' + u.role.toLowerCase()">{{ getInitials(u.fullName) }}</span>
+            {{ u.fullName }}
+          </td>
+          <td class="email-cell">{{ u.email }}</td>
           <td><span class="badge badge--role-{{ u.role.toLowerCase() }}">{{ getRoleLabel(u.role) }}</span></td>
           <td>{{ u.speciality || '—' }}</td>
-          <td>{{ u.availabilityStatus || '—' }}</td>
+          <td>
+            <span class="dot-status" *ngIf="u.availabilityStatus"
+                  [ngClass]="u.availabilityStatus === 'Available' ? 'dot-status--available' : 'dot-status--unavailable'"></span>
+            {{ u.availabilityStatus === 'Available' ? 'Disponible' : (u.availabilityStatus ? 'Indisponible' : '—') }}
+          </td>
           <td>
             <span class="badge" [ngClass]="u.active ? 'badge--active' : 'badge--inactive'">
               {{ u.active ? 'Actif' : 'Désactivé' }}
             </span>
           </td>
+
           <td class="actions-cell">
             <button class="btn-icon btn-icon--view" [routerLink]="['/users', u.id]" title="Voir le détail">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -82,7 +97,12 @@
       </tbody>
     </table>
     <ng-template #emptyState>
-      <div class="empty-state"><h3>Aucun utilisateur trouvé</h3></div>
+      <div class="empty-state">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+        </svg>
+        <h3>Aucun utilisateur trouvé</h3>
+      </div>
     </ng-template>
   </div>
 </div>

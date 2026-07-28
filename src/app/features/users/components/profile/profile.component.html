@@ -5,43 +5,104 @@
   <div class="alert-error" *ngIf="errorMessage">{{ errorMessage }}</div>
 
   <div *ngIf="profile && !isLoading" class="profile-card">
+
+    <div class="profile-banner" [ngClass]="'profile-banner--' + profile.role.toLowerCase()"></div>
+
     <div class="profile-header">
-      <div class="avatar">{{ profile.fullName.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase() }}</div>
-      <div>
+      <div class="avatar" [ngClass]="'avatar--' + profile.role.toLowerCase()">
+        {{ profile.fullName.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase() }}
+      </div>
+      <div class="profile-header__info">
         <h2 class="user-name">{{ profile.fullName }}</h2>
         <span class="badge badge--role-{{ profile.role.toLowerCase() }}">{{ getRoleLabel(profile.role) }}</span>
       </div>
     </div>
 
-    <div class="info-list">
-      <div class="info-item"><span class="info-label">Email</span><span>{{ profile.email }}</span></div>
-      <div class="info-item" *ngIf="profile.speciality"><span class="info-label">Spécialité</span><span>{{ profile.speciality }}</span></div>
-      <div class="info-item" *ngIf="profile.availabilityStatus"><span class="info-label">Disponibilité</span><span>{{ profile.availabilityStatus }}</span></div>
+    <div class="info-grid">
+      <div class="info-item">
+        <div class="info-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/>
+          </svg>
+        </div>
+        <div>
+          <span class="info-label">Email</span>
+          <span class="info-value">{{ profile.email }}</span>
+        </div>
+      </div>
+
+      <div class="info-item" *ngIf="profile.speciality">
+        <div class="info-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+        </div>
+        <div>
+          <span class="info-label">Spécialité</span>
+          <span class="info-value">{{ profile.speciality }}</span>
+        </div>
+      </div>
+
+      <div class="info-item" *ngIf="profile.availabilityStatus">
+        <div class="info-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <div>
+          <span class="info-label">Disponibilité</span>
+          <span class="info-value">
+            <span class="dot-status" [ngClass]="profile.availabilityStatus === 'Available' ? 'dot-status--available' : 'dot-status--unavailable'"></span>
+            {{ profile.availabilityStatus === 'Available' ? 'Disponible' : 'Indisponible' }}
+          </span>
+        </div>
+      </div>
+
       <div class="info-item" *ngIf="profile.lastLoginAt">
-        <span class="info-label">Dernière connexion</span>
-        <span>{{ profile.lastLoginAt | date:'dd/MM/yyyy HH:mm' }}</span>
+        <div class="info-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10 3H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h6"/>
+            <polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+        </div>
+        <div>
+          <span class="info-label">Dernière connexion</span>
+          <span class="info-value">{{ profile.lastLoginAt | date:'dd/MM/yyyy HH:mm' }}</span>
+        </div>
       </div>
     </div>
+
+    <!-- Bascule disponibilité (Technicien uniquement) -->
+    <div class="availability-section" *ngIf="isTechnician">
+      <span class="info-label">Changer ma disponibilité</span>
+      <button class="availability-toggle"
+              [class.availability-toggle--available]="profile.availabilityStatus === 'Available'"
+              [class.availability-toggle--unavailable]="profile.availabilityStatus !== 'Available'"
+              (click)="toggleAvailability()"
+              [disabled]="isUpdatingAvailability">
+        <span class="dot"></span>
+        {{ profile.availabilityStatus === 'Available' ? 'Disponible' : 'Indisponible' }}
+      </button>
+      <p class="availability-error" *ngIf="availabilityError">{{ availabilityError }}</p>
+    </div>
   </div>
-  <div class="availability-section" *ngIf="isTechnician">
-  <span class="info-label">Disponibilité</span>
-  <button class="availability-toggle"
-          [class.availability-toggle--available]="profile?.availabilityStatus === 'Available'"
-          [class.availability-toggle--unavailable]="profile?.availabilityStatus !== 'Available'"
-          (click)="toggleAvailability()"
-          [disabled]="isUpdatingAvailability">
-    <span class="dot"></span>
-    {{ profile?.availabilityStatus === 'Available' ? 'Disponible' : 'Indisponible' }}
-  </button>
-  <p class="availability-error" *ngIf="availabilityError">{{ availabilityError }}</p>
-</div>
 
   <!-- Changement de mot de passe -->
-<div class="profile-card" *ngIf="profile && !isLoading">
-  <div class="section-header" (click)="togglePasswordForm()">
-    <h2 class="card-title-inline">🔒 Changer mon mot de passe</h2>
-    <span class="toggle-icon">{{ showPasswordForm ? '−' : '+' }}</span>
-  </div>
+  <div class="profile-card password-card" *ngIf="profile && !isLoading">
+    <div class="section-header" (click)="togglePasswordForm()">
+      <h2 class="card-title-inline">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        Changer mon mot de passe
+      </h2>
+      <span class="toggle-icon" [class.toggle-icon--open]="showPasswordForm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </span>
+    </div>
 
     <form [formGroup]="passwordForm" (ngSubmit)="onChangePassword()" *ngIf="showPasswordForm" class="password-form">
 
@@ -49,61 +110,61 @@
       <div class="alert alert-error" *ngIf="passwordError">{{ passwordError }}</div>
 
       <div class="form-group">
-    <label>Mot de passe actuel</label>
-    <div class="password-wrapper">
-      <input [type]="showCurrentPassword ? 'text' : 'password'" formControlName="currentPassword" />
-      <button type="button" class="toggle-visibility" (click)="toggleFieldVisibility('current')">
-        <svg *ngIf="!showCurrentPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-        </svg>
-        <svg *ngIf="showCurrentPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
-          <line x1="1" y1="1" x2="23" y2="23"/>
-        </svg>
-      </button>
-    </div>
-  </div>
+        <label>Mot de passe actuel</label>
+        <div class="password-wrapper">
+          <input [type]="showCurrentPassword ? 'text' : 'password'" formControlName="currentPassword" />
+          <button type="button" class="toggle-visibility" (click)="toggleFieldVisibility('current')">
+            <svg *ngIf="!showCurrentPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+            <svg *ngIf="showCurrentPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+              <line x1="1" y1="1" x2="23" y2="23"/>
+            </svg>
+          </button>
+        </div>
+      </div>
 
-  <div class="form-group">
-    <label>Nouveau mot de passe</label>
-    <div class="password-wrapper">
-      <input [type]="showNewPassword ? 'text' : 'password'" formControlName="newPassword" />
-      <button type="button" class="toggle-visibility" (click)="toggleFieldVisibility('new')">
-        <svg *ngIf="!showNewPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-        </svg>
-        <svg *ngIf="showNewPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
-          <line x1="1" y1="1" x2="23" y2="23"/>
-        </svg>
-      </button>
-    </div>
-    <span class="hint">Minimum 6 caractères</span>
-  </div>
+      <div class="form-group">
+        <label>Nouveau mot de passe</label>
+        <div class="password-wrapper">
+          <input [type]="showNewPassword ? 'text' : 'password'" formControlName="newPassword" />
+          <button type="button" class="toggle-visibility" (click)="toggleFieldVisibility('new')">
+            <svg *ngIf="!showNewPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+            <svg *ngIf="showNewPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+              <line x1="1" y1="1" x2="23" y2="23"/>
+            </svg>
+          </button>
+        </div>
+        <span class="hint">Minimum 6 caractères</span>
+      </div>
 
-  <div class="form-group">
-    <label>Confirmer le nouveau mot de passe</label>
-    <div class="password-wrapper">
-      <input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="confirmPassword" />
-      <button type="button" class="toggle-visibility" (click)="toggleFieldVisibility('confirm')">
-        <svg *ngIf="!showConfirmPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-        </svg>
-        <svg *ngIf="showConfirmPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
-          <line x1="1" y1="1" x2="23" y2="23"/>
-        </svg>
-      </button>
-    </div>
-    <span class="error-text" *ngIf="passwordForm.errors?.['passwordMismatch'] && passwordForm.get('confirmPassword')?.touched">
-      Les mots de passe ne correspondent pas
-    </span>
-  </div>
+      <div class="form-group">
+        <label>Confirmer le nouveau mot de passe</label>
+        <div class="password-wrapper">
+          <input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="confirmPassword" />
+          <button type="button" class="toggle-visibility" (click)="toggleFieldVisibility('confirm')">
+            <svg *ngIf="!showConfirmPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+            <svg *ngIf="showConfirmPassword" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+              <line x1="1" y1="1" x2="23" y2="23"/>
+            </svg>
+          </button>
+        </div>
+        <span class="error-text" *ngIf="passwordForm.errors?.['passwordMismatch'] && passwordForm.get('confirmPassword')?.touched">
+          Les mots de passe ne correspondent pas
+        </span>
+      </div>
 
-    <button type="submit" class="btn-submit" [disabled]="isChangingPassword">
-      <span *ngIf="!isChangingPassword">Valider</span>
-      <span *ngIf="isChangingPassword" class="btn-loading"><span class="spinner"></span> Envoi...</span>
-    </button>
-  </form>
- </div>
+      <button type="submit" class="btn-submit" [disabled]="isChangingPassword">
+        <span *ngIf="!isChangingPassword">Valider</span>
+        <span *ngIf="isChangingPassword" class="btn-loading"><span class="spinner"></span> Envoi...</span>
+      </button>
+    </form>
+  </div>
 </div>

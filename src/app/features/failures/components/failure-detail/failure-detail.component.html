@@ -80,6 +80,21 @@
       </div>
     </div>
 
+          <!-- Audit -->
+      <div class="detail-card">
+        <h2 class="card-title">Historique</h2>
+        <div class="info-list">
+          <div class="info-item">
+            <span class="info-label">Créée le</span>
+            <span>{{ failure.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Mise à jour</span>
+            <span>{{ failure.updatedAt | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+        </div>
+      </div>
+
       <!-- Description -->
       <div class="detail-card full-width">
         <h2 class="card-title">Description</h2>
@@ -190,22 +205,6 @@
         </button>
       </div>
     </div>
-
-      <!-- Audit -->
-      <div class="detail-card">
-        <h2 class="card-title">Historique</h2>
-        <div class="info-list">
-          <div class="info-item">
-            <span class="info-label">Créée le</span>
-            <span>{{ failure.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">Mise à jour</span>
-            <span>{{ failure.updatedAt | date:'dd/MM/yyyy HH:mm' }}</span>
-          </div>
-        </div>
-      </div>
-
     </div>
   </div>
 </div>

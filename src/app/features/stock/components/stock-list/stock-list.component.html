@@ -5,29 +5,46 @@
       <h1 class="page-title">Stock de pièces</h1>
       <span class="page-subtitle">{{ parts.length }} pièce(s)</span>
     </div>
-  <div class="header-actions">
-    <button class="btn btn-ghost" routerLink="/stock/consumption-history">
+    <div class="header-actions">
+      <button class="btn btn-ghost" routerLink="/stock/consumption-history">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 8v4l3 3"/>
+          <circle cx="12" cy="12" r="9"/>
+        </svg>
+        Historique de consommation
+      </button>
+      <button class="btn" [class.btn-warning]="showLowStockOnly" [class.btn-ghost]="!showLowStockOnly"
+              (click)="toggleFilter()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        Stock faible ({{ lowStockCount }})
+      </button>
+      <button *ngIf="isAdmin" class="btn btn-primary" routerLink="/stock/new">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Ajouter une pièce
+      </button>
+    </div>
+  </div>
+
+  <!-- Bandeau résumé -->
+  <div class="stock-summary" *ngIf="!isLoading && parts.length > 0">
+    <div class="summary-pill">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M12 8v4l3 3"/>
-        <circle cx="12" cy="12" r="9"/>
+        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
       </svg>
-      Historique de consommation
-    </button>
-    <button class="btn" [class.btn-warning]="showLowStockOnly" [class.btn-ghost]="!showLowStockOnly"
-            (click)="toggleFilter()">
+      <span><strong>{{ parts.length }}</strong> références</span>
+    </div>
+    <div class="summary-pill summary-pill--warning" *ngIf="lowStockCount > 0">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
         <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
       </svg>
-      Stock faible ({{ lowStockCount }})
-    </button>
-    <button *ngIf="isAdmin" class="btn btn-primary" routerLink="/stock/new">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-      </svg>
-      Ajouter une pièce
-    </button>
-  </div>
+      <span><strong>{{ lowStockCount }}</strong> en stock faible</span>
+    </div>
   </div>
 
   <div class="loading-state" *ngIf="isLoading"><div class="spinner-lg"></div></div>
@@ -42,8 +59,7 @@
           <th>Nom</th>
           <th>Fournisseur</th>
           <th>Magasin</th>
-          <th>Stock actuel</th>
-          <th>Stock minimum</th>
+          <th>Niveau de stock</th>
           <th>Unité</th>
           <th>Prix unitaire</th>
           <th>Alerte</th>
@@ -51,16 +67,23 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let p of parts" [class.row--low-stock]="p.lowStock">
+        <tr *ngFor="let p of parts; let i = index" [class.row--low-stock]="p.lowStock" [style.animation-delay.ms]="i * 30">
           <td class="id-cell">{{ p.id }}</td>
           <td class="ref-cell">{{ p.reference }}</td>
           <td class="name-cell">{{ p.name }}</td>
           <td>{{ p.supplier || '—' }}</td>
           <td>{{ p.warehouseLocation || '—' }}</td>
-          <td>
-            <span class="qty-value" [class.qty-low]="p.lowStock">{{ p.quantity }}</span>
+          <td class="stock-level-cell">
+            <div class="stock-level">
+              <div class="stock-level__bar">
+                <div class="stock-level__fill"
+                     [class.stock-level__fill--low]="p.lowStock"
+                     [style.width.%]="getStockPercent(p)"></div>
+              </div>
+              <span class="qty-value" [class.qty-low]="p.lowStock">{{ p.quantity }}</span>
+              <span class="qty-min">/ {{ p.minimumStock }} min</span>
+            </div>
           </td>
-          <td>{{ p.minimumStock }}</td>
           <td>{{ p.unit || '—' }}</td>
           <td>{{ p.unitPrice ? (p.unitPrice | number:'1.2-2') + ' MAD' : '—' }}</td>
           <td>
@@ -71,7 +94,12 @@
               </svg>
               Stock faible
             </span>
-            <span *ngIf="!p.lowStock" class="ok-badge">OK</span>
+            <span *ngIf="!p.lowStock" class="ok-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              OK
+            </span>
           </td>
           <td *ngIf="isAdmin">
             <button class="btn-icon btn-icon--edit" [routerLink]="['/stock', p.id, 'edit']" title="Modifier">
